@@ -1,12 +1,13 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import {Card, CardImg,Button, CardText, CardBody, CardTitle, CardSubtitle, Fade} from 'reactstrap'
 
 
 
-function Home (props) {
+function Start (props) {
 
     return (
-        <div className='container'>
+        <div className='container align-middle' >
             <div className='row row-header home-page-header'>
                 <div className='col-12 col-sm-12'>
                     <h5><strong>Department of Industrial Information Technology</strong></h5>
@@ -19,12 +20,12 @@ function Home (props) {
                         <h1> <strong>Heuristics</strong></h1>
                     </div>
                     <div className='col-12 justify-content-around'>
-                        <Button active className='col-md-3 btn btn-light' >
+                        <Link active className='col-md-3 btn btn-light' to='/selectyourway'>
                             Start App
-                        </Button>
-                        <Button className='col-md-3 offset-md-1 btn btn-light'>
+                        </Link>
+                        <Link className='col-md-3 offset-md-1 btn btn-light' to='/moreinfo' >
                         More Info
-                        </Button>
+                        </Link>
 
                     </div>
                    
@@ -34,7 +35,7 @@ function Home (props) {
                 <div className='col-12 col-md-5'>
                     
                     <Card>
-                        <CardImg src= "../../img/bycle.jpg" width={100} height={250}/>
+                        <CardImg src= "assets/bycle.jpg" width={100} height={250}/>
                     </Card>
 
                 
@@ -45,4 +46,4 @@ function Home (props) {
         </div>
     )
 }
-export default Home;
+export default Start;
