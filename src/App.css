@@ -13,3 +13,25 @@
   border-bottom: 1px ridge;
   min-height: 400px;
 }
+
+.selectYourWayImage{
+  height: 360px; 
+  width: 360px;
+  padding:10px;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 0px 130px 0px 0px;
+}
+
+
+.selectYourWayCard{
+  height: 619px;
+  width: 377.13px;
+  border-radius: 0px 130px 0px 130px;
+}
+
+.selectYourWayCardBody{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

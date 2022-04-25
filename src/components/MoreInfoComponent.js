@@ -22,8 +22,8 @@ function MoreInfo(){
                     </div>
                     <div className='col-12 justify-content-around'>
                         
-                        <Link className='col-md-3 offset-md-1 btn btn-light' to='/start' >
-                        Go Back
+                        <Link className='col-md-3  btn btn-light btn-lg' style={{borderRadius:"30px"}} to='/start' >
+                        <h5>Go Back</h5>
                         </Link>
 
                     </div>

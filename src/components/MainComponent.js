@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import Start from './StartComponent';
 import MoreInfo from './MoreInfoComponent';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import Login from './LoginPageComponent';
 import YourWay from './SelectYourWayComponent';
+import YourMode from './SelectYourMode';
+import { Switch, Route, Redirect } from 'react-router-dom';
 
 class Main extends Component {
     constructor(props){
@@ -13,7 +15,7 @@ class Main extends Component {
 
         const StartPage= ()=> {
             return (
-                <div className='startpage' style = {{height:"100vh"}}>
+                <div className='startpage' style = {{minHeight:"100vh"}}>
                     <Start/>
 
                 </div>
@@ -22,7 +24,7 @@ class Main extends Component {
                 
         const MoreInfos =() =>{
             return(
-                <div className='startpage' style = {{height:"100vh"}}>
+                <div className='startpage' style = {{minHeight:"100vh"}}>
                     <MoreInfo/>
                 </div>
             );
@@ -30,11 +32,25 @@ class Main extends Component {
 
         const SelectYourWay =()=> {
             return(
-                <div className='startpage' style = {{height:"100vh"}}>
+                <div className='startpage' style = {{minHeight: "100vh"}}>
                     <YourWay/>
                 </div>
             );
+        }
+        const SelectYourMode =()=> {
+            return(
+                <div className='startpage' style = {{minHeight: "100vh"}}>
+                    <YourMode/>
+                </div>
+            );
+        }
 
+        const LoginPage =()=>{
+            return(
+                <div className='startpage' style = {{minHeight:"100vh"}}>
+                    <Login/>
+                </div>
+            )
         }
         
         return (
@@ -47,6 +63,8 @@ class Main extends Component {
                     <Route path='/start' component={StartPage}/>
                     <Route exact path='/moreinfo' component={MoreInfos}/>
                     <Route path='/selectyourway' component={SelectYourWay}/>
+                    <Route path='/login' component={LoginPage}/>
+                    <Route path='/selectyourmode' component={SelectYourMode}/>
                     <Redirect to="/start" />
                 </Switch>
             </div>
