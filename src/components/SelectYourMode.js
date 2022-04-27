@@ -23,13 +23,14 @@ class YourMode extends Component{
                         <div className='col-12 col-md-5  '>
                             <Media list >
                                 <div className='row ' >
-
-                                    <Card style={{marginTop:"20px", borderRadius:"10px"}}>
-                                        <div className='col-12 col-md-10 m-2'  style={{padding:"10px 20px 10px"}}>
-                                            <h3><strong>Design Heuristic Collection</strong></h3>
-                                            <p>A state of the art DfX database with a search and filter function</p>
-                                        </div>
-                                    </Card>
+                                    <Link  className='text-decoration-none card-block' style={{color:"black"}} to="/design-heuristic-collection">
+                                        <Card style={{marginTop:"20px", borderRadius:"10px"}}>
+                                            <div className='col-12 col-md-10 m-2'  style={{padding:"10px 20px 10px"}}>
+                                                <h3><strong>Design Heuristic Collection</strong></h3>
+                                                <p>A state of the art DfX database with a search and filter function</p>
+                                            </div>
+                                        </Card>
+                                    </Link>
                                     <Card style={{marginTop:"20px", borderRadius:"10px"}}>
                                         <div className='col-12 col-md-10 m-2' style={{padding:"10px 20px 10px"}} >
                                             <h3> <strong> Development Assistant</strong></h3>
