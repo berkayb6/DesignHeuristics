@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import Start from './StartComponent';
 import MoreInfo from './MoreInfoComponent';
 import Login from './LoginPageComponent';
+import Register from './RegisterComponent';
 import YourWay from './SelectYourWayComponent';
 import YourMode from './SelectYourMode';
 import DHCollection from './DesignHeuristicCollectionComponent';
 import AddHeuristic from './AddHeuristicComponent';
+import ForgotPassword from './ForgotPasswordComponent';
 import { HEURISTICS } from '../shared/heuristics';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
@@ -59,6 +61,14 @@ class Main extends Component {
             )
         }
 
+        const RegisterPage =()=>{
+            return(
+                <div className='startpage' style = {{minHeight:"100vh"}}>
+                    <Register/>
+                </div>
+            )
+        }
+
         const DesignHeuristicCollection =()=>{
             return(
                 <div className='startpage' style = {{minHeight:"100vh"}}>
@@ -74,6 +84,14 @@ class Main extends Component {
                 </div>
             )
         }
+
+        const ForgotYourPassword = ()=>{
+            return(
+                <div className='startpage' style = {{minHeight:"100vh"}}>
+                    <ForgotPassword/>
+                </div>
+            )
+        }
         
         return (
             <div>
@@ -86,9 +104,11 @@ class Main extends Component {
                     <Route exact path='/moreinfo' component={MoreInfos}/>
                     <Route path='/selectyourway' component={SelectYourWay}/>
                     <Route path='/login' component={LoginPage}/>
+                    <Route path='/register' component={RegisterPage}/>
                     <Route path='/selectyourmode' component={SelectYourMode}/>
                     <Route path='/design-heuristic-collection' component={DesignHeuristicCollection}/>
                     <Route path='/add-your-own-heuristic' component={AddYourOwnHeuristic}/>
+                    <Route path='/forgot-your-password' component={ForgotYourPassword}/>
                     <Redirect to="/start" />
                 </Switch>
             </div>

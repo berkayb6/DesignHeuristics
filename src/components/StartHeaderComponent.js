@@ -57,6 +57,11 @@ class StartHeader extends Component{
                             </Nav>
                             <Nav className='ms-auto' navbar>
                                 <NavItem  >
+                                    <Link outline className='btn ' style={{border:"0px"}} to='/register'  >
+                                       <h5>Register</h5>
+                                    </Link>
+                                </NavItem>
+                                <NavItem  >
                                     <Link outline className='btn ' style={{border:"0px"}} to='/login'  >
                                        <h5>Login</h5>
                                     </Link>
