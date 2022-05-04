@@ -10,7 +10,7 @@ class YourMode extends Component{
             <>
                 <div style={{marginBottom:"50px"}}>
                     
-                    <StartHeader/>
+                    <StartHeader selectyour="Mode" />
                 </div>
                 <div className='container' >
                 

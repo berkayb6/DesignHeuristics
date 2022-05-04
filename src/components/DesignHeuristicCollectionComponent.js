@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import HeuristicDetails from './HeuristicDetailsComponent';
 import {Link} from 'react-router-dom';
-import { Form, FormGroup, Col, Label, Input,Button, Card,CardTitle, CardBody, CardText } from 'reactstrap';
+import { Form, FormGroup, Col, Label, Input,Button, Card, CardTitle, CardBody, CardText, Modal, ModalHeader, ModalBody } from 'reactstrap';
 import Header from './HeaderComponent';
 
 
@@ -144,6 +145,35 @@ export default DHCollection;
 
 
 class Collection extends Component{
+    constructor(props) {
+        super(props);
+
+        this.toggleModal=this.toggleModal.bind(this);
+        this.closeModal=this.closeModal.bind(this);
+
+        this.state = {
+          isModalOpen: false,
+          selectedHeuristic: ''
+        };
+
+        
+    }
+
+    toggleModal(selectedOne){
+        this.setState({
+            isModalOpen: !this.state.isModalOpen,
+            selectedHeuristic: selectedOne
+        });
+    }
+
+    closeModal(){
+        this.setState({
+            isModalOpen: !this.state.isModalOpen
+        });
+    }
+
+    
+
 
     render(){
 
@@ -165,49 +195,57 @@ class Collection extends Component{
                     </div>
                     <div className='col-12 col-md-6' >
                         <Card key={heuristic.id}>
-                            <CardBody>
-                                <CardText> {heuristic.description}</CardText>
+                            <CardBody >
+                                <CardText onClick={()=>this.toggleModal(heuristic)}> {heuristic.title}</CardText>
                             </CardBody>
                         </Card>
                     </div>
                 </div>
-    )
+        )
         })
 
         if (this.props.isSearchClicked){
             return(
-               
-                <div style={{backgroundColor:"#C9E2FF"}}>
-                    <div className='container'>
-                        <div className='row row-header'>
-                            <div className='col-12 col-md-2' >
-                                <h3>Design for</h3>
-                            </div>
-                            <div className='col-12 col-md-1' >
-                                <h3>Level</h3>
-                            </div>
-                            <div className='col-12 col-md-2' >
-                                <h3>Industry</h3>
-                            </div>
-                            <div className='col-12 col-md-1' >
-                                <h3>Rating</h3>
-                            </div>
-                            <div className='col-12 col-md-6' >
+                <>
+                    <div style={{backgroundColor:"#C9E2FF"}}>
+                        <div className='container'>
+                            <div className='row row-header'>
+                                <div className='col-12 col-md-2' >
+                                    <h3>Design for</h3>
+                                </div>
+                                <div className='col-12 col-md-1' >
+                                    <h3>Level</h3>
+                                </div>
+                                <div className='col-12 col-md-2' >
+                                    <h3>Industry</h3>
+                                </div>
+                                <div className='col-12 col-md-1' >
+                                    <h3>Rating</h3>
+                                </div>
+                                <div className='col-12 col-md-6' >
 
-                                <h3>Applicable heuristic</h3>
+                                    <h3>Applicable heuristic</h3>
+                                </div>
                             </div>
+                            <div className='row row-content'>
+
+                                {heuristic}
+                            
+
+                            </div>
+
                         </div>
-                        <div className='row row-content'>
-
-                            {heuristic}
-                           
-                        </div>
-
+                        
                     </div>
+
+                    <Modal className='modal-lg'  isOpen={this.state.isModalOpen} toggle={this.closeModal} >
+                        <ModalHeader className='startpage' toggle={this.closeModal}></ModalHeader>
+                        <ModalBody className='startpage'>
+                            <HeuristicDetails selectedOne= {this.state.selectedHeuristic} />
+                        </ModalBody>
+                    </Modal>
                     
-                </div>
-                    
-                
+                </>
             )
 
         }
@@ -217,6 +255,5 @@ class Collection extends Component{
 
                 </div>
             )
-        
     }
 }

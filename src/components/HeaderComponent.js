@@ -43,31 +43,36 @@ class Header extends Component{
                             <Nav navbar >
                             <NavItem >
                                 <NavLink className="nav-link" to="/selectyourway" style={{color:"black"}}>
-                                    <span className='fa-lg' >Home</span> 
+                                    <span className='fa-lg' ><strong>Home</strong></span> 
                                 </NavLink>
                             </NavItem>
                             <NavItem>
                                 <NavLink className="nav-link" to="/design-heuristic-collection" style={{color:"black"}}>
-                                    <span className='fa-lg'>DfX-Collection</span>
+                                    <span className='fa-lg'><strong>DfX-Collection</strong></span>
                                 </NavLink>
                             </NavItem>
                             <NavItem>
                                 <NavLink className="nav-link" to="/menu" style={{color:"black"}}>
-                                    <span className='fa-lg'>Assistant</span>
+                                    <span className='fa-lg'><strong>Assistant</strong></span>
                                 </NavLink>
                             </NavItem>
                             <NavItem>
                                 <NavLink className="nav-link" to="/contactus" style={{color:"black"}}>
-                                    <span className='fa-lg'>Your library</span>
+                                    <span className='fa-lg'><strong>Your library</strong></span>
                                 </NavLink>
                             </NavItem>
                             <NavItem>
                                 <NavLink className="nav-link" to="/contactus" style={{color:"black"}}>
-                                    <span className='fa-lg'>Search</span>
+                                    <span className='fa-lg'><strong>Search</strong></span>
                                 </NavLink>
                             </NavItem>
                             </Nav>
                             <Nav className='ms-auto' navbar>
+                                <NavItem>
+                                    <NavLink className="nav-link" style={{color:"black"}} to='/register'  >
+                                       <span className='fa-lg'>Register</span>
+                                    </NavLink>
+                                </NavItem>
                                 <NavItem>
                                     <NavLink className="nav-link" to="/login" style={{color:"black"}}>
                                         <span className='fa-lg'>Login</span> 

@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import {Navbar, Nav, NavbarToggler, Collapse, NavItem,Form, FormGroup, Input, Label, Button, FormFeedback, Col} from 'reactstrap'
 
+
+var regularExpression = /^(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
+
 class Register extends Component{
     constructor(props){
         super (props);
@@ -44,14 +47,15 @@ class Register extends Component{
             password_repeat: '',
             agree: ''
         };
-        if (this.state.touched.password && this.state.password.length <8)
-            errors.password = 'Your password needs to contain at least 8 letters'
+        
+        if(this.state.touched.email && this.state.email.split('').filter(x => x === '@').length !== 1)
+            errors.email = 'Email should contain a @';
+
+        if(this.state.touched.password && !regularExpression.test(this.state.password))
+            errors.password = 'Your password needs to contain at least 8 letters and 1 special character'
         
         if(this.state.touched.password && this.state.touched.password_repeat && this.state.password !==this.state.password_repeat )
             errors.password_repeat = 'Passwords do not match!'
-
-        if(this.state.touched.email && email.split('').filter(x => x === '@').length !== 1)
-            errors.email = 'Email should contain a @';
         
         if(!this.state.agree_terms_conditions)
             errors.agree= 'You need to accept'

@@ -16,8 +16,8 @@ class StartHeader extends Component{
             isNavOpen: false,
             isModalOpen: false
         };
-
     }
+    
     toggleNav(){
 
         this.setState({
@@ -40,6 +40,7 @@ class StartHeader extends Component{
     render(){
         return(
             <>
+            
             {/**Navbar includes the TU-Logo, titel and also links to Login and Register pages.
              * expand='md' makes the navbar static for medium screen sizes. 
              * Smaller screen sizes have a collapsed navbar
@@ -52,7 +53,7 @@ class StartHeader extends Component{
                         <Collapse isOpen={this.state.isNavOpen} navbar>
                             <Nav navbar>
                                 <NavItem>
-                                    <h1><strong>Select Your Way</strong></h1>
+                                    <h1><strong>Select Your {this.props.selectyour}</strong></h1>
                                 </NavItem>
                             </Nav>
                             <Nav className='ms-auto' navbar>
