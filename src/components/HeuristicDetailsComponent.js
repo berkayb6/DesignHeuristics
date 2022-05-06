@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import { Form, FormGroup, Col, Label, Input,Button, Card, CardTitle, CardBody, CardText, CardImg} from 'reactstrap';
 
-
+/** Please read first the explanation under HeuristicDetails */
 function RenderDetailItem({item,type}){
-
+    /**Since there are different kind of visualities with respect to heuristic properties,
+     * there are different kind of rendering. To do the right rendering, the type variable is used.
+     * 
+     */
     if (type=='positive'){
         return(
             <Card>
@@ -73,7 +76,17 @@ class HeuristicDetails extends Component{
     }
     
     render() {
+
+        /**To set the selected heuristic as the selected one, it is defined to avoid writing more codes */
         const selectedHeuristic= this.props.selectedOne;
+
+        /**Since each property of the seleceted heuristic has a different kind of visuality,
+         * the type of these properties has been defined in each variable to improve the simplicity and
+         * avoid more coding!
+         * 
+         * Each item or property will be rendered via the function defined above (RenderDetailItem)
+         * The functions seeks for two property: item that should be rendered, and the type of that */
+
         const positiveInfluence= selectedHeuristic.positiveInfluence.map((influence)=>{
             let type= 'positive';
             return(
@@ -148,7 +161,9 @@ class HeuristicDetails extends Component{
                     </Card>
                 </div>
                 <div className='row row-content' >
-
+                    {/** After defining how to render each property of the corresponding heuristic,
+                     * there will be rendered below.
+                     */}
                     <div className='row' style={{marginBottom:'40px'}}>
                         <h3> Possible positive influence</h3>
                         {positiveInfluence}

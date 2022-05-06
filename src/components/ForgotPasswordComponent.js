@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import {Form, FormGroup, Input, Label, Button, FormFeedback} from 'reactstrap'
 
 class ForgotPassword extends Component{
+    
+    /**It asks for an email and also checks if the given input has the sign '@' */
     constructor(props){
         super (props);
         this.state = {

@@ -26,10 +26,12 @@ class YourWay extends Component{
     render(){
         return(
             <>
-            {/**The header will be replaced by StartHeaderComponent */}
+            {/**The header will be replaced by StartHeaderComponent.
+             * Since this component should have a header being "Select Your Way", selectyour prop
+             * should be defined as "Way" and sent so to StartHeaderComponent
+             */}
                 <div style={{marginBottom:"50px"}}>
-                    
-                    <StartHeader/>
+                    <StartHeader selectyour= "Way"/>
                 </div>
 
             {/**Below there are two cards: Tutorial and DfX-Assist.

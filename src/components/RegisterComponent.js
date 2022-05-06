@@ -2,10 +2,15 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import {Navbar, Nav, NavbarToggler, Collapse, NavItem,Form, FormGroup, Input, Label, Button, FormFeedback, Col} from 'reactstrap'
 
-
+{/**To check if the password has at least 8 characters and 1 special character,
+the regularExpression is defined as below */}
 var regularExpression = /^(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
 
 class Register extends Component{
+
+    /**The state should contain the password, password repeat, email the status of agreement of terms and conditions,
+     * also the status of agreement of subscription, and check whether any entry for email, password and password repeat has been obtained.
+     */
     constructor(props){
         super (props);
         this.state = {
@@ -34,12 +39,21 @@ class Register extends Component{
         });
     }
     
+    /**To check if the corresponding input field has been touched (fulfilled), If so,
+     * then change the state as true
+     */
     handleBlur = (field) => (evt) => {
         this.setState({
             touched: { ...this.state.touched, [field]: true }
         });
     }
 
+    /**To validate: 
+     * - for email: it should contain an '@' sign.
+     * - for password: it should contain at least 8 char and 1 special char
+     * - for password_again: it should be same as password
+     * - for agreement of terms and conditions: it should be checked.
+     */
     validate(password, password_repeat, agree, email) {
         const errors = {
             email: '',
@@ -79,6 +93,7 @@ class Register extends Component{
         event.preventDefault();
     }
     render(){
+        {/**errors is defined as a class that will be sent to the function "validate" */}
         const errors = this.validate(this.state.password, this.state.password_repeat, this.state.email);
         return(
             <>
@@ -102,6 +117,13 @@ class Register extends Component{
                         <h1 style={{marginTop: "150px", marginBottom: "50px"}}><strong>Registration</strong></h1>
 
                         <Form onSubmit={this.handleSendLink}>
+                            {/**The email input:
+                             * changes the value as it is given by the user
+                             * checks if it is valid, if not an error message will raise
+                             * onChange: changes the state of corresponding variable (email in this case)
+                             * 
+                             * SAME PROCESSES ARE ALSO DONE FOR OTHER VARIABLES BELOW
+                             */}
                             <FormGroup>
                                 <Label htmlFor="email"><h2><strong>Email</strong></h2></Label>
                                 <Input type="text" id="email" name="email" style={{width:"400px"}} 

@@ -39,6 +39,14 @@ class DHCollection extends Component{
         event.preventDefault();
     }
 
+    /** a temporary button "search" is added to obtain the selection for:
+     * -designfor
+     * -industry
+     * -level
+     * If the button is clicked, this changes the status of the state "isSearchClicked" to true
+     * After that, the Collection which is defined below of this page will be rendered
+     */
+
     searchClicked(){
         if (this.state.isSearchClicked===false){
             this.setState({
@@ -131,6 +139,9 @@ class DHCollection extends Component{
                     </div>
 
                 </div>
+                {/** The Collection component needs the information which options the user selected.
+                 * According to the selections, corresponding heuristics will be shown to the user
+                 */}
                 <Collection heuristics={this.props.heuristics}
                     isSearchClicked={this.state.isSearchClicked}
                     designfor={this.props.heuristics.filter( heuristic => heuristic.designfor=== this.state.designfor)}
@@ -145,12 +156,19 @@ export default DHCollection;
 
 
 class Collection extends Component{
+
+    /** Collection Component has also an property which is showing the details of a specific heuristic
+     * that the user clicked on. To show that as a pop-up (modal), it contains the HeuristicDetailsComponent inside of it.
+     */
     constructor(props) {
         super(props);
 
         this.toggleModal=this.toggleModal.bind(this);
         this.closeModal=this.closeModal.bind(this);
-
+        
+        /**To define the selected heuristic and pass it into the HeuristicDetailsComponent the state
+         * contains selectedHeuristic as an empty string.
+         */
         this.state = {
           isModalOpen: false,
           selectedHeuristic: ''
@@ -176,6 +194,11 @@ class Collection extends Component{
 
 
     render(){
+
+        /** The heuristic defined just below contains all the informations of heuristics that the user wants to see: designfor, level etc.
+         * A short explanation about the heuristic stands as the last column. If the user wants to have more information
+         * about this specific heuristic, s/he should click on the explanation to toggle the pop-up.
+         */
 
         const heuristic= this.props.designfor.map((heuristic)=>{
             return(
@@ -237,6 +260,11 @@ class Collection extends Component{
                         </div>
                         
                     </div>
+
+                    {/**If the user has clicked on the explanation, then the modal will be shown. 
+                     * For this to be rendered properly, the information which heuristic has been clicked,
+                     * will be sent to the component HeuristicDetails along with all data of that heuristic.
+                     */}
 
                     <Modal className='modal-lg'  isOpen={this.state.isModalOpen} toggle={this.closeModal} >
                         <ModalHeader className='startpage' toggle={this.closeModal}></ModalHeader>

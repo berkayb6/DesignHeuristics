@@ -70,6 +70,9 @@ class Main extends Component {
         }
 
         const DesignHeuristicCollection =()=>{
+            /**Heuristics are defined in the file "heuristics.js" under the file shared. They should be passed
+             * into the DHCollection component to render them.
+             */
             return(
                 <div className='startpage' style = {{minHeight:"100vh"}}>
                     <DHCollection heuristics={this.state.heuristics}/>

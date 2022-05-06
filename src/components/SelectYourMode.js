@@ -8,21 +8,32 @@ class YourMode extends Component{
 
         return(
             <>
+                {/**The header will be replaced by StartHeaderComponent.
+                * Since this component should have a header being "Select Your Mode", selectyour prop
+                * should be defined as "Mode" and sent so to StartHeaderComponent
+                */}
                 <div style={{marginBottom:"50px"}}>
-                    
                     <StartHeader selectyour="Mode" />
                 </div>
+
+                {/** According to the design, a picture should stand on the left hand side, and
+                 * on the right hand side, there are three card components standing on top of each other, and linking
+                 * to design heuristic collection, development assistant and your personal library
+                 */}
+
                 <div className='container' >
-                
                     <div className='row row-content align-items-start'>
-                        
-                        <div className='col-12  col-md-6 offset-md-1' >
+
+                        <div className='col-12 col-md-6 offset-md-1' >
                             <CardImg src= "assets/SelectYourMode.png" className='selectYourWayImage' />
                         </div>
-
                         <div className='col-12 col-md-5  '>
                             <Media list >
                                 <div className='row ' >
+                                    
+                                    {/**Since covering the card with "Link" makes the text underlined and blue,
+                                     * the className has set to text-decoration-none and card-block and also the color as black*/}
+
                                     <Link  className='text-decoration-none card-block' style={{color:"black"}} to="/design-heuristic-collection">
                                         <Card style={{marginTop:"20px", borderRadius:"10px"}}>
                                             <div className='col-12 col-md-10 m-2'  style={{padding:"10px 20px 10px"}}>

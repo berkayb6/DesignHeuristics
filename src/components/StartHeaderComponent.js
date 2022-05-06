@@ -19,7 +19,8 @@ class StartHeader extends Component{
     }
     
     toggleNav(){
-
+        {/**When the user clicks on the navbar,
+     the state of nav should be changed to the opposite of current status */}
         this.setState({
             isNavOpen: !this.state.isNavOpen
         });
@@ -53,6 +54,10 @@ class StartHeader extends Component{
                         <Collapse isOpen={this.state.isNavOpen} navbar>
                             <Nav navbar>
                                 <NavItem>
+                                    {/**Since there are two pages that have similar heading being "Select Your Way" and "Select Your Mode",
+                                     * the corresponding ending is sent to this component. Depending on the received selectyour-prop, heading
+                                     * will be edited. 
+                                     */}
                                     <h1><strong>Select Your {this.props.selectyour}</strong></h1>
                                 </NavItem>
                             </Nav>
