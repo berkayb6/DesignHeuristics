@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import StartHeader from './StartHeaderComponent';
 import {Link} from 'react-router-dom';
 import { Card, CardImg, Button, Media } from 'reactstrap';
+import {baseUrl} from '../shared/baseUrl';
 
 class YourMode extends Component{
     render(){
@@ -25,7 +26,7 @@ class YourMode extends Component{
                     <div className='row row-content align-items-start'>
 
                         <div className='col-12 col-md-6 offset-md-1' >
-                            <CardImg src= "assets/SelectYourMode.png" className='selectYourWayImage' />
+                            <CardImg src= {`${baseUrl}assets/SelectYourMode.png`} className='selectYourWayImage' />
                         </div>
                         <div className='col-12 col-md-5  '>
                             <Media list >

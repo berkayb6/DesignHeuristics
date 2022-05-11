@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Link} from "react-router-dom";
 import StartHeader from './StartHeaderComponent';
 import { Card, CardImg, CardBody, CardTitle, CardSubtitle, CardText, Button } from 'reactstrap';
-
+import {baseUrl} from '../shared/baseUrl';
 
 
 class YourWay extends Component{
@@ -49,7 +49,7 @@ class YourWay extends Component{
                         <div className='col-12 col-md offset-md-1' >
                             
                             <Card className='selectYourWayCard'>
-                                <CardImg src= "assets/SelectYourWay_left.jpg" className='selectYourWayImage' alt= "Tutorials"/>
+                                <CardImg src= {`${baseUrl}assets/SelectYourWay_left.jpg`} className='selectYourWayImage' alt= "Tutorials"/>
                                 <CardBody>
                                     <CardTitle style={{display: "flex", justifyContent:'center', alignItems:'center'}}> <h3><strong>Tutorials</strong></h3> </CardTitle>                
                                     <CardText> <h5>Here you will find tutorials on how to use our app and how design heuristics help you acchieve better designs.</h5></CardText>
@@ -64,7 +64,7 @@ class YourWay extends Component{
                         <div className='col-12 col-md offset-md-1' >
                             <Link  className='text-decoration-none card-block' style={{color:"black"}} to="/selectyourmode">
                                 <Card className='selectYourWayCard' onClick={this.directDfXAssist}>
-                                    <CardImg src= "assets/SelectYourWay_right.jpg" className='selectYourWayImage' alt= "Tutorials"/>
+                                    <CardImg src= {`${baseUrl}assets/SelectYourWay_right.jpg`} className='selectYourWayImage' alt= "Tutorials"/>
                                     <CardBody>
                                         <CardTitle className='selectYourWayCardBody'> <h3><strong>DfX-Assist</strong></h3> </CardTitle>                
                                         <CardText > <h5 >Here you will find state of the design heuristics and and product development assistant</h5> </CardText>

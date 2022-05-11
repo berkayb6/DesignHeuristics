@@ -10,7 +10,8 @@ import AddHeuristic from './AddHeuristicComponent';
 import ForgotPassword from './ForgotPasswordComponent';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { addComment } from '../redux/ActionCreators';
+import { addComment, fetchHeuristics, fetchComments } from '../redux/ActionCreators';
+import { actions } from 'react-redux-form';
 
 
 const mapStateToProps = state => {
@@ -22,13 +23,21 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    addComment: (heuristicId, author, comment) => dispatch(addComment(heuristicId, author, comment))
+    addComment: (heuristicId, author, comment) => dispatch(addComment(heuristicId, author, comment)),
+    fetchHeuristics: () => {dispatch(fetchHeuristics())},
+    fetchComments: () => {dispatch(fetchComments())},
+    resetFeedbackForm: () => {dispatch(actions.reset('feedback'))} //
 })
 
 class Main extends Component {
     constructor(props){
         super (props);
         
+    }
+
+    componentDidMount(){
+        this.props.fetchHeuristics();
+        this.props.fetchComments();
     }
     
 
@@ -87,8 +96,11 @@ class Main extends Component {
              */
             return(
                 <div className='startpage' style = {{minHeight:"100vh"}}>
-                    <DHCollection heuristics={this.props.heuristics}
-                        comments={this.props.comments}
+                    <DHCollection heuristics={this.props.heuristics.heuristics}
+                        heuristicsLoading= {this.props.heuristics.isLoading}
+                        heuristiscErrMess= {this.props.heuristics.errMess}
+                        comments={this.props.comments.comments}
+                        commentsErrMess= {this.props.comments.errMess}
                         addComment={this.props.addComment}/>
                     
                 </div>

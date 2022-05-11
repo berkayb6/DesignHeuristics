@@ -3,7 +3,7 @@ import HeuristicDetails from './HeuristicDetailsComponent';
 import {Link} from 'react-router-dom';
 import { Form, FormGroup, Col, Label, Input,Button, Card, CardTitle, CardBody, CardText, Modal, ModalHeader, ModalBody } from 'reactstrap';
 import Header from './HeaderComponent';
-
+import { Loading } from './LoadingComponent';
 
 class DHCollection extends Component{
     constructor(props) {
@@ -143,6 +143,8 @@ class DHCollection extends Component{
                  */}
                 <Collection heuristics={this.props.heuristics}
                     isSearchClicked={this.state.isSearchClicked}
+                    isLoading= {this.props.heuristicsLoading}
+                    errMess= {this.props.heuristiscErrMess}
                     designfor={this.props.heuristics.filter( heuristic => heuristic.designfor=== this.state.designfor)}
                     industry={this.props.heuristics.filter( heuristic => heuristic.industry=== this.state.industry)}
                     level={this.props.heuristics.filter( heuristic => heuristic.level=== this.state.level)}
@@ -239,57 +241,77 @@ class Collection extends Component{
         })
 
         if (this.props.isSearchClicked){
-            return(
-                <>
-                    <div style={{backgroundColor:"#C9E2FF"}}>
-                        <div className='container'>
-                            <div className='row row-header'>
-                                <div className='col-12 col-md-2' >
-                                    <h3>Design for</h3>
-                                </div>
-                                <div className='col-12 col-md-1' >
-                                    <h3>Level</h3>
-                                </div>
-                                <div className='col-12 col-md-2' >
-                                    <h3>Industry</h3>
-                                </div>
-                                <div className='col-12 col-md-1' >
-                                    <h3>Rating</h3>
-                                </div>
-                                <div className='col-12 col-md-6' >
 
-                                    <h3>Applicable heuristic</h3>
-                                </div>
-                            </div>
-                            <div className='row row-content'>
-
-                                {heuristic}
-                            
-
-                            </div>
-
+            if (this.props.isLoading) {
+                return(
+                    <div className='container'>
+                        <div className='row'>
+                            <Loading/>
                         </div>
-                        
                     </div>
+                )
+            }
+            else if (this.props.errMess){
+                return(
+                    <div className='container'>
+                        <div className='row'>
+                            <h4>{this.props.errMess}</h4>
+                        </div>
+                    </div>
+                )
+            }
+            else
+                return(
+                    <>
+                        <div style={{backgroundColor:"#C9E2FF"}}>
+                            <div className='container'>
+                                <div className='row row-header'>
+                                    <div className='col-12 col-md-2' >
+                                        <h3>Design for</h3>
+                                    </div>
+                                    <div className='col-12 col-md-1' >
+                                        <h3>Level</h3>
+                                    </div>
+                                    <div className='col-12 col-md-2' >
+                                        <h3>Industry</h3>
+                                    </div>
+                                    <div className='col-12 col-md-1' >
+                                        <h3>Rating</h3>
+                                    </div>
+                                    <div className='col-12 col-md-6' >
 
-                    {/**If the user has clicked on the explanation, then the modal will be shown. 
-                     * For this to be rendered properly, the information which heuristic has been clicked,
-                     * will be sent to the component HeuristicDetails along with all data of that heuristic.
-                     */}
+                                        <h3>Applicable heuristic</h3>
+                                    </div>
+                                </div>
+                                <div className='row row-content'>
 
-                    <Modal className='modal-lg'  isOpen={this.state.isModalOpen} toggle={this.closeModal} >
-                        <ModalHeader className='startpage' toggle={this.closeModal}></ModalHeader>
-                        <ModalBody className='startpage'>
-                            <HeuristicDetails selectedOne= {this.state.selectedHeuristic} 
-                                comments={this.state.selectedComments}
-                                addComment= {this.props.addComment} />
-                        </ModalBody>
-                    </Modal>
-                    
-                </>
-            )
+                                    {heuristic}
+                                
 
-        }
+                                </div>
+
+                            </div>
+                            
+                        </div>
+
+                        {/**If the user has clicked on the explanation, then the modal will be shown. 
+                         * For this to be rendered properly, the information which heuristic has been clicked,
+                         * will be sent to the component HeuristicDetails along with all data of that heuristic.
+                         */}
+
+                        <Modal className='modal-lg'  isOpen={this.state.isModalOpen} toggle={this.closeModal} >
+                            <ModalHeader className='startpage' toggle={this.closeModal}></ModalHeader>
+                            <ModalBody className='startpage'>
+                                <HeuristicDetails selectedOne= {this.state.selectedHeuristic} 
+                                    comments={this.state.selectedComments}
+                                    addComment= {this.props.addComment} />
+                            </ModalBody>
+                        </Modal>
+                        
+                    </>
+                )
+
+            }
         else
             return(
                 <div>

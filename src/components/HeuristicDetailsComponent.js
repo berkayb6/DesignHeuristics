@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Form, FormGroup, Col, Label, Input,Button, Card, CardTitle, CardBody, CardText, CardImg, Row} from 'reactstrap';
 import { LocalForm, Control} from 'react-redux-form';
-
+import {baseUrl} from '../shared/baseUrl';
 
 /** Please read first the explanation under HeuristicDetails */
 function RenderDetailItem({item,type}){
@@ -29,7 +29,7 @@ function RenderDetailItem({item,type}){
     } 
     if (type=='graphic'){
         return(
-            <CardImg className='align-items-center' src={item}></CardImg>
+            <CardImg className='align-items-center' src={baseUrl + item}></CardImg>
         )  
     } 
     if (type=='source'){
