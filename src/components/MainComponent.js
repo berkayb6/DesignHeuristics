@@ -8,19 +8,31 @@ import YourMode from './SelectYourMode';
 import DHCollection from './DesignHeuristicCollectionComponent';
 import AddHeuristic from './AddHeuristicComponent';
 import ForgotPassword from './ForgotPasswordComponent';
-import { HEURISTICS } from '../shared/heuristics';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { addComment } from '../redux/ActionCreators';
+
+
+const mapStateToProps = state => {
+    return {
+        heuristics: state.heuristics,
+        comments: state.comments,
+        users: state.users
+    }
+}
+
+const mapDispatchToProps = (dispatch) => ({
+    addComment: (heuristicId, author, comment) => dispatch(addComment(heuristicId, author, comment))
+})
 
 class Main extends Component {
     constructor(props){
         super (props);
-        this.state={
-            heuristics: HEURISTICS
-        };
+        
     }
     
-    render (){
 
+    render (){
         const StartPage= ()=> {
             return (
                 <div className='startpage' style = {{minHeight:"100vh"}}>
@@ -56,7 +68,7 @@ class Main extends Component {
         const LoginPage =()=>{
             return(
                 <div className='startpage' style = {{minHeight:"100vh"}}>
-                    <Login/>
+                    <Login users= {this.props.users}/>
                 </div>
             )
         }
@@ -75,7 +87,10 @@ class Main extends Component {
              */
             return(
                 <div className='startpage' style = {{minHeight:"100vh"}}>
-                    <DHCollection heuristics={this.state.heuristics}/>
+                    <DHCollection heuristics={this.props.heuristics}
+                        comments={this.props.comments}
+                        addComment={this.props.addComment}/>
+                    
                 </div>
             )
         }
@@ -121,4 +136,4 @@ class Main extends Component {
     }
 
 }
-export default Main;
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Main));

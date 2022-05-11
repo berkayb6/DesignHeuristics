@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { Form, FormGroup, Col, Label, Input,Button, Card, CardTitle, CardBody, CardText, CardImg} from 'reactstrap';
+import { Form, FormGroup, Col, Label, Input,Button, Card, CardTitle, CardBody, CardText, CardImg, Row} from 'reactstrap';
+import { LocalForm, Control} from 'react-redux-form';
+
 
 /** Please read first the explanation under HeuristicDetails */
 function RenderDetailItem({item,type}){
@@ -69,16 +71,16 @@ class HeuristicDetails extends Component{
 
         this.sendComment=this.sendComment.bind(this);
     }
-
-    sendComment(event){
-        alert("Comment: " + this.comment.value );
-        event.preventDefault();
+    sendComment(values){
+        this.props.addComment(this.props.selectedOne.id, values.author, values.comment);
     }
     
     render() {
+        console.log(this.state)
 
         /**To set the selected heuristic as the selected one, it is defined to avoid writing more codes */
         const selectedHeuristic= this.props.selectedOne;
+        const selectedComments= this.props.comments;
 
         /**Since each property of the seleceted heuristic has a different kind of visuality,
          * the type of these properties has been defined in each variable to improve the simplicity and
@@ -132,7 +134,7 @@ class HeuristicDetails extends Component{
             )
         })
         
-        const comments= selectedHeuristic.comments.map((comment)=>{
+        const comments= selectedComments.map((comment)=>{
             let type= 'comment';
             return(
                 <div key={comment.id} className='col-12 m-1  '>
@@ -188,15 +190,29 @@ class HeuristicDetails extends Component{
                         <h3> Comments</h3>
                         {comments}
                     </div>
-                    <Form onSubmit={this.sendComment}>
-                        <FormGroup>
-                            <Label htmlFor="comment"></Label>
-                            <Input type="text" id="comment" name="comment" style={{width:"400px"}} innerRef={(input) => this.username = input} />
-                        </FormGroup>
-                        <FormGroup >
-                            <Button type="submit" value="submit" color="light"> Send comment</Button>
-                        </FormGroup>
-                    </Form>
+                    <LocalForm onSubmit={(values)=>{this.sendComment(values)}}>
+                        <Row className='form-group'>
+                            <Col>
+                                <Label htmlFor="author"></Label>
+                                <Control.text model=".author" id="author" name="author" 
+                                    className= "form-control" placeholder="Your Name" 
+                                    style={{width:"400px"}}  />
+                            </Col>
+                        </Row>
+                        <Row className='form-group'>
+                            <Col>
+                                <Label htmlFor="comment"></Label>
+                                <Control.text model=".comment" id="comment" name="comment"
+                                    className= "form-control" placeholder="Your Feedback"
+                                    style={{width:"400px", marginBottom:"20px"}}  />
+                            </Col>
+                        </Row>
+                        <Row className='form-group'>
+                            <Col>
+                                <Button type="submit"  value="submit" color="light"> Send comment</Button>
+                            </Col>
+                        </Row>
+                    </LocalForm>
                 </div>
             </div>
         );

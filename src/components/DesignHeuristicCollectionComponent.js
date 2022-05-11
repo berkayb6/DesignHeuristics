@@ -19,7 +19,6 @@ class DHCollection extends Component{
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.searchClicked = this.searchClicked.bind(this);
-        
     }
 
     handleInputChange(event) {
@@ -147,6 +146,8 @@ class DHCollection extends Component{
                     designfor={this.props.heuristics.filter( heuristic => heuristic.designfor=== this.state.designfor)}
                     industry={this.props.heuristics.filter( heuristic => heuristic.industry=== this.state.industry)}
                     level={this.props.heuristics.filter( heuristic => heuristic.level=== this.state.level)}
+                    comments= {this.props.comments}
+                    addComment= {this.props.addComment}
                     style = {{minHeight: "100vh"}}/>
             </>
         )
@@ -165,15 +166,16 @@ class Collection extends Component{
 
         this.toggleModal=this.toggleModal.bind(this);
         this.closeModal=this.closeModal.bind(this);
-        
+        this.getComments=this.getComments.bind(this);
+
         /**To define the selected heuristic and pass it into the HeuristicDetailsComponent the state
          * contains selectedHeuristic as an empty string.
          */
         this.state = {
           isModalOpen: false,
-          selectedHeuristic: ''
+          selectedHeuristic: '',
+          selectedComments: ''
         };
-
         
     }
 
@@ -182,12 +184,21 @@ class Collection extends Component{
             isModalOpen: !this.state.isModalOpen,
             selectedHeuristic: selectedOne
         });
+        this.getComments(selectedOne.id)
     }
 
     closeModal(){
         this.setState({
             isModalOpen: !this.state.isModalOpen
         });
+    }
+
+    getComments(selectedOneId){
+        const comments = this.props.comments.filter(comment=> comment.heuristicId===selectedOneId)
+        this.setState({
+            selectedComments: comments
+        })
+        
     }
 
     
@@ -269,7 +280,9 @@ class Collection extends Component{
                     <Modal className='modal-lg'  isOpen={this.state.isModalOpen} toggle={this.closeModal} >
                         <ModalHeader className='startpage' toggle={this.closeModal}></ModalHeader>
                         <ModalBody className='startpage'>
-                            <HeuristicDetails selectedOne= {this.state.selectedHeuristic} />
+                            <HeuristicDetails selectedOne= {this.state.selectedHeuristic} 
+                                comments={this.state.selectedComments}
+                                addComment= {this.props.addComment} />
                         </ModalBody>
                     </Modal>
                     
