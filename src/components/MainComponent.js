@@ -10,7 +10,7 @@ import AddHeuristic from './AddHeuristicComponent';
 import ForgotPassword from './ForgotPasswordComponent';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { addComment, fetchHeuristics, fetchComments } from '../redux/ActionCreators';
+import { postComment, fetchHeuristics, fetchComments } from '../redux/ActionCreators';
 import { actions } from 'react-redux-form';
 
 
@@ -23,7 +23,7 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    addComment: (heuristicId, author, comment) => dispatch(addComment(heuristicId, author, comment)),
+    postComment: (heuristicId, author, comment) => dispatch(postComment(heuristicId, author, comment)),
     fetchHeuristics: () => {dispatch(fetchHeuristics())},
     fetchComments: () => {dispatch(fetchComments())},
     resetFeedbackForm: () => {dispatch(actions.reset('feedback'))} //
@@ -101,7 +101,7 @@ class Main extends Component {
                         heuristiscErrMess= {this.props.heuristics.errMess}
                         comments={this.props.comments.comments}
                         commentsErrMess= {this.props.comments.errMess}
-                        addComment={this.props.addComment}/>
+                        postComment={this.props.postComment}/>
                     
                 </div>
             )

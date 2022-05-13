@@ -10,7 +10,7 @@ class DHCollection extends Component{
         super(props);
 
         this.state = {
-            designfor: '',
+            designfor: 'sustainability',
             industry: '',
             level: '',
             isSearchClicked: false
@@ -149,7 +149,7 @@ class DHCollection extends Component{
                     industry={this.props.heuristics.filter( heuristic => heuristic.industry=== this.state.industry)}
                     level={this.props.heuristics.filter( heuristic => heuristic.level=== this.state.level)}
                     comments= {this.props.comments}
-                    addComment= {this.props.addComment}
+                    postComment= {this.props.postComment}
                     style = {{minHeight: "100vh"}}/>
             </>
         )
@@ -304,7 +304,7 @@ class Collection extends Component{
                             <ModalBody className='startpage'>
                                 <HeuristicDetails selectedOne= {this.state.selectedHeuristic} 
                                     comments={this.state.selectedComments}
-                                    addComment= {this.props.addComment} />
+                                    postComment= {this.props.postComment} />
                             </ModalBody>
                         </Modal>
                         

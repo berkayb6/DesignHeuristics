@@ -72,7 +72,7 @@ class HeuristicDetails extends Component{
         this.sendComment=this.sendComment.bind(this);
     }
     sendComment(values){
-        this.props.addComment(this.props.selectedOne.id, values.author, values.comment);
+        this.props.postComment(this.props.selectedOne.id, values.author, values.comment);
     }
     
     render() {
