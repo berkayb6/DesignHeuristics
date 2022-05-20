@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter  } from 'react-router-dom';
 import {Navbar, Nav, NavbarToggler, Collapse, NavItem, Form, FormGroup, Row, Label, Button, Col} from 'reactstrap'
 import { Control, LocalForm, Errors} from 'react-redux-form';
 
@@ -13,8 +13,8 @@ const isTermsChecked = (val) => val;
 
 class Register extends Component{
     
-    /**The state should contain the password, password repeat, email the status of agreement of terms and conditions,
-     * also the status of agreement of subscription, and check whether any entry for email, password and password repeat has been obtained.
+    /** Passwords will temporarily saved into state to compare with eachother and to check,
+     *  whether they both are exactly same.
      */
     constructor(props){
         super (props);
@@ -26,7 +26,6 @@ class Register extends Component{
         this.handleInputChange = this.handleInputChange.bind(this);
         this.toggleNav = this.toggleNav.bind(this);
         this.handleSendLink=this.handleSendLink.bind(this);
-        
     }
     
     toggleNav(){
@@ -45,20 +44,23 @@ class Register extends Component{
             [name]: value
         });
     }
-
-    
-    /**To validate: 
-     * - for email: it should contain an '@' sign.
-     * - for password: it should contain at least 8 char and 1 special char
-     * - for password_again: it should be same as password
-     * - for agreement of terms and conditions: it should be checked.
-     */
-    
     
     handleSendLink(values){
-        console.log('Current State is: ' + JSON.stringify(values));
-        alert('Current State is: ' + JSON.stringify(values));
+
+        /** After completing registration, the user will be directed to another page called "register completed".
+         *  Before that, the input data such as user's email, password and check status of subscription should be sent
+         *  to the server. 
+         *  If the user doesn't check the subscription, it will be sent as false, and true otherwise.
+         */
+        if (values.subscription===undefined){
+            this.props.register(values.email, values.password, false);
+        }
+        else
+            this.props.register(values.email, values.password, values.subscription);
+        
+        this.props.history.push('/register-completed');
     }
+
     render(){
         
         return(
@@ -168,7 +170,7 @@ class Register extends Component{
                                 <Col md={{size: 6}}>
                                     <div className="form-check">
                                         <Label check></Label>
-                                        <Control.checkbox model=".subscription" name="agree_subscription" 
+                                        <Control.checkbox model=".subscription" checked={false} name="agree_subscription" 
                                             className= "form-check-input"/> 
                                             Accept to receive emails (optional)
                                     </div>
@@ -184,4 +186,4 @@ class Register extends Component{
         )
     }
 }
-export default Register;
+export default withRouter(Register);

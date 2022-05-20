@@ -1,5 +1,5 @@
 import React from 'react';
-
+/** Loading circle */
 export const Loading= () => {
     return (
         <div className='col-12'>

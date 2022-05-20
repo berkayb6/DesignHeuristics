@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "react-router-dom/Link";
 import { Card, CardImg } from "reactstrap";
+import { baseUrl } from "../shared/baseUrl";
 
 function MoreInfo(){
 
@@ -34,7 +35,7 @@ function MoreInfo(){
                 <div className='col-12 col-md-5'>
                     
                     <Card>
-                        <CardImg src= "assets/bycle.jpg" width={100} height={250}/>
+                        <CardImg src= {`${baseUrl}assets/bycle.jpg`} width={100} height={250}/>
                     </Card>
 
                 

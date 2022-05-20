@@ -71,12 +71,17 @@ class HeuristicDetails extends Component{
 
         this.sendComment=this.sendComment.bind(this);
     }
+
+
     sendComment(values){
+
+        /** After the user submits the feedback, this function will be called to dispatch the input
+        * being the heuristic which the user sends a feedback for, user's name and comment to the server.
+        */
         this.props.postComment(this.props.selectedOne.id, values.author, values.comment);
     }
     
     render() {
-        console.log(this.state)
 
         /**To set the selected heuristic as the selected one, it is defined to avoid writing more codes */
         const selectedHeuristic= this.props.selectedOne;
