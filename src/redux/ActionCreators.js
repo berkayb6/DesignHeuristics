@@ -162,11 +162,17 @@ export const attemptRegistration = (user) => ({
     payload: user
 });
 
-export const register = (email, password, subscription) => (dispatch) =>{
+export const register = (email, password, subscription, library, yourHeuristics, [adminProjects, participantProjects]) => (dispatch) =>{
     const newUser= {
         email: email,
         password: password,
-        subscription: subscription
+        subscription: subscription,
+        library: library,
+        yourHeuristics: yourHeuristics,
+        projects: {
+            adminProjects: adminProjects,
+            participantProjects: participantProjects
+        }
     }
 
     return fetch (baseUrl + 'users', {
@@ -194,7 +200,8 @@ export const register = (email, password, subscription) => (dispatch) =>{
             throw errmess;
         })
         .then (response => response.json())
-        .then (response => dispatch(addComment(response)))
+        .then (response => {dispatch(addComment(response))
+            console.log("user: ", JSON.stringify(response))})
         .catch ( error => {console.log ('Registration ', error.message)
             alert( 'You could not be registered\nError: ' + error.message)})
 }

@@ -26,8 +26,13 @@ class Register extends Component{
         this.handleInputChange = this.handleInputChange.bind(this);
         this.toggleNav = this.toggleNav.bind(this);
         this.handleSendLink=this.handleSendLink.bind(this);
+        
     }
     
+    componentDidCatch(){
+        console.log( "test: ", this.props.users[this.props.users.length-1].projects)
+    }
+        
     toggleNav(){
         
         this.setState({
@@ -46,6 +51,10 @@ class Register extends Component{
     }
     
     handleSendLink(values){
+        var library = [];
+        var yourHeuristics= [];
+        var adminProjects= [];
+        var participantProjects = [];
 
         /** After completing registration, the user will be directed to another page called "register completed".
          *  Before that, the input data such as user's email, password and check status of subscription should be sent
@@ -53,11 +62,11 @@ class Register extends Component{
          *  If the user doesn't check the subscription, it will be sent as false, and true otherwise.
          */
         if (values.subscription===undefined){
-            this.props.register(values.email, values.password, false);
+            this.props.register(values.email, values.password, false, library, yourHeuristics, [adminProjects, participantProjects]);
         }
         else
-            this.props.register(values.email, values.password, values.subscription);
-        
+            this.props.register(values.email, values.password, values.subscription, library, yourHeuristics, [adminProjects, participantProjects]);
+
         this.props.history.push('/register-completed');
     }
 

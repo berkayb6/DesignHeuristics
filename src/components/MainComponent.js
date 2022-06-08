@@ -3,11 +3,13 @@ import Start from './StartComponent';
 import MoreInfo from './MoreInfoComponent';
 import Login from './LoginPageComponent';
 import Register from './RegisterComponent';
+import Profile from './ProfileComponent';
 import RegisterCompleted from './RegisterCompletedComponent';
 import YourWay from './SelectYourWayComponent';
 import YourMode from './SelectYourMode';
 import DHCollection from './DesignHeuristicCollectionComponent';
-import AddHeuristic from './AddHeuristicComponent';
+import AddHeuristic from './AddHeuristicComponent'
+import Search from './SearchComponent';
 import ForgotPassword from './ForgotPasswordComponent';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -28,7 +30,7 @@ const mapStateToProps = state => {
  */
 const mapDispatchToProps = (dispatch) => ({
     postComment: (heuristicId, author, comment) => dispatch(postComment(heuristicId, author, comment)),
-    register: (email, password, subscription) => dispatch(register(email, password, subscription)),
+    register: (email, password, subscription, library, yourHeuristics, projects) => dispatch(register(email, password, subscription, library, yourHeuristics, projects)),
     fetchUsers: () => {dispatch(fetchUsers())},
     fetchHeuristics: () => {dispatch(fetchHeuristics())},
     fetchComments: () => {dispatch(fetchComments())},
@@ -105,6 +107,13 @@ class Main extends Component {
             )
         }
 
+        const ProfilePage = () => {
+            return(
+                <div className='startpage' style = {{minHeight:"100vh"}}>
+                <Profile />
+                </div>
+            )
+        }
         const DesignHeuristicCollection =()=>{
             /**Heuristics data come from server and need to pass into the DH Collection component to be presented
              * on the browser. Also the messages for an "error" and "loading" will be pass into the same component.
@@ -133,6 +142,14 @@ class Main extends Component {
             )
         }
 
+        const SearchPage = () => {
+            return(
+                <div className='startpage' style = {{minHeight:"100vh"}}>
+                    <Search/>
+                </div>
+            )
+        }
+
         const ForgotYourPassword = ()=>{
             return(
                 <div className='startpage' style = {{minHeight:"100vh"}}>
@@ -154,9 +171,11 @@ class Main extends Component {
                     <Route path='/login' component={LoginPage}/>
                     <Route path='/register' component={RegisterPage}/>
                     <Route path='/register-completed' component={RegisterCompletedPage}/>
+                    <Route path='/your-profile' component={ProfilePage}/>
                     <Route path='/selectyourmode' component={SelectYourMode}/>
                     <Route path='/design-heuristic-collection' component={DesignHeuristicCollection}/>
                     <Route path='/add-your-own-heuristic' component={AddYourOwnHeuristic}/>
+                    <Route path='/search' component={SearchPage}/>
                     <Route path='/forgot-your-password' component={ForgotYourPassword}/>
                     <Redirect to="/start" />
                 </Switch>

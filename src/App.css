@@ -35,3 +35,19 @@
   justify-content: center;
   align-items: center;
 }
+
+.circle {
+  display: flex;
+  width: 100px;
+  height: 100px;
+  background-color: green;
+  border-radius: 50%;
+}
+
+.square {
+  display: flex;
+  border-radius: 10px;
+  width: 260px;
+  height: 60px;
+  background-color: #FEE3DD;
+}

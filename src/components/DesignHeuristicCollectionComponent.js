@@ -11,8 +11,8 @@ class DHCollection extends Component{
 
         this.state = {
             designfor: 'sustainability',
-            industry: '',
-            level: '',
+            industry: 'automobility',
+            level: 'system',
             isSearchClicked: false
         };
 
@@ -25,14 +25,15 @@ class DHCollection extends Component{
         const target = event.target;
         const value = target.type === 'checkbox' ? target.checked : target.value;
         const name = target.name;
+        
     
         this.setState({
           [name]: value
         });
-
     }
 
     handleSubmit(event) {
+        
         console.log('Current State is: ' + JSON.stringify(this.state));
         alert('Current State is: ' + JSON.stringify(this.state));
         event.preventDefault();
@@ -97,30 +98,30 @@ class DHCollection extends Component{
                                         </Col>
                                     </FormGroup>
                                     <FormGroup row>
-                                        <Label htmlFor="designfor" md={5}><h4>Industry</h4></Label>
+                                        <Label htmlFor="industry" md={5}><h4>Industry</h4></Label>
                                         <Col md={7}>
                                             <Input type="select" name="industry"
                                                     value={this.state.industry}
                                                     placeholder="change the property"
                                                     onChange={this.handleInputChange}>
-                                                <option>Automobility</option>
-                                                <option>Airospace</option>
-                                                <option>Furniture</option>
-                                                <option>Household Goods</option>
+                                                <option>automobility</option>
+                                                <option>airospace</option>
+                                                <option>furniture</option>
+                                                <option>household goods</option>
                                             </Input>
                                         </Col>
                                     </FormGroup>
                                     <FormGroup row>
-                                        <Label htmlFor="designfor" md={5}><h4>Level</h4></Label>
+                                        <Label htmlFor="level" md={5}><h4>Level</h4></Label>
                                         <Col md={7}>
                                             <Input type="select" name="level"
                                                     value={this.state.level}
                                                     placeholder="change the property"
                                                     onChange={this.handleInputChange}>
-                                                <option>System</option>
-                                                <option>Product</option>
-                                                <option>Component</option>
-                                                <option>Part</option>
+                                                <option>system</option>
+                                                <option>product</option>
+                                                <option>component</option>
+                                                <option>part</option>
                                             </Input>
                                         </Col>
                                     </FormGroup>
@@ -145,6 +146,7 @@ class DHCollection extends Component{
                     isSearchClicked={this.state.isSearchClicked}
                     isLoading= {this.props.heuristicsLoading}
                     errMess= {this.props.heuristiscErrMess}
+                    search={this.state}
                     designfor={this.props.heuristics.filter( heuristic => heuristic.designfor=== this.state.designfor)}
                     industry={this.props.heuristics.filter( heuristic => heuristic.industry=== this.state.industry)}
                     level={this.props.heuristics.filter( heuristic => heuristic.level=== this.state.level)}
@@ -165,7 +167,7 @@ class Collection extends Component{
      */
     constructor(props) {
         super(props);
-
+        
         this.toggleModal=this.toggleModal.bind(this);
         this.closeModal=this.closeModal.bind(this);
         this.getComments=this.getComments.bind(this);
@@ -207,7 +209,20 @@ class Collection extends Component{
 
 
     render(){
-
+        var query= {...this.props.search};
+        delete query.isSearchClicked;
+        // function suche(){
+        //     return this.props.heuristics[key] == query
+        // }
+        var deneme = Object.keys(this.props.heuristics)
+        
+        
+        var result = this.props.heuristics.filter(search, query);
+        function search(user){
+            return (Object.keys(this).forEach((key) => user[key] === this[key]))
+        }
+        console.log("rops: ", result)
+        
         /** The heuristic defined just below contains all the informations of heuristics that the user wants to see: designfor, level etc.
          * A short explanation about the heuristic stands as the last column. If the user wants to have more information
          * about this specific heuristic, s/he should click on the explanation to toggle the pop-up.
@@ -220,11 +235,18 @@ class Collection extends Component{
                         
                         {heuristic.designfor}
                     </div>
+                    <div className='col-12 col-md-2' >
+                        {heuristic.industry.map((industry)=>{
+                            return(
+                                <div>
+                                    {industry}
+                                </div>
+                            )
+                        })}
+                        
+                    </div>
                     <div className='col-12 col-md-1' >
                         {heuristic.level}
-                    </div>
-                    <div className='col-12 col-md-2' >
-                        {heuristic.industry}
                     </div>
                     <div className='col-12 col-md-1' >
                         {heuristic.rating}
@@ -263,17 +285,18 @@ class Collection extends Component{
             else
                 return(
                     <>
+
                         <div style={{backgroundColor:"#C9E2FF"}}>
                             <div className='container'>
                                 <div className='row row-header'>
                                     <div className='col-12 col-md-2' >
                                         <h3>Design for</h3>
                                     </div>
-                                    <div className='col-12 col-md-1' >
-                                        <h3>Level</h3>
-                                    </div>
                                     <div className='col-12 col-md-2' >
                                         <h3>Industry</h3>
+                                    </div>
+                                    <div className='col-12 col-md-1' >
+                                        <h3>Level</h3>
                                     </div>
                                     <div className='col-12 col-md-1' >
                                         <h3>Rating</h3>
