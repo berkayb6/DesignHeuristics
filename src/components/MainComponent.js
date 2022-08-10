@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Start from './StartComponent';
 import MoreInfo from './MoreInfoComponent';
+import StartHeader from './StartHeaderComponent';
 import Login from './LoginPageComponent';
 import Register from './RegisterComponent';
 import Profile from './ProfileComponent';
@@ -13,7 +14,7 @@ import Search from './SearchComponent';
 import ForgotPassword from './ForgotPasswordComponent';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { postComment, fetchHeuristics, fetchComments, register, fetchUsers } from '../redux/ActionCreators';
+import { postComment, fetchHeuristics, fetchComments, loginUser, logoutUser, register, fetchUsers } from '../redux/ActionCreators';
 import { actions } from 'react-redux-form';
 
 /** Data will come from the server. Users will be deleted afterwards, when the backend is deployed.*/
@@ -21,7 +22,8 @@ const mapStateToProps = state => {
     return {
         heuristics: state.heuristics,
         comments: state.comments,
-        users: state.users
+        users: state.users,
+        auth: state.auth
     }
 }
 
@@ -31,6 +33,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = (dispatch) => ({
     postComment: (heuristicId, author, comment) => dispatch(postComment(heuristicId, author, comment)),
     register: (email, password, subscription, library, yourHeuristics, projects) => dispatch(register(email, password, subscription, library, yourHeuristics, projects)),
+    loginUser: (creds) => dispatch(loginUser(creds)),
+    logoutUser: () => dispatch(logoutUser()),
     fetchUsers: () => {dispatch(fetchUsers())},
     fetchHeuristics: () => {dispatch(fetchHeuristics())},
     fetchComments: () => {dispatch(fetchComments())},
@@ -71,14 +75,16 @@ class Main extends Component {
         const SelectYourWay =()=> {
             return(
                 <div className='startpage' style = {{minHeight: "100vh"}}>
-                    <YourWay/>
+                    <YourWay auth={this.props.auth}
+                        logoutUser={this.props.logoutUser}/>
                 </div>
             );
         }
         const SelectYourMode =()=> {
             return(
                 <div className='startpage' style = {{minHeight: "100vh"}}>
-                    <YourMode/>
+                    <YourMode auth={this.props.auth}
+                        logoutUser={this.props.logoutUser}/>
                 </div>
             );
         }
@@ -86,7 +92,10 @@ class Main extends Component {
         const LoginPage =()=>{
             return(
                 <div className='startpage' style = {{minHeight:"100vh"}}>
-                    <Login users= {this.props.users}/>
+                    <Login users= {this.props.users}
+                        auth={this.props.auth} 
+                        loginUser={this.props.loginUser} 
+                        logoutUser={this.props.logoutUser}/>
                 </div>
             )
         }
@@ -110,7 +119,8 @@ class Main extends Component {
         const ProfilePage = () => {
             return(
                 <div className='startpage' style = {{minHeight:"100vh"}}>
-                <Profile />
+                    <Profile auth={this.props.auth}
+                        logoutUser={this.props.logoutUser}/>
                 </div>
             )
         }
@@ -128,7 +138,9 @@ class Main extends Component {
                         heuristiscErrMess= {this.props.heuristics.errMess}
                         comments={this.props.comments.comments}
                         commentsErrMess= {this.props.comments.errMess}
-                        postComment={this.props.postComment}/>
+                        postComment={this.props.postComment}
+                        auth={this.props.auth}
+                        logoutUser={this.props.logoutUser}/>
                     
                 </div>
             )
@@ -137,7 +149,8 @@ class Main extends Component {
         const AddYourOwnHeuristic =()=>{
             return(
                 <div className='startpage' style = {{minHeight:"100vh"}}>
-                    <AddHeuristic/>
+                    <AddHeuristic auth={this.props.auth}
+                        logoutUser={this.props.logoutUser}/>
                 </div>
             )
         }
@@ -145,7 +158,8 @@ class Main extends Component {
         const SearchPage = () => {
             return(
                 <div className='startpage' style = {{minHeight:"100vh"}}>
-                    <Search/>
+                    <Search auth={this.props.auth}
+                        logoutUser={this.props.logoutUser}/>
                 </div>
             )
         }
@@ -160,6 +174,7 @@ class Main extends Component {
         
         return (
             <div>
+                
                 {/**
                  * Defining the paths of pages and assigning the component to each path
                  * Redirect: If any given path does not exist, then it will redirect to start page.

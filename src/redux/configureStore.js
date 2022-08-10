@@ -6,6 +6,7 @@ import { Users } from './users';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 import { InitialFeedback } from './forms';
+import { Auth } from './auth';
 
 export const ConfigureStore = () => {
     const store = createStore(
@@ -13,6 +14,7 @@ export const ConfigureStore = () => {
             heuristics: Heuristics,
             comments: Comments,
             users: Users,
+            auth: Auth,
             ...createForms({
                 feedback: InitialFeedback
             })

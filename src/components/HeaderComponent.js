@@ -10,6 +10,7 @@ class Header extends Component{
     
         this.toggleNav = this.toggleNav.bind(this);
         this.toggleModal=this.toggleModal.bind(this);
+        this.handleLogout = this.handleLogout.bind(this);
 
         this.state = {
           isNavOpen: false,
@@ -29,6 +30,9 @@ class Header extends Component{
         this.setState({
             isModalOpen: !this.state.isModalOpen
         });
+    }
+    handleLogout() {
+        this.props.logoutUser();
     }
 
     render(){
@@ -68,16 +72,44 @@ class Header extends Component{
                             </NavItem>
                             </Nav>
                             <Nav className='ms-auto' navbar>
-                                <NavItem>
-                                    <NavLink className="nav-link" style={{color:"black"}} to='/register'  >
-                                       <span className='fa-lg'>Register</span>
-                                    </NavLink>
-                                </NavItem>
-                                <NavItem>
-                                    <NavLink className="nav-link" to="/login" style={{color:"black"}}>
-                                        <span className='fa-lg'>Login</span> 
-                                    </NavLink>
-                                </NavItem>
+                                { !this.props.auth.isAuthenticated ?
+                                    
+                                    <Nav className='ms-auto' navbar>
+                                        
+                                        {this.props.auth.isFetching ?
+                                            <span className="fa fa-spinner fa-pulse fa-fw"></span>
+                                            : null
+                                        }
+                                        <NavItem  >
+                                            <NavLink className="nav-link" style={{color:"black"}} to='/register'  >
+                                                <span className='fa-lg'>Register</span>
+                                            </NavLink>
+                                        </NavItem>
+                                        <NavItem  >
+                                            <NavLink className="nav-link" to="/login" style={{color:"black"}}>
+                                                <span className='fa-lg'>Login</span> 
+                                            </NavLink>
+                                        </NavItem>
+                                    </Nav>
+                                    
+                                    :
+                                    <div className='row align-items-center'>
+                                        <div className='col-12 col-md-4'>
+                                            <NavLink className="nav-link fa fa-user-circle fa-3x"  style={{color:"black"}} to='/your-profile'/>
+                                        </div>
+                                        <div className='col-12 col-md-8'>
+                                            <Button outline onClick={this.handleLogout}>
+                                                <span className="fa fa-sign-out fa-lg"></span> Logout
+                                                {this.props.auth.isFetching ?
+                                                    <span className="fa fa-spinner fa-pulse fa-fw"></span>
+                                                    : null
+                                                }
+                                            </Button>
+
+                                        </div>
+                                    </div>
+                                }
+                               
                             </Nav>
                         </Collapse>
                     </div>

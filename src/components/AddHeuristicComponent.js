@@ -37,7 +37,8 @@ class AddHeuristic extends Component{
 
         return(
             <div>
-                <Header/>
+                <Header auth={this.props.auth}
+                    logoutUser={this.props.logoutUser}/>
                 <div className='container'>
                     <div className='row row-content'>
                         <LocalForm>

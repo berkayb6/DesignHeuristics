@@ -33,7 +33,6 @@ class DHCollection extends Component{
     }
 
     handleSubmit(event) {
-        
         console.log('Current State is: ' + JSON.stringify(this.state));
         alert('Current State is: ' + JSON.stringify(this.state));
         event.preventDefault();
@@ -60,7 +59,8 @@ class DHCollection extends Component{
        
         return(
             <>
-                <Header/>
+                <Header auth={this.props.auth}
+                    logoutUser={this.props.logoutUser}/>
                 <div className='container' >
                 
                     <div className='row row-content align-items-start'>
@@ -150,7 +150,7 @@ class DHCollection extends Component{
                     designfor={this.props.heuristics.filter( heuristic => heuristic.designfor=== this.state.designfor)}
                     industry={this.props.heuristics.filter( heuristic => heuristic.industry=== this.state.industry)}
                     level={this.props.heuristics.filter( heuristic => heuristic.level=== this.state.level)}
-                    comments= {this.props.comments}
+                    comments= {this.props.heuristics}
                     postComment= {this.props.postComment}
                     style = {{minHeight: "100vh"}}/>
             </>
@@ -170,15 +170,13 @@ class Collection extends Component{
         
         this.toggleModal=this.toggleModal.bind(this);
         this.closeModal=this.closeModal.bind(this);
-        this.getComments=this.getComments.bind(this);
 
         /**To define the selected heuristic and pass it into the HeuristicDetailsComponent the state
          * contains selectedHeuristic as an empty string.
          */
         this.state = {
           isModalOpen: false,
-          selectedHeuristic: '',
-          selectedComments: ''
+          selectedHeuristic: ''
         };
         
     }
@@ -188,7 +186,6 @@ class Collection extends Component{
             isModalOpen: !this.state.isModalOpen,
             selectedHeuristic: selectedOne
         });
-        this.getComments(selectedOne.id)
     }
 
     closeModal(){
@@ -197,14 +194,7 @@ class Collection extends Component{
         });
     }
 
-    getComments(selectedOneId){
-        const comments = this.props.comments.filter(comment=> comment.heuristicId===selectedOneId)
-        this.setState({
-            selectedComments: comments
-        })
-        
-    }
-
+    
     
 
 
@@ -221,7 +211,6 @@ class Collection extends Component{
         function search(user){
             return (Object.keys(this).forEach((key) => user[key] === this[key]))
         }
-        console.log("rops: ", result)
         
         /** The heuristic defined just below contains all the informations of heuristics that the user wants to see: designfor, level etc.
          * A short explanation about the heuristic stands as the last column. If the user wants to have more information
@@ -235,7 +224,7 @@ class Collection extends Component{
                         
                         {heuristic.designfor}
                     </div>
-                    <div className='col-12 col-md-2' >
+                    {/* <div className='col-12 col-md-2' >
                         {heuristic.industry.map((industry)=>{
                             return(
                                 <div>
@@ -244,6 +233,10 @@ class Collection extends Component{
                             )
                         })}
                         
+                    </div> */}
+                    <div className='col-12 col-md-2' >
+                        
+                        {heuristic.industry}
                     </div>
                     <div className='col-12 col-md-1' >
                         {heuristic.level}
@@ -326,7 +319,6 @@ class Collection extends Component{
                             <ModalHeader className='startpage' toggle={this.closeModal}></ModalHeader>
                             <ModalBody className='startpage'>
                                 <HeuristicDetails selectedOne= {this.state.selectedHeuristic} 
-                                    comments={this.state.selectedComments}
                                     postComment= {this.props.postComment} />
                             </ModalBody>
                         </Modal>

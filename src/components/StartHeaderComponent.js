@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import {Navbar, NavbarBrand, Nav, NavbarToggler, Collapse, NavItem,
+import {Navbar, Nav, NavbarToggler, Collapse, NavItem,
 Button, Modal, ModalHeader, ModalBody, Form, Input, FormGroup, Label} from 'reactstrap';
-import {Link} from 'react-router-dom';
+import {NavLink} from 'react-router-dom';
 import Start from './StartComponent';
 
 class StartHeader extends Component{
@@ -11,6 +11,7 @@ class StartHeader extends Component{
         this.toggleNav = this.toggleNav.bind(this);
         this.toggleModal=this.toggleModal.bind(this);
         this.handleLogin=this.handleLogin.bind(this);
+        this.handleLogout = this.handleLogout.bind(this);
 
         this.state = {
             isNavOpen: false,
@@ -38,10 +39,14 @@ class StartHeader extends Component{
         event.preventDefault();
     }
 
+    handleLogout() {
+        this.props.logoutUser();
+    }
+
     render(){
         return(
             <>
-            
+
             {/**Navbar includes the TU-Logo, titel and also links to Login and Register pages.
              * expand='md' makes the navbar static for medium screen sizes. 
              * Smaller screen sizes have a collapsed navbar
@@ -62,16 +67,49 @@ class StartHeader extends Component{
                                 </NavItem>
                             </Nav>
                             <Nav className='ms-auto' navbar>
-                                <NavItem  >
-                                    <Link outline className='btn ' style={{border:"0px"}} to='/register'  >
-                                       <h5>Register</h5>
-                                    </Link>
-                                </NavItem>
-                                <NavItem  >
-                                    <Link outline className='btn ' style={{border:"0px"}} to='/login'  >
-                                       <h5>Login</h5>
-                                    </Link>
-                                </NavItem>
+                            
+                                { !this.props.auth.isAuthenticated ?
+                                    
+                                    <Nav className='ms-auto' navbar>
+                                        
+                                        {this.props.auth.isFetching ?
+                                            <span className="fa fa-spinner fa-pulse fa-fw"></span>
+                                            : null
+                                        }
+                                        <NavItem  >
+                                            <NavLink className="nav-link" style={{color:"black"}} to='/register'  >
+                                                <span className='fa-lg'>Register</span>
+                                            </NavLink>
+                                        </NavItem>
+                                        <NavItem  >
+                                            <NavLink className="nav-link" to="/login" style={{color:"black"}}>
+                                                <span className='fa-lg'>Login</span> 
+                                            </NavLink>
+                                        </NavItem>
+                                    </Nav>
+                                    
+                                    :
+                                    <div className='row align-items-center'>
+                                        <div className='col-12 col-md-4'>
+                                            <NavLink className="nav-link fa fa-user-circle fa-3x"  style={{color:"black"}} to='/your-profile'/>
+                                            
+                                            {/* <div className="navbar-text mr-3" style={{color: "black"}}>{this.props.auth.user.username}</div> */}
+
+                                        </div>
+                                        <div className='col-12 col-md-8'>
+                                            <Button outline onClick={this.handleLogout}>
+                                                <span className="fa fa-sign-out fa-lg"></span> Logout
+                                                {this.props.auth.isFetching ?
+                                                    <span className="fa fa-spinner fa-pulse fa-fw"></span>
+                                                    : null
+                                                }
+                                            </Button>
+
+                                        </div>
+                                    </div>
+                                }
+                        
+                                
                             </Nav>
                         </Collapse>
                     </div>

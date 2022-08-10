@@ -31,7 +31,9 @@ class YourWay extends Component{
              * should be defined as "Way" and sent so to StartHeaderComponent
              */}
                 <div style={{marginBottom:"50px"}}>
-                    <StartHeader selectyour= "Way"/>
+                    <StartHeader selectyour= "Way"
+                        auth={this.props.auth}
+                        logoutUser={this.props.logoutUser}/>
                 </div>
 
             {/**Below there are two cards: Tutorial and DfX-Assist.

@@ -14,7 +14,9 @@ class YourMode extends Component{
                 * should be defined as "Mode" and sent so to StartHeaderComponent
                 */}
                 <div style={{marginBottom:"50px"}}>
-                    <StartHeader selectyour="Mode" />
+                    <StartHeader selectyour="Mode"
+                        auth={this.props.auth}
+                        logoutUser={this.props.logoutUser} />
                 </div>
 
                 {/** According to the design, a picture should stand on the left hand side, and

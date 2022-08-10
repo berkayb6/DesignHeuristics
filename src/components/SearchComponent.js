@@ -68,7 +68,8 @@ class Search extends Component{
 
         return(
             <>
-                <Header/>
+                <Header auth={this.props.auth}
+                    logoutUser={this.props.logoutUser}/>
                 <div className='container' >
                 
                     <div className='row row-content align-items-start'>

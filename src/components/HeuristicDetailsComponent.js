@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { Form, FormGroup, Col, Label, Input,Button, Card, CardTitle, CardBody, CardText, CardImg, Row} from 'reactstrap';
 import { LocalForm, Control} from 'react-redux-form';
 import {baseUrl} from '../shared/baseUrl';
+import { toHaveDescription } from '@testing-library/jest-dom/dist/matchers';
 
 /** Please read first the explanation under HeuristicDetails */
 function RenderDetailItem({item,type}){
@@ -27,7 +28,7 @@ function RenderDetailItem({item,type}){
             </Card>
         )  
     } 
-    if (type=='graphic'){
+    if (type=='image'){
         return(
             <CardImg className='align-items-center' src={baseUrl + item}></CardImg>
         )  
@@ -43,9 +44,8 @@ function RenderDetailItem({item,type}){
     if (type=='comment'){
         return(
             <Card>
-                
                 <CardBody className='m-1 align-items-center' >
-                    <strong>{item.author}</strong>
+                    <strong>{item.author.username}</strong>
                     <CardText>
                         {item.comment}
                     </CardText>
@@ -64,7 +64,7 @@ function RenderDetailItem({item,type}){
     
 }
 
-class HeuristicDetails extends Component{
+class HeuristicDetails extends Component{   
 
     constructor(props){
         super (props);
@@ -78,15 +78,18 @@ class HeuristicDetails extends Component{
         /** After the user submits the feedback, this function will be called to dispatch the input
         * being the heuristic which the user sends a feedback for, user's name and comment to the server.
         */
-        this.props.postComment(this.props.selectedOne.id, values.author, values.comment);
+       // this.setState({ comments: [...this.state.comments, this.props.postComment(this.props.selectedOne._id, values.author, values.comment)]})
+       this.props.postComment(this.props.selectedOne._id, values.author, values.comment);
+       window.location.reload(false);
+        
     }
+
     
     render() {
 
         /**To set the selected heuristic as the selected one, it is defined to avoid writing more codes */
         const selectedHeuristic= this.props.selectedOne;
         const selectedComments= this.props.comments;
-
         /**Since each property of the seleceted heuristic has a different kind of visuality,
          * the type of these properties has been defined in each variable to improve the simplicity and
          * avoid more coding!
@@ -121,11 +124,11 @@ class HeuristicDetails extends Component{
             )
         })
 
-        const graphics= selectedHeuristic.graphics.map((graphic)=>{
-            let type= 'graphic';
+        const images= selectedHeuristic.image.map((image)=>{
+            let type= 'image';
             return(
                 <div className='col-12 col-md-5 m-1 text-center ' >
-                    <RenderDetailItem item={graphic} type={type}/>
+                    <RenderDetailItem item={image} type={type}/>
                 </div>
             )
         })
@@ -138,11 +141,10 @@ class HeuristicDetails extends Component{
                 </div>
             )
         })
-        
-        const comments= selectedComments.map((comment)=>{
+        const comments= selectedHeuristic.comments.map((comment)=>{
             let type= 'comment';
             return(
-                <div key={comment.id} className='col-12 m-1  '>
+                <div key={comment._id} className='col-12 m-1  '>
                     <RenderDetailItem item={comment} type={type}/>
                 </div> 
             )
@@ -184,8 +186,8 @@ class HeuristicDetails extends Component{
                         {applicableIndustry}
                     </div>
                     <div className='row' style={{marginBottom:'40px'}}>
-                        <h3> Graphics</h3>
-                        {graphics}
+                        <h3> Image</h3>
+                        {images}
                     </div>
                     <div className='row' style={{marginBottom:'40px'}}>
                         <h3> Sources</h3>

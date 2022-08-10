@@ -5,16 +5,20 @@ import {Xarrow} from 'react-xarrows';
 import SimpleExample from './ArrowExample';
 const boxStyle = {border: "grey solid 2px", borderRadius: "10px", padding: "5px"};
 
-function Profile(){
+class Profile extends Component {
     
-    
+    constructor(props) {
+        super(props);
+    }
 
-   
-        
+
+    render(){
+
         return(
             <div>
                 
-                <Header/>
+                <Header auth={this.props.auth}
+                    logoutUser={this.props.logoutUser}/>
                 <div className='container'>
                     <div className='row row-content' >
                         <h1 style={{marginTop: "150px", marginBottom: "50px"}}><strong>Your Profile</strong></h1>
@@ -33,7 +37,7 @@ function Profile(){
                     </div>
                 </div>
                 <div className='row row-content ' style={{justifyContent: "space-around"}}>
-
+    
                     <div id="test2" class="square">
                         <p style={{margin:"auto"}}>Circle text</p>
                     </div>
@@ -51,6 +55,8 @@ function Profile(){
             </div>
     
         )
+    }
+        
 
     
         
