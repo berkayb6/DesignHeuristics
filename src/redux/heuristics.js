@@ -14,6 +14,10 @@ export const Heuristics = (state= {
 
         case ActionTypes.HEURISTICS_FAILED:
             return {...state, isLoading: false, errMess: action.payload, heuristics: []}
+    
+        case ActionTypes.ADD_HEURISTIC:
+            var heuristic= action.payload;
+            return {...ActionTypes, heuristics:state.heuristics.concat(heuristic)};
 
         default:
             return state;

@@ -122,6 +122,60 @@ export const addHeuristics= (heuristics) => ({
     payload: heuristics
 })
 
+// -------------- ADD NEW HEURISTIC -------------------
+export const addHeuristic = (heuristic) => ({
+    type: ActionTypes.ADD_HEURISTIC,
+    payload: heuristic
+});
+
+export const postHeuristic = (designOrder,systemLevel,industry,rating,positiveEffects,negativeEffects,applicableIndustry,description,source) => (dispatch) =>{
+    console.log("test2: ", designOrder,systemLevel,industry,rating,positiveEffects,negativeEffects,applicableIndustry,description,source)
+    const newHeuristic= {
+        designfor: designOrder,
+        level: systemLevel,
+        industry: industry,
+        rating: rating,
+        positiveInfluence: positiveEffects,
+        negativInfluence: negativeEffects,
+        applicableIndustry: applicableIndustry,
+        description: description,
+        sources: source
+    }
+    const bearer = 'Bearer ' + localStorage.getItem('token');
+
+    console.log("new Heur: ", newHeuristic)
+    return fetch (baseUrl + 'heuristics', {
+        method: 'POST',
+        body: JSON.stringify(newHeuristic),
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': bearer
+        },
+        credentials: 'same-origin'
+    })
+    .then (response => {
+        /** When an error from the server is encountered  */
+    
+            if (response.ok)
+                return response;
+            else
+                var error= new Error('Error '+ response.status + ': ' + response.statusText);
+                error.response= response;
+                throw error;
+        },
+    
+        /** When no response from the server is encountered  */
+        error=> {
+            var errmess= new Error(error.message);
+            throw errmess;
+        })
+        .then (response => response.json())
+        .then (response => {dispatch(addHeuristic(response))
+            console.log("user: ", JSON.stringify(response))})
+        .catch ( error => {console.log ('Registration ', error.message)
+            alert( 'You could not be registered\nError: ' + error.message)})
+}
+
 // FETCHING USERS
 
 export const fetchUsers= () => (dispatch) => {
@@ -200,12 +254,14 @@ export const register = (email, password, subscription, library, yourHeuristics,
             throw errmess;
         })
         .then (response => response.json())
-        .then (response => {dispatch(addComment(response))
+        .then (response => {dispatch(attemptRegistration(response))
             console.log("user: ", JSON.stringify(response))})
         .catch ( error => {console.log ('Registration ', error.message)
             alert( 'You could not be registered\nError: ' + error.message)})
 }
 
+
+//-------------------LOGIN-----------------------
 export const requestLogin = (creds) => {
     return {
         type: ActionTypes.LOGIN_REQUEST,
@@ -269,6 +325,9 @@ export const loginUser = (creds) => (dispatch) => {
     .catch(error => dispatch(loginError(error.message)))
 };
 
+
+//-------------------LOGOUT-----------------------
+
 export const requestLogout = () => {
     return {
       type: ActionTypes.LOGOUT_REQUEST
@@ -287,4 +346,48 @@ export const logoutUser = () => (dispatch) => {
     localStorage.removeItem('token');
     localStorage.removeItem('creds');
     dispatch(receiveLogout())
+}
+
+//-------------------UPLOAD IMAGE-----------------------
+
+
+export const attemptUploadImage = (image) => ({
+    type: ActionTypes.UPLOAD_IMAGE,
+    payload: image
+});
+
+export const uploadImage = (data) => (dispatch) =>{
+    const newData ={
+        data: data
+    }
+    console.log("test12: ", data)
+    //Sending the new comment to the server:
+    return fetch (baseUrl + "imageUpload", {
+        method: 'POST',
+        body: data,
+        headers: {
+            
+            'Content-Type': 'multipart/form-data'
+        }
+    })
+    .then (response => {
+    /** When an error from the server is encountered  */
+
+        if (response.ok)
+            return response;
+        else
+            var error= new Error('Error '+ response.status + ': ' + response.statusText);
+            error.response= response;
+            throw error;
+    },
+
+    /** When no response from the server is encountered  */
+    error=> {
+        var errmess= new Error(error.message);
+        throw errmess;
+    })
+    .then (response => response.json())
+    .then (response => dispatch(addComment(response)))
+    .catch ( error => {console.log ('Post comments ', error.message)
+        alert( 'Your comment could not be posted\nError: ' + error.message)})
 }

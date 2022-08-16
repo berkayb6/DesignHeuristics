@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Start from './StartComponent';
 import MoreInfo from './MoreInfoComponent';
-import StartHeader from './StartHeaderComponent';
 import Login from './LoginPageComponent';
 import Register from './RegisterComponent';
 import Profile from './ProfileComponent';
@@ -14,7 +13,7 @@ import Search from './SearchComponent';
 import ForgotPassword from './ForgotPasswordComponent';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { postComment, fetchHeuristics, fetchComments, loginUser, logoutUser, register, fetchUsers } from '../redux/ActionCreators';
+import { postComment, fetchHeuristics, fetchComments, loginUser, logoutUser, register, fetchUsers, postHeuristic, uploadImage } from '../redux/ActionCreators';
 import { actions } from 'react-redux-form';
 
 /** Data will come from the server. Users will be deleted afterwards, when the backend is deployed.*/
@@ -32,6 +31,8 @@ const mapStateToProps = state => {
  */
 const mapDispatchToProps = (dispatch) => ({
     postComment: (heuristicId, author, comment) => dispatch(postComment(heuristicId, author, comment)),
+    postHeuristic: (designOrder, systemLevel, industry, rating, positiveEffects, negativeEffects, applicableIndustry, description, source) => dispatch(postHeuristic(designOrder, systemLevel, industry, rating, positiveEffects, negativeEffects, applicableIndustry, description, source)),
+    uploadImage: (data) => dispatch(uploadImage(data)),
     register: (email, password, subscription, library, yourHeuristics, projects) => dispatch(register(email, password, subscription, library, yourHeuristics, projects)),
     loginUser: (creds) => dispatch(loginUser(creds)),
     logoutUser: () => dispatch(logoutUser()),
@@ -150,7 +151,9 @@ class Main extends Component {
             return(
                 <div className='startpage' style = {{minHeight:"100vh"}}>
                     <AddHeuristic auth={this.props.auth}
-                        logoutUser={this.props.logoutUser}/>
+                        logoutUser={this.props.logoutUser}
+                        uploadImage={this.props.uploadImage}
+                        postHeuristic={this.props.postHeuristic}/>
                 </div>
             )
         }

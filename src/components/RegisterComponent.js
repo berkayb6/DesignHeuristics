@@ -48,6 +48,8 @@ class Register extends Component{
         this.setState({
             [name]: value
         });
+
+        
     }
     
     handleSendLink(values){
@@ -55,7 +57,7 @@ class Register extends Component{
         var yourHeuristics= [];
         var adminProjects= [];
         var participantProjects = [];
-
+        console.log("target: ",values)
         /** After completing registration, the user will be directed to another page called "register completed".
          *  Before that, the input data such as user's email, password and check status of subscription should be sent
          *  to the server. 

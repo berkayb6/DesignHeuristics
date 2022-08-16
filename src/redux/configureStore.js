@@ -7,6 +7,7 @@ import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 import { InitialFeedback } from './forms';
 import { Auth } from './auth';
+import { Images } from './image';
 
 export const ConfigureStore = () => {
     const store = createStore(
@@ -15,6 +16,7 @@ export const ConfigureStore = () => {
             comments: Comments,
             users: Users,
             auth: Auth,
+            images: Images,
             ...createForms({
                 feedback: InitialFeedback
             })
