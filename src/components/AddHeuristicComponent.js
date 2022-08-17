@@ -14,6 +14,7 @@ class AddHeuristic extends Component{
 
         }
         this.handleSubmit=this.handleSubmit.bind(this);
+        this.postReq=this.postReq.bind(this);
     }
 
     
@@ -68,6 +69,7 @@ class AddHeuristic extends Component{
         } 
     };
 
+
     handleSubmit (values){
         var rating= 4;
         
@@ -78,21 +80,31 @@ class AddHeuristic extends Component{
         var systemLevel= keys.filter(value => value.startsWith('level'));
         var industry= keys.filter(value => value.startsWith('ind'));
         var applicableIndustry= industry;
-        this.props.postHeuristic(
-            values.designOrder,
-            systemLevel,
-            industry,
-            rating,
-            positiveEffects,
-            negativeEffects,
-            applicableIndustry,
-            description,
-            values.source
-        )
-        this.onFileUpload();
+        return new Promise (resolve=> {
+            resolve(this.props.postHeuristic(
+                values.designOrder,
+                systemLevel,
+                industry,
+                rating,
+                positiveEffects,
+                negativeEffects,
+                applicableIndustry,
+                description,
+                values.source
+            ));
+        })
+        
+        
 
     }
+
+    async postReq (values) {
+        
+        const res = await this.handleSubmit(values);
+        console.log("res: ", res)
+        this.onFileUpload();
     
+    }
     render(){
 
         return(
@@ -102,7 +114,7 @@ class AddHeuristic extends Component{
                     logoutUser={this.props.logoutUser}/>
                 <div className='container'>
                     <div className='row row-content'>
-                        <LocalForm onSubmit={values=> this.handleSubmit(values) }>
+                        <LocalForm onSubmit={values=> this.postReq(values) }>
                             
                             <Label style={{marginBottom:"20px"}}><h2>Add a new design heuristic</h2></Label>
 
