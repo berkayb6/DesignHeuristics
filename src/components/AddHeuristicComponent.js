@@ -15,9 +15,16 @@ class AddHeuristic extends Component{
         }
         this.handleSubmit=this.handleSubmit.bind(this);
         this.postReq=this.postReq.bind(this);
+        this.handleChange=this.handleChange.bind(this);
     }
 
+    handleChange = e => {
+        const { name, value } = e.target;
     
+        this.setState({
+          [name]: value
+        });
+    };
 
     onFileChange= event => {
         this.setState({selectedFile: event.target.files[0]});
@@ -26,23 +33,23 @@ class AddHeuristic extends Component{
     onFileUpload = () => {
         const url = 'https://localhost:3443/imageUpload';
         var formData = new FormData();
+    
         
         formData.append(
             "imageFile",
             this.state.selectedFile,
-            this.state.selectedFile.name
+            this.state.flexRadioDefault + ".jpg"
         );
         const config = {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
         };
-        console.log("upload: ", this.state.selectedFile);
+       // console.log("upload: ", formData.get(name));
         
         axios.post(url, formData, config).then((response)=> {
             console.log(response.data)
         }); 
-        // this.props.uploadImage(formData)
     };
 
     fileData = () => { 
@@ -72,7 +79,6 @@ class AddHeuristic extends Component{
 
     handleSubmit (values){
         var rating= 4;
-        
         var keys= Object.keys(values);
         var description = "test";
         var positiveEffects= keys.filter(value => value.startsWith('pos'));
@@ -93,15 +99,11 @@ class AddHeuristic extends Component{
                 values.source
             ));
         })
-        
-        
-
     }
 
     async postReq (values) {
         
         const res = await this.handleSubmit(values);
-        console.log("res: ", res)
         this.onFileUpload();
     
     }
@@ -292,15 +294,15 @@ class AddHeuristic extends Component{
                                             <span>negative</span>
                                             <span>different</span>
                                         </Col>
-                                        <Col className='d-flex justify-content-between' >
-                                            <Control.radio model=".positive1" isToggle={false} name="flexRadioDefault" style={{ marginLeft: '.5rem' }} id="positive1"
-                                                className= "btn-check"/>
+                                        <Col className='d-flex justify-content-between'  onChange={this.handleChange} >
+                                            <Control.radio model=".positive1" name="flexRadioDefault" style={{ marginLeft: '.5rem' }} id="positive1"
+                                                className= "btn-check" value="positive"/>
                                             <Label className="btn btn-outline-success" for="positive1">&nbsp; &nbsp;</Label>
-                                            <Control.radio model=".negative1" isToggle={false} name="flexRadioDefault" id="negative1"
-                                                className= "btn-check"/>
+                                            <Control.radio model=".negative1" name="flexRadioDefault" id="negative1"
+                                                className= "btn-check" value="negative"/>
                                             <Label className="btn btn-outline-danger" for="negative1">&nbsp; &nbsp;</Label>
-                                            <Control.radio model=".different1" isToggle={false} name="flexRadioDefault" id="different1"
-                                                className= "btn-check"/>
+                                            <Control.radio model=".different1" name="flexRadioDefault" id="different1"
+                                                className= "btn-check" value="different"/>
                                             <Label className="btn btn-outline-secondary" for="different1">&nbsp; &nbsp;</Label>                                            
                                         </Col>
                                     
@@ -325,15 +327,15 @@ class AddHeuristic extends Component{
                                         <Input type="file" onChange={this.onFileChange} />
                                     </Col>
                                     <Col md={4}>
-                                        <Col className='d-flex justify-content-between' >
+                                        <Col className='d-flex justify-content-between' onChange={this.handleChange} >
                                             <Control.radio model=".positive2" name="flexRadioDefault2" id="positive2"
-                                                className= "btn-check"/>
+                                                className= "btn-check" value="positive"/>
                                             <Label className="btn btn-outline-success" for="positive2">&nbsp; &nbsp;</Label>
                                             <Control.radio model=".negative2" name="flexRadioDefault2" id="negative2"
-                                                className= "btn-check"/>
+                                                className= "btn-check" value="negative"/>
                                             <Label className="btn btn-outline-danger" for="negative2">&nbsp; &nbsp;</Label>
                                             <Control.radio model=".different2" name="flexRadioDefault2" id="different2"
-                                                className= "btn-check"/>
+                                                className= "btn-check" value="different"/>
                                             <Label className="btn btn-outline-secondary" for="different2">&nbsp; &nbsp;</Label>                                            
                                             
                                         </Col>
@@ -355,15 +357,15 @@ class AddHeuristic extends Component{
                                         <Input type="file" onChange={this.onFileChange} />
                                     </Col>
                                     <Col md={4}>
-                                        <Col className='d-flex justify-content-between' >
+                                        <Col className='d-flex justify-content-between' onChange={this.handleChange} >
                                             <Control.radio model=".positive3" name="flexRadioDefault3" id="positive3"
-                                                className= "btn-check"/>
+                                                className= "btn-check" value="positive"/>
                                             <Label className="btn btn-outline-success" for="positive3">&nbsp; &nbsp;</Label>
-                                            <Control.radio model=".positive3" name="flexRadioDefault3" id="negative3"
-                                                className= "btn-check"/>
+                                            <Control.radio model=".negative3" name="flexRadioDefault3" id="negative3"
+                                                className= "btn-check" value="negative"/>
                                             <Label className="btn btn-outline-danger" for="negative3">&nbsp; &nbsp;</Label>
-                                            <Control.radio model=".positive3" name="flexRadioDefault3" id="different3"
-                                                className= "btn-check"/>
+                                            <Control.radio model=".different3" name="flexRadioDefault3" id="different3"
+                                                className= "btn-check" value="different"/>
                                             <Label className="btn btn-outline-secondary" for="different3">&nbsp; &nbsp;</Label>                                            
                                             
                                         </Col>
