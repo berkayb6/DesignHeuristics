@@ -10,8 +10,9 @@ class AddHeuristic extends Component{
         super(props);
 
         this.state= {
-            selectedFile: null
-
+            selectedFile: null,
+            selectedFile2: null,
+            selectedFile3: null
         }
         this.handleSubmit=this.handleSubmit.bind(this);
         this.postReq=this.postReq.bind(this);
@@ -30,26 +31,89 @@ class AddHeuristic extends Component{
         this.setState({selectedFile: event.target.files[0]});
     }
 
+    onFileChange2= event => {
+        this.setState({selectedFile2: event.target.files[0]});
+    }
+
     onFileUpload = () => {
         const url = 'https://localhost:3443/imageUpload';
-        var formData = new FormData();
-    
-        
-        formData.append(
-            "imageFile",
-            this.state.selectedFile,
-            this.state.flexRadioDefault + ".jpg"
-        );
+
         const config = {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
         };
-       // console.log("upload: ", formData.get(name));
+
+        // if (this.selectedFile!== null){
+        //     console.log("a: ", this.state.selectedFile)
+        //     var formData = new FormData();
+        //     formData.append(
+        //         "imageFile",
+        //         this.state.selectedFile,
+        //         this.state.selectedFile.name
+                
+        //         //this.state.flexRadioDefault + ".jpg"
+        //     );
+            
+        //    // console.log("upload: ", formData.get(name));
+            
+        // }
         
-        axios.post(url, formData, config).then((response)=> {
-            console.log(response.data)
-        }); 
+        // else if (this.selectedFile2!== null){
+        //     console.log("b")
+        //     var formData2 = new FormData();
+        //     formData2.append(
+        //         "imageFile",
+        //         this.state.selectedFile2,
+        //         this.state.selectedFile2.name
+                
+        //         //this.state.flexRadioDefault + ".jpg"
+        //     );
+            
+        // }
+        // const request1 = axios.post(url, formData, config);
+        // const request2 = axios.post(url, formData2, config)
+        // axios.all([request1, request2]).then(axios.spread((...responses) => {
+        //     console.log(responses[0])
+        //     console.log(responses[1]) 
+        //   })).catch(errors => {
+        //   })
+        
+
+        if (this.selectedFile!== null){
+            console.log("a: ", this.state.selectedFile)
+            var formData = new FormData();
+            formData.append(
+                "imageFile",
+                this.state.selectedFile,
+                this.state.selectedFile.name
+                
+                //this.state.flexRadioDefault + ".jpg"
+            );
+            
+           // console.log("upload: ", formData.get(name));
+            
+            axios.post(url, formData, config).then((response)=> {
+                console.log(response.data)
+            }); 
+        }
+        else if (this.selectedFile2!== null){
+            console.log("b")
+            var formData2 = new FormData();
+            formData2.append(
+                "imageFile",
+                this.state.selectedFile2,
+                this.state.selectedFile2.name
+                
+                //this.state.flexRadioDefault + ".jpg"
+            );
+           // console.log("upload: ", formData2.get(name));
+            
+            axios.post(url, formData2, config).then((response)=> {
+                console.log(response.data)
+            }); 
+        }
+        
     };
 
     fileData = () => { 
@@ -324,7 +388,7 @@ class AddHeuristic extends Component{
                                 </Row>
                                 <Row style={{marginBottom:"20px"}}>
                                     <Col md={2} >
-                                        <Input type="file" onChange={this.onFileChange} />
+                                        <Input type="file" onChange={this.onFileChange2} />
                                     </Col>
                                     <Col md={4}>
                                         <Col className='d-flex justify-content-between' onChange={this.handleChange} >
