@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Route, Link, withRouter, Redirect } from 'react-router-dom';
-import {Navbar, Nav, NavbarToggler, Collapse, NavItem, Form, Row , Input, Label, Button, FormGroup, Col} from 'reactstrap';
+import { Route, Link, withRouter, NavLink, Redirect } from 'react-router-dom';
+import {Navbar, Nav, NavbarToggler,  Collapse, NavItem, Form, Row , Input, Label, Button, FormGroup, Col} from 'reactstrap';
 import { Control, LocalForm, Errors} from 'react-redux-form';
 
 
@@ -89,10 +89,9 @@ class Login extends Component{
                                     </Nav>
                                     
                                     :
-                                    <div className='row'>
+                                    <div className='row align-items-center'>
                                         <div className='col-12 col-md-4'>
-                                            <div className="navbar-text mr-3" style={{color: "black"}}>{this.props.auth.user.username}</div>
-
+                                            <NavLink className="nav-link fa fa-user-circle fa-3x"  style={{color:"black"}} to='/your-profile'/>
                                         </div>
                                         <div className='col-12 col-md-8'>
                                             <Button outline onClick={this.handleLogout}>

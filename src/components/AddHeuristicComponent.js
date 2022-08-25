@@ -35,6 +35,10 @@ class AddHeuristic extends Component{
         this.setState({selectedFile2: event.target.files[0]});
     }
 
+    onFileChange3= event => {
+        this.setState({selectedFile3: event.target.files[0]});
+    }
+
     onFileUpload = () => {
         const url = 'https://localhost:3443/imageUpload';
 
@@ -43,10 +47,49 @@ class AddHeuristic extends Component{
                 'Content-Type': 'multipart/form-data'
             }
         };
+        var requestArray= []
+        for ( const[key, value] of Object.entries(this.state)){
+            if (key!== null){
+                var formData = new FormData();
+                formData.append(
+                    "imageFile",
+                    value,
+                    value.name
+                //this.state.flexRadioDefault + ".jpg"
+                );
+                const request = axios.post(url, formData, config);
+                requestArray.push(request)
+            }
+        }
+        axios.all(requestArray).then((...responses) => {
+            console.log(responses[0])
+            console.log(responses[1]) 
+        }).catch(errors => {
+        })
+        // var formData = new FormData();
+        // formData.append(
+        //     "imageFile",
+        //     this.state.selectedFile,
+        //     this.state.selectedFile.name
+        //     //this.state.flexRadioDefault + ".jpg"
+        // );
+            
+        // // console.log("upload: ", formData.get(name));
+        
+        // var formData2 = new FormData();
+        // formData2.append(
+        //     "imageFile",
+        //     this.state.selectedFile2,
+        //     this.state.selectedFile2.name
+            
+        //     //this.state.flexRadioDefault + ".jpg"
+        // );  
+        
+        
+        // var formData = new FormData();
 
         // if (this.selectedFile!== null){
         //     console.log("a: ", this.state.selectedFile)
-        //     var formData = new FormData();
         //     formData.append(
         //         "imageFile",
         //         this.state.selectedFile,
@@ -56,9 +99,8 @@ class AddHeuristic extends Component{
         //     );
             
         //    // console.log("upload: ", formData.get(name));
-            
+             
         // }
-        
         // else if (this.selectedFile2!== null){
         //     console.log("b")
         //     var formData2 = new FormData();
@@ -69,50 +111,15 @@ class AddHeuristic extends Component{
                 
         //         //this.state.flexRadioDefault + ".jpg"
         //     );
+        // //    // console.log("upload: ", formData2.get(name));
             
+        // //     axios.post(url, formData2, config).then((response)=> {
+        // //         console.log(response.data)
+        // //     }); 
         // }
         // const request1 = axios.post(url, formData, config);
         // const request2 = axios.post(url, formData2, config)
-        // axios.all([request1, request2]).then(axios.spread((...responses) => {
-        //     console.log(responses[0])
-        //     console.log(responses[1]) 
-        //   })).catch(errors => {
-        //   })
         
-
-        if (this.selectedFile!== null){
-            console.log("a: ", this.state.selectedFile)
-            var formData = new FormData();
-            formData.append(
-                "imageFile",
-                this.state.selectedFile,
-                this.state.selectedFile.name
-                
-                //this.state.flexRadioDefault + ".jpg"
-            );
-            
-           // console.log("upload: ", formData.get(name));
-            
-            axios.post(url, formData, config).then((response)=> {
-                console.log(response.data)
-            }); 
-        }
-        else if (this.selectedFile2!== null){
-            console.log("b")
-            var formData2 = new FormData();
-            formData2.append(
-                "imageFile",
-                this.state.selectedFile2,
-                this.state.selectedFile2.name
-                
-                //this.state.flexRadioDefault + ".jpg"
-            );
-           // console.log("upload: ", formData2.get(name));
-            
-            axios.post(url, formData2, config).then((response)=> {
-                console.log(response.data)
-            }); 
-        }
         
     };
 
@@ -145,10 +152,10 @@ class AddHeuristic extends Component{
         var rating= 4;
         var keys= Object.keys(values);
         var description = "test";
-        var positiveEffects= keys.filter(value => value.startsWith('pos'));
-        var negativeEffects= keys.filter(value => value.startsWith('neg'));
-        var systemLevel= keys.filter(value => value.startsWith('level'));
-        var industry= keys.filter(value => value.startsWith('ind'));
+        var positiveEffects= keys.filter(value => value.startsWith('pos')).map(value=> value.slice(4));
+        var negativeEffects= keys.filter(value => value.startsWith('neg')).map(value=> value.slice(4));
+        var systemLevel= keys.filter(value => value.startsWith('level')).map(value=> value.slice(6));
+        var industry= keys.filter(value => value.startsWith('ind')).map(value=> value.slice(4));
         var applicableIndustry= industry;
         return new Promise (resolve=> {
             resolve(this.props.postHeuristic(
@@ -418,7 +425,7 @@ class AddHeuristic extends Component{
                                 </Row>
                                 <Row style={{marginBottom:"20px"}}>
                                     <Col md={2} >
-                                        <Input type="file" onChange={this.onFileChange} />
+                                        <Input type="file" onChange={this.onFileChange3} />
                                     </Col>
                                     <Col md={4}>
                                         <Col className='d-flex justify-content-between' onChange={this.handleChange} >

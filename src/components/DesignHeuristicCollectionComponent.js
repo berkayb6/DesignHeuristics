@@ -21,6 +21,11 @@ class DHCollection extends Component{
         this.searchClicked = this.searchClicked.bind(this);
     }
 
+    
+
+    
+
+
     handleInputChange(event) {
         const target = event.target;
         const value = target.type === 'checkbox' ? target.checked : target.value;
@@ -56,6 +61,14 @@ class DHCollection extends Component{
     
 
     render(){
+        var heur= this.props.heuristics.filter(item => {
+            return item.industry.length < 2
+            
+        }).map (item=> {
+            console.log("item: ",  item.industry[0].slice(4))
+        })
+        //var heur2= heur[0].industry[0]
+        console.log(heur)
        
         return(
             <>
@@ -146,10 +159,11 @@ class DHCollection extends Component{
                     isSearchClicked={this.state.isSearchClicked}
                     isLoading= {this.props.heuristicsLoading}
                     errMess= {this.props.heuristiscErrMess}
-                    search={this.state}
-                    designfor={this.props.heuristics.filter( heuristic => heuristic.designfor=== this.state.designfor)}
-                    industry={this.props.heuristics.filter( heuristic => heuristic.industry=== this.state.industry)}
-                    level={this.props.heuristics.filter( heuristic => heuristic.level=== this.state.level)}
+                    item= {this.props.heuristics.filter(item => {
+                            return item.designfor=== this.state.designfor && item.industry[0]=== this.state.industry && item.level[0]=== this.state.level
+                            
+                        })
+                    }
                     comments= {this.props.heuristics}
                     postComment= {this.props.postComment}
                     style = {{minHeight: "100vh"}}/>
@@ -194,30 +208,14 @@ class Collection extends Component{
         });
     }
 
-    
-    
-
-
     render(){
-        var query= {...this.props.search};
-        delete query.isSearchClicked;
-        // function suche(){
-        //     return this.props.heuristics[key] == query
-        // }
-        var deneme = Object.keys(this.props.heuristics)
-        
-        
-        var result = this.props.heuristics.filter(search, query);
-        function search(user){
-            return (Object.keys(this).forEach((key) => user[key] === this[key]))
-        }
         
         /** The heuristic defined just below contains all the informations of heuristics that the user wants to see: designfor, level etc.
          * A short explanation about the heuristic stands as the last column. If the user wants to have more information
          * about this specific heuristic, s/he should click on the explanation to toggle the pop-up.
          */
 
-        const heuristic= this.props.designfor.map((heuristic)=>{
+        const heuristic= this.props.item.map((heuristic)=>{
             return(
                 <div className='row align-items-center'>
                     <div className='col-12 col-md-2' >
