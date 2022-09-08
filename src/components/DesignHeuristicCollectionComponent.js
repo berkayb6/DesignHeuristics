@@ -11,8 +11,8 @@ class DHCollection extends Component{
 
         this.state = {
             designfor: 'sustainability',
-            industry: 'automobility',
-            level: 'system',
+            industry: 'automotive',
+            lifeCyclePhase: 'design',
             isSearchClicked: false
         };
 
@@ -61,14 +61,6 @@ class DHCollection extends Component{
     
 
     render(){
-        var heur= this.props.heuristics.filter(item => {
-            return item.industry.length < 2
-            
-        }).map (item=> {
-            console.log("item: ",  item.industry[0].slice(4))
-        })
-        //var heur2= heur[0].industry[0]
-        console.log(heur)
        
         return(
             <>
@@ -117,24 +109,24 @@ class DHCollection extends Component{
                                                     value={this.state.industry}
                                                     placeholder="change the property"
                                                     onChange={this.handleInputChange}>
-                                                <option>automobility</option>
-                                                <option>airospace</option>
+                                                <option>automotive</option>
+                                                <option>aircraft</option>
                                                 <option>furniture</option>
-                                                <option>household goods</option>
+                                                <option>household</option>
                                             </Input>
                                         </Col>
                                     </FormGroup>
                                     <FormGroup row>
-                                        <Label htmlFor="level" md={5}><h4>Level</h4></Label>
+                                        <Label htmlFor="lifeCyclePhase" md={5}><h4>Life Cycle Phase</h4></Label>
                                         <Col md={7}>
-                                            <Input type="select" name="level"
-                                                    value={this.state.level}
+                                            <Input type="select" name="lifeCyclePhase"
+                                                    value={this.state.lifeCyclePhase}
                                                     placeholder="change the property"
                                                     onChange={this.handleInputChange}>
-                                                <option>system</option>
-                                                <option>product</option>
-                                                <option>component</option>
-                                                <option>part</option>
+                                                <option>design</option>
+                                                <option>production</option>
+                                                <option>use</option>
+                                                <option>end of life</option>
                                             </Input>
                                         </Col>
                                     </FormGroup>
@@ -160,8 +152,7 @@ class DHCollection extends Component{
                     isLoading= {this.props.heuristicsLoading}
                     errMess= {this.props.heuristiscErrMess}
                     item= {this.props.heuristics.filter(item => {
-                            return item.designfor=== this.state.designfor && item.industry[0]=== this.state.industry && item.level[0]=== this.state.level
-                            
+                            return item.designFor[0]=== this.state.designfor && item.industry[0]=== this.state.industry && item.lifeCyclePhase[0]=== this.state.lifeCyclePhase
                         })
                     }
                     comments= {this.props.heuristics}
@@ -220,7 +211,7 @@ class Collection extends Component{
                 <div className='row align-items-center'>
                     <div className='col-12 col-md-2' >
                         
-                        {heuristic.designfor}
+                        {heuristic.designFor}
                     </div>
                     {/* <div className='col-12 col-md-2' >
                         {heuristic.industry.map((industry)=>{

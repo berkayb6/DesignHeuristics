@@ -5,35 +5,60 @@ import {baseUrl} from '../shared/baseUrl';
 import { toHaveDescription } from '@testing-library/jest-dom/dist/matchers';
 
 /** Please read first the explanation under HeuristicDetails */
-function RenderDetailItem({item,type}){
+function RenderDetailItem({item, type, id}){
     /**Since there are different kind of visualities with respect to heuristic properties,
      * there are different kind of rendering. To do the right rendering, the type variable is used.
      * 
      */
-    if (type=='positive'){
+    if (type=== 'phase'){
         return(
-            <Card>
-                <CardBody className='align-items-center' style={{backgroundColor:'#BAEDAD'}}>
+            <Card className='heuristicDetailsCard align-items-center'>
+                <Row className='heuristicDetailsCardBody'>
+                    <Col md={6}>
+                        <CardImg src= {`${baseUrl}assets/${item}.jpg`} className='heuristicDetailsCardImage'/>
+                    </Col>
+                    <Col md={6}>
+                        <CardTitle style={{display: "flex", justifyContent:'center', alignItems:'center', color: "black"}}> <h3><strong>{item}</strong></h3> </CardTitle>                
+                    </Col>
+                </Row>
+            </Card>
+        )
+    }
+    if (type==='positive'){
+        return(
+            <Card className='justify-content-center' style={{backgroundColor:'#BAEDAD', height: "50px", width: "auto"}}>
+                <CardBody >
                     {item}
                 </CardBody>
             </Card>
         )
     }
-    if (type=='negative'){
+    if (type==='negative'){
         return(
-            <Card>
-                <CardBody className='align-items-center' style={{backgroundColor:'#F7BCB0'}}>
+            <Card className='justify-content-center' style={{backgroundColor:'#F7BCB0', height: "50px", width: "auto"}}>
+                <CardBody >
                     {item}
                 </CardBody>
             </Card>
         )  
     } 
-    if (type=='image'){
+    if (type==='image'){
         return(
-            <CardImg className='align-items-center' src={baseUrl + item}></CardImg>
+            <CardImg className='align-items-center' src={`${baseUrl}assets/${id}/${item}`}>
+
+            </CardImg>
         )  
-    } 
-    if (type=='source'){
+    }
+    if (type=== 'lcp'){
+        return (
+            <Card className='justify-content-center' style={{ height: "50px", width: "auto"}}>
+                <CardBody >
+                    {item}
+                </CardBody>
+            </Card>
+        )
+    }
+    if (type==='source'){
         return(
             <div>
 
@@ -41,7 +66,7 @@ function RenderDetailItem({item,type}){
             </div>
         )  
     } 
-    if (type=='comment'){
+    if (type==='comment'){
         return(
             <Card>
                 <CardBody className='m-1 align-items-center' >
@@ -55,8 +80,8 @@ function RenderDetailItem({item,type}){
     } 
     else
         return(
-            <Card>
-                <CardBody className='align-items-center' >
+            <Card className='justify-content-center' style={{ height: "50px", width: "auto"}}>
+                <CardBody >
                     {item}
                 </CardBody>
             </Card>
@@ -86,67 +111,87 @@ class HeuristicDetails extends Component{
 
     
     render() {
-
+        
         /**To set the selected heuristic as the selected one, it is defined to avoid writing more codes */
         const selectedHeuristic= this.props.selectedOne;
-        const selectedComments= this.props.comments;
+        const id = selectedHeuristic._id;
+        console.log("sH: ", selectedHeuristic)
         /**Since each property of the seleceted heuristic has a different kind of visuality,
          * the type of these properties has been defined in each variable to improve the simplicity and
          * avoid more coding!
          * 
          * Each item or property will be rendered via the function defined above (RenderDetailItem)
          * The functions seeks for two property: item that should be rendered, and the type of that */
-
+        
+        const designPhase= selectedHeuristic.designPhase.map((phase)=>{
+            let type= 'phase';
+            return(
+                <Col md={6} className="text-center">
+                    <RenderDetailItem item={phase} type={type}/>
+                </Col>
+            )
+        })
         const positiveInfluence= selectedHeuristic.positiveInfluence.map((influence)=>{
             let type= 'positive';
             return(
-                <div className='col-12 col-md-3 m-1 text-center' >
+                <Col md={4} className="text-center">
                     <RenderDetailItem item={influence} type={type}/>
-                </div>
+                </Col>
             )
         })
+
+        const rating = selectedHeuristic.rating
 
         const negativeInfluence= selectedHeuristic.negativeInfluence.map((influence)=>{
             let type= 'negative';
             return(
-                <div className='col-12 col-md-3 m-1 text-center' >
+                <Col md={4} className='text-center' >
                     <RenderDetailItem item={influence} type={type}/>
-                </div>
+                </Col>
             )
         })
 
-        const applicableIndustry = selectedHeuristic.applicableIndustry.map((industry)=>{
+        const applicableIndustry = selectedHeuristic.industry.map((industry)=>{
             let type= 'industry';
             return(
-                <div className='col-12 col-md-4 m-1 text-center ' >
+                <Col md={4} className='text-center ' >
                     <RenderDetailItem item={industry} type={type}/>
-                </div>
+                </Col>
+            )
+        })
+
+        const lifeCyclePhase = selectedHeuristic.lifeCyclePhase.map((phase)=> {
+            let type= "lcp";
+            return(
+                <Col md={4} className="text-center">
+                    <RenderDetailItem item={phase} type={type}/>
+                </Col>
             )
         })
 
         const images= selectedHeuristic.image.map((image)=>{
             let type= 'image';
             return(
-                <div className='col-12 col-md-5 m-1 text-center ' >
-                    <RenderDetailItem item={image} type={type}/>
-                </div>
+                <Col md={5} className='text-center ' >
+                    <RenderDetailItem item={image} type={type} id={id}/>
+                </Col>
             )
         })
 
         const sources= selectedHeuristic.sources.map((source)=>{
             let type= 'source';
             return(
-                <div className='col-12 m-1' >
+                <Col>
                     <RenderDetailItem item={source} type={type}/>
-                </div>
+                </Col>
             )
         })
         const comments= selectedHeuristic.comments.map((comment)=>{
             let type= 'comment';
             return(
-                <div key={comment._id} className='col-12 m-1  '>
+                <Col key={comment._id}>
                     <RenderDetailItem item={comment} type={type}/>
-                </div> 
+                </Col> 
             )
         })
 
@@ -154,49 +199,80 @@ class HeuristicDetails extends Component{
         return (
             <div className='container'>
                 <div className='row row-header align-items-center'>
-                    <div className='col-12 col-md-4'>
-                        Design Advice
-                    </div>
-                    <Card className='col-12 col-md-8'>
-                        <CardBody>
-                            {selectedHeuristic.title}
-                            
-                        </CardBody>
-                    </Card>
-                    <Card className='col-12 col-md-4 offset-md-4'>
-                        <CardBody>
-                            Add to library
-                        </CardBody>
-                    </Card>
+                    <Row>
+                        <Col md={4}>
+                            <h3>Design Advice</h3>
+                        </Col>
+                        <Col md= {6}>
+                            <Card >
+                                <CardBody>
+                                    {selectedHeuristic.title}
+                                    
+                                </CardBody>
+                            </Card>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col>
+                            <Card className='col-12 col-md-4 offset-md-4'>
+                                <CardBody>
+                                    Add to library
+                                </CardBody>
+                            </Card>
+                        </Col>
+                    </Row>
                 </div>
-                <div className='row row-content' >
+                <div className='row row-content' style={{rowGap: "60px"}}>
                     {/** After defining how to render each property of the corresponding heuristic,
                      * there will be rendered below.
                      */}
-                    <div className='row' style={{marginBottom:'40px'}}>
-                        <h3> Possible positive influence</h3>
+                    
+                    <Row>
+                        <h4><b>Addressed Design Phase </b></h4> 
+                        {designPhase}
+                    </Row>
+                    <Row>
+                        <h4><b>Possible positive influence </b></h4> 
                         {positiveInfluence}
-                    </div>
-                    <div className='row' style={{marginBottom:'40px'}}>
-                        <h3> Possible negative influence</h3>
+                    </Row>
+                    <Row>
+                        <h4><b>Possible negative influence </b></h4> 
                         {negativeInfluence}
-                    </div>
-                    <div className='row' style={{marginBottom:'40px'}}>
-                        <h3> Applicable industry</h3>
+                    </Row>
+                    <Row>
+                        <h4><b>Rating</b></h4> 
+                        {rating}
+                    </Row>
+                    <Row>
+                        <h4><b>Applicable industry</b></h4> 
                         {applicableIndustry}
-                    </div>
-                    <div className='row' style={{marginBottom:'40px'}}>
-                        <h3> Image</h3>
+                    </Row>
+                    <Row>
+                        <h4><b> Adressed Life Cycle Phase</b></h4>
+                        {lifeCyclePhase}
+                    </Row>
+                    <Row>
+                        <h4><b>Description</b></h4> 
+                        <Card>
+                            <CardBody className='m-1 align-items-center' >
+                                <CardText>
+                                    {selectedHeuristic.description}
+                                </CardText>
+                            </CardBody>
+                        </Card>
+                    </Row>
+                    <Row>
+                        <h4><b>Graphics</b></h4> 
                         {images}
-                    </div>
-                    <div className='row' style={{marginBottom:'40px'}}>
-                        <h3> Sources</h3>
+                    </Row>
+                    <Row>
+                        <h4><b>Sources</b></h4> 
                         {sources}
-                    </div>
-                    <div className='row' style={{marginBottom:'40px'}}>
-                        <h3> Comments</h3>
+                    </Row>
+                    <Row>
+                        <h4><b>Comments</b></h4> 
                         {comments}
-                    </div>
+                    </Row>
                     <LocalForm onSubmit={(values)=>{this.sendComment(values)}}>
                         <Row className='form-group'>
                             <Col>

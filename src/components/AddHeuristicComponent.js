@@ -1,18 +1,25 @@
 import React, { Component } from 'react';
 import { Control, LocalForm } from 'react-redux-form';
-import { Col, Label, Row, Input, Button } from 'reactstrap';
+import { Col, Label, Row, Input, Button, Card, CardBody, CardImg, CardTitle, CardText } from 'reactstrap';
+import {baseUrl} from '../shared/baseUrl';
 import Header from './HeaderComponent';
 import axios from 'axios';
 
 class AddHeuristic extends Component{
-
+    
     constructor(props){
         super(props);
 
         this.state= {
-            selectedFile: null,
-            selectedFile2: null,
-            selectedFile3: null
+            file: {
+                selectedFile: null,
+                selectedFile2: null,
+                selectedFile3: null
+            },
+            checkArtifact: "",
+            checkArtifactRestriction: "",
+            checkOrderVerb: "",
+            checkOrderAdverb: ""
         }
         this.handleSubmit=this.handleSubmit.bind(this);
         this.postReq=this.postReq.bind(this);
@@ -28,15 +35,21 @@ class AddHeuristic extends Component{
     };
 
     onFileChange= event => {
-        this.setState({selectedFile: event.target.files[0]});
+        var file= {...this.state.file};
+        file.selectedFile= event.target.files[0];
+        this.setState({file});
     }
 
     onFileChange2= event => {
-        this.setState({selectedFile2: event.target.files[0]});
+        var file= {...this.state.file};
+        file.selectedFile2= event.target.files[0];
+        this.setState({file});
     }
 
     onFileChange3= event => {
-        this.setState({selectedFile3: event.target.files[0]});
+        var file= {...this.state.file};
+        file.selectedFile3= event.target.files[0];
+        this.setState({file});
     }
 
     onFileUpload = () => {
@@ -48,7 +61,9 @@ class AddHeuristic extends Component{
             }
         };
         var requestArray= []
-        for ( const[key, value] of Object.entries(this.state)){
+        console.log("files: ", this.state.file)
+        for ( const[key, value] of Object.entries(this.state.file)){
+
             if (key!== null){
                 var formData = new FormData();
                 formData.append(
@@ -66,115 +81,67 @@ class AddHeuristic extends Component{
             console.log(responses[1]) 
         }).catch(errors => {
         })
-        // var formData = new FormData();
-        // formData.append(
-        //     "imageFile",
-        //     this.state.selectedFile,
-        //     this.state.selectedFile.name
-        //     //this.state.flexRadioDefault + ".jpg"
-        // );
-            
-        // // console.log("upload: ", formData.get(name));
-        
-        // var formData2 = new FormData();
-        // formData2.append(
-        //     "imageFile",
-        //     this.state.selectedFile2,
-        //     this.state.selectedFile2.name
-            
-        //     //this.state.flexRadioDefault + ".jpg"
-        // );  
-        
-        
-        // var formData = new FormData();
-
-        // if (this.selectedFile!== null){
-        //     console.log("a: ", this.state.selectedFile)
-        //     formData.append(
-        //         "imageFile",
-        //         this.state.selectedFile,
-        //         this.state.selectedFile.name
-                
-        //         //this.state.flexRadioDefault + ".jpg"
-        //     );
-            
-        //    // console.log("upload: ", formData.get(name));
-             
-        // }
-        // else if (this.selectedFile2!== null){
-        //     console.log("b")
-        //     var formData2 = new FormData();
-        //     formData2.append(
-        //         "imageFile",
-        //         this.state.selectedFile2,
-        //         this.state.selectedFile2.name
-                
-        //         //this.state.flexRadioDefault + ".jpg"
-        //     );
-        // //    // console.log("upload: ", formData2.get(name));
-            
-        // //     axios.post(url, formData2, config).then((response)=> {
-        // //         console.log(response.data)
-        // //     }); 
-        // }
-        // const request1 = axios.post(url, formData, config);
-        // const request2 = axios.post(url, formData2, config)
-        
-        
     };
-
-    fileData = () => { 
-        if (this.state.selectedFile) { 
-            
-          return ( 
-            <div> 
-              <h2>File Details:</h2> 
-              <p>File Name: {this.state.selectedFile.name}</p> 
-              <p>File Type: {this.state.selectedFile.type}</p> 
-              <p> 
-                Last Modified:{" "} 
-                {this.state.selectedFile.lastModifiedDate.toDateString()} 
-              </p> 
-            </div> 
-          ); 
-        } else { 
-          return ( 
-            <div> 
-              <br /> 
-              <h4>Choose before Pressing the Upload button</h4> 
-            </div> 
-          ); 
-        } 
-    };
+    guidelineChange = e => {
+        const {id, value} = e.target; 
+        if(id=== "artifact"){
+            this.setState({checkArtifact: value})
+        }
+        else if (id=== "artifactRestriction"){
+            this.setState({checkArtifactRestriction: value})
+        }
+        else if (id=== "orderVerb"){
+            this.setState({checkOrderVerb: value})
+        }
+        else if (id=== "orderAdverb"){
+            this.setState({checkOrderAdverb: value})
+        }
+    }
 
 
     handleSubmit (values){
         var rating= 4;
+        values.preventDefault();
         var keys= Object.keys(values);
-        var description = "test";
+        console.log("posEffect: ", keys.filter(value => value.startsWith('pos')))
+        var designPhase= keys.filter(value => value.startsWith('phase')).map(value=> value.slice(6));
         var positiveEffects= keys.filter(value => value.startsWith('pos')).map(value=> value.slice(4));
         var negativeEffects= keys.filter(value => value.startsWith('neg')).map(value=> value.slice(4));
-        var systemLevel= keys.filter(value => value.startsWith('level')).map(value=> value.slice(6));
+        var lifeCyclePhase= keys.filter(value => value.startsWith('lcp')).map(value=> value.slice(4));
         var industry= keys.filter(value => value.startsWith('ind')).map(value=> value.slice(4));
-        var applicableIndustry= industry;
+        var title = this.state.checkOrderVerb + " " + this.state.checkArtifactRestriction + " " + this.state.checkArtifact + " " + this.state.checkOrderAdverb;
+        var designFor= positiveEffects; 
+        var category= values.categories;
+        var description= values.description;
+        var image= []
+        for ( const[key, value] of Object.entries(this.state.file)){
+            if (value!== null){
+                image.push(value.name)
+            }
+        }
+        console.log("posEffect: ", positiveEffects)
+        var sources= values.sources;
         return new Promise (resolve=> {
             resolve(this.props.postHeuristic(
-                values.designOrder,
-                systemLevel,
+                designFor,
+                positiveEffects,
+                designPhase,
+                title,
+                negativeEffects,
+                lifeCyclePhase,
                 industry,
                 rating,
-                positiveEffects,
-                negativeEffects,
-                applicableIndustry,
+                category,
                 description,
-                values.source
+                image,
+                sources
             ));
         })
     }
 
     async postReq (values) {
         
-        const res = await this.handleSubmit(values);
+        await this.handleSubmit(values);
         this.onFileUpload();
     
     }
@@ -188,58 +155,18 @@ class AddHeuristic extends Component{
                 <div className='container'>
                     <div className='row row-content'>
                         <LocalForm onSubmit={values=> this.postReq(values) }>
-                            
-                            <Label style={{marginBottom:"20px"}}><h2>Add a new design heuristic</h2></Label>
-
-                            <Row className='form-group' style={{marginBottom:"20px"}}>
-                                
-                                <Col md={2}>
-                                    <h4>Design Order </h4>
-                                </Col>
-                                <Col md={6}>
-                                    <Control.text model='.designOrder' id="designOrder" name="designOrder"  
-                                        className= "form-control"/>
-                                </Col>
-                                <Col md={4}>
-                                    <p>
-                                        What should be done? Please use a verb!{"\n"} e.g.: Locate
-                                    </p>
-                                </Col>
-                            </Row>
-                            <Row className='form-group' style={{marginBottom:"20px"}}>
-                                <Col md={2}>
-                                    <h4>Design Artefact </h4>
-                                </Col>
-                                <Col md={6}>
-                                    <Control.text model='.designArtefact' id="designArtefact" name="designArtefact"  
-                                        className= "form-control"/>
-                                </Col>
-                                <Col md={4}>
-                                    <p>
-                                    What are you aiming for? Please specify the artefact! e.g.: unrecycable parts
-                                    </p>
-                                </Col>
-                            </Row>
-                            <Row className='form-group' style={{marginBottom:"20px"}}>
-                                <Col md={2}>
-                                    <h4>Design Attribute </h4> <p>(optional)</p>
-                                </Col>
-                                <Col md={6}>
-                                    <Control.text model='.designAttribute' id="designAttribute" name="designAttribute"  
-                                        className= "form-control"/>
-                                </Col>
-                                <Col md={4}>
-                                    <p>
-                                    What should be done with the artefact? Please specify the attribute!  e.g. in one area which can be easily removed and discarded
-                                    </p>
-                                </Col>
-                            </Row>
+                            <Label className='align-items-center' style={{marginBottom:"20px"}}><h2>You want to share your knowledge? Great!<br/>
+                                We will help you set up your guide line with 5 easy steps.</h2></Label>
                             <Row className='form-group' style={{marginBottom:"60px"}}>
+                                <Col md={2}>
+                                    <h2>Step 1</h2>
+                                </Col>
                                 <Col md={3}>
-                                    <h5>Positive design effects</h5>                                
+                                    <h5>Positive design effects</h5>
                                 </Col>
                                 <Col md={9}>
-                                    <h7>Choose what can be reached through your heuristic! e.g.: sustainability. You can choose more than one. Please contact us if you cannot find the reaction you are looking for!</h7>
+                                    <h7>Tell us about the positive impact of your design advice! In the scientific community you differentiate between different DfX (Design for X)
+                                        targets. To sort the guidelines for others better, it is easiest, you choose one or more of the following. If you think about another one, write us a mail.</h7>
                                 </Col>
                                 <Col className="col-12 d-flex justify-content-between" md={6} style={{marginTop:"20px"}}>
                                     <Control.checkbox model=".pos_sustainability" name="pos_sustainability" id="pos_sustainability"
@@ -256,6 +183,219 @@ class AddHeuristic extends Component{
                                 </Col>
                             </Row>
                             <Row className='form-group' style={{marginBottom:"60px"}}>
+                                <Col md={2}>
+                                    <h2>Step 2</h2>
+                                </Col>
+                                <Col md={3}>
+                                    <h5>Design Phase</h5>
+                                </Col>
+                                <Col md={9}>
+                                    <h7>Let’s start with something easy. Tell us, in which design phase your guideline can be used? 
+                                        This helps other users to find your guideline! If you want, you can also choose more than one.</h7>
+                                </Col>
+                                <Col className="col-12 d-flex justify-content-between"  style={{marginTop:"20px"}}>
+                                    <Control.checkbox model=".phase_materialSelection" name="materialSelection" id="materialSelection"
+                                        className= "btn-check"/>
+                                    <Label  className=" btn-outline-success" for="materialSelection">
+                                        <Card className='addYourHeuristicCard align-items-center'>
+                                            <Row className='addYourHeuristicCardBody'>
+                                                <Col md={3}>
+                                                    <CardImg src= {`${baseUrl}assets/materialSelection.jpg`} className='addYourHeuristicImage'/>
+                                                </Col>
+                                                <Col md={4}>
+                                                    <CardTitle style={{display: "flex", justifyContent:'center', alignItems:'center', color: "black"}}> <h3><strong>Material Selection</strong></h3> </CardTitle>                
+                                                </Col>
+                                                <Col md={4}>
+                                                    <CardText style={{color: "black"}}> <h7>Does your guideline give designers advices for choosing the right material, how to handle certain materials or information on which materials to better avoid for certain reasons?</h7></CardText>
+                                                </Col>
+                                            </Row>
+                                        </Card>
+                                    </Label>
+                                </Col>
+                                <Col className="col-12 d-flex justify-content-between"  style={{marginTop:"20px"}}>
+                                    <Control.checkbox model=".phase_construction" name="construction" id="construction"
+                                        className= "btn-check"/>
+                                    <Label className=" btn-outline-success" for="construction">
+                                        <Card className='addYourHeuristicCard align-items-center'>
+                                            <Row className='addYourHeuristicCardBody'>
+                                                <Col md={3}>
+                                                    <CardImg src= {`${baseUrl}assets/construction.jpg`} className='addYourHeuristicImage'/>
+                                                </Col>
+                                                <Col md={4}>
+                                                    <CardTitle style={{display: "flex", color: "black", justifyContent:'center', alignItems:'center'}}> <h3><strong>Construction</strong></h3> </CardTitle>                
+                                                </Col>
+                                                <Col md={4}>
+                                                    <CardText style={{color: "black"}}> <h7>Does your guideline give designers advices for constructing a better product, where to locate components within a product, how to dimension the parts or which joints to use?</h7></CardText>
+                                                </Col>
+                                            </Row>
+                                        </Card>
+                                    </Label>
+                                </Col>
+                                <Col className="col-12 d-flex justify-content-between"  style={{marginTop:"20px"}}>
+                                    <Control.checkbox model=".phase_processSelection" name="processSelection" id="processSelection"
+                                        className= "btn-check"/>
+                                    <Label className=" btn-outline-success" for="processSelection">    
+                                        <Card className='addYourHeuristicCard align-items-center'>
+                                            <Row className='addYourHeuristicCardBody'>
+                                                <Col md={3}>
+                                                    <CardImg src= {`${baseUrl}assets/processSelection.jpg`} className='addYourHeuristicImage'/>
+                                                </Col>
+                                                <Col md={4}>
+                                                    <CardTitle style={{display: "flex",color: "black", justifyContent:'center', alignItems:'center'}}> <h3><strong>Process Selection</strong></h3> </CardTitle>                
+                                                </Col>
+                                                <Col md={4}>
+                                                    <CardText style={{color: "black"}}> <h7>Does your guideline give designers advices on which processes to use for producing the product, which welding processes to use for which material or which ways the product desing can be made more efficient?</h7></CardText>
+                                                </Col>
+                                            </Row>
+                                        </Card>
+                                    </Label>
+                                </Col>
+                                <Col className="col-12 d-flex justify-content-between"  style={{marginTop:"20px"}}>
+                                    <Control.checkbox model=".phase_software" name="software" id="software"
+                                        className= "btn-check"/>
+                                    <Label className=" btn-outline-success" for="software">                                           
+                                        <Card className='addYourHeuristicCard align-items-center'>
+                                            <Row className='addYourHeuristicCardBody'>
+                                                <Col md={3}>
+                                                    <CardImg src= {`${baseUrl}assets/software.jpg`} className='addYourHeuristicImage'/>
+                                                </Col>
+                                                <Col md={4}>
+                                                    <CardTitle style={{display: "flex",color: "black", justifyContent:'center', alignItems:'center'}}> <h3><strong>Sofware/System</strong></h3> </CardTitle>                
+                                                </Col>
+                                                <Col md={4}>
+                                                    <CardText style={{color: "black"}}> <h7>Does your guideline give designers advices on how to equip your product with the right software, on how to embed the product in a usage system or system with other products?</h7></CardText>
+                                                </Col>
+                                            </Row>
+                                        </Card>
+                                    </Label>
+                                </Col>
+                                <Col className="col-12 d-flex justify-content-between"  style={{marginTop:"20px"}}>
+                                    <Control.checkbox model=".phase_others" name="others" id="others"
+                                        className= "btn-check"/>
+                                    <Label className=" btn-outline-success" for="others">
+                                        <Card className='addYourHeuristicCard align-items-center'>
+                                            <Row className='addYourHeuristicCardBody'>
+                                                <Col md={3}>
+                                                    <CardImg src= {`${baseUrl}assets/others.jpg`} className='addYourHeuristicImage'/>
+                                                </Col>
+                                                <Col md={4}>
+                                                    <CardTitle style={{display: "flex",color: "black", justifyContent:'center', alignItems:'center'}}> <h3><strong>Others</strong></h3> </CardTitle>                
+                                                </Col>
+                                                <Col md={4}>
+                                                    <CardText style={{color: "black"}}> <h7>You cannot put your advice in any of the above mentioned but still want to share it? Maybe an advice on how to bring users to recycle the product by themselves?</h7></CardText>
+                                                </Col>
+                                            </Row>
+                                        </Card>
+                                    </Label>
+
+                                </Col>
+                            </Row>
+                            <Row onChange={this.guidelineChange} className='form-group' style={{marginBottom:"60px"}}>
+                                <Col md={2}>
+                                    <h2>Step 3</h2>
+                                </Col>
+                                <Col md={3}>
+                                    <h5>guideline formulation</h5>
+                                </Col>
+                                <Col md={9}>
+                                    <h7>This is the core information you give others! Please use your words carefully and check before hand, if 
+                                        somebody else already posted your guideline. You can easily also add more information to an already guideline.</h7>
+                                </Col>
+                                <Row  className='form-group' style={{marginBottom:"20px", marginTop:"20px"}}>
+                                    
+                                    <Col>
+                                        <h4>1. Artifact  </h4>
+                                    </Col>
+                                    <Row>
+                                        <Col md={6}>
+                                            <Control.text model='.artifact' id="artifact" name="artifact"  
+                                                className= "form-control"/>
+                                        </Col>
+                                        <Col md={6}>
+                                            <p>
+                                            What do you want to give an advice for in detail? A product, a component, the material types, joints or certain processes? Please try to use one word or 2 maximum.
+                                            </p>
+                                        </Col>
+                                    </Row>
+                                </Row>
+                                <Row className='form-group' style={{marginBottom:"20px"}}>
+                                    <Col >
+                                        <h4>2. Artifact Restriction/Extension (optional) </h4>
+                                    </Col>
+                                    <Row>
+                                        <Col md={6}>
+                                            <Control.text model='.artifactRestriction' id="artifactRestriction" name="artifactRestriction"  
+                                                className= "form-control"/>
+                                        </Col>
+                                        <Col md={6}>
+                                            <p>
+                                            This part is optional. To describe the artifact we only gave you 2 words. Here you can desribe it in more detail e.g. only products <strong>that contain hazardous components</strong> or only joints <strong>with plastic parts.</strong> You get the drill!
+                                            </p>
+                                        </Col>
+                                    </Row>
+                                </Row>
+                                <Row className='form-group' style={{marginBottom:"20px"}}>
+                                    <Col>
+                                        <h4>3. Order Verb  </h4>
+                                    </Col>
+                                    <Row>
+                                        <Col md={6}>
+                                            <Control.text model='.orderVerb' id="orderVerb" name="orderVerb"  
+                                                className= "form-control"/>
+                                        </Col>
+                                        <Col md={6}>
+                                            <p>
+                                            What should be done with the artifact? Use a verb! Should be designed a certain way? write <strong>Design.</strong> Should something be avoided? Write <strong>Avoid.</strong> In the next field you can be more precise about it.
+                                            </p>
+                                        </Col>
+                                    </Row>
+                                </Row>
+                                <Row className='form-group' style={{marginBottom:"20px"}}>
+                                    <Col>
+                                        <h4>4. Order Adverb  </h4>
+                                    </Col>
+                                    <Row>
+                                        <Col md={6}>
+                                            <Control.text model='.orderAdverb' id="orderAdverb" name="orderAdverb"  
+                                                className= "form-control"/>
+                                        </Col>
+                                        <Col md={6}>
+                                            <p>
+                                            This part is optional. Here you can describe what should be done with the artifact in more detail e.g. the artifact should located <strong>in easily accessible areas</strong> or your artifact should the artifacts default state should be set <strong>at minimal material consumption.</strong>
+                                            </p>
+                                        </Col>
+                                    </Row>
+                                </Row>
+                            </Row>
+                            <Row  className='form-group' style={{marginBottom:"40px"}}>
+                                <Col md={2}>
+                                    <h2>Step 4</h2>
+                                </Col>
+                                <Col md={3}>
+                                    <h5>Check your guideline</h5>
+                                </Col>
+                                <Col md={9}>
+                                    <p>
+                                        {this.state.checkOrderVerb + " " + this.state.checkArtifactRestriction + " " + this.state.checkArtifact + " " + this.state.checkOrderAdverb}
+                                    </p>
+                                </Col>
+                            </Row>
+                            
+                            <Row className='form-group' style={{marginBottom:"60px"}}>
+                                <Col md={2}>
+                                    <h2>Step 5</h2>
+                                </Col>
+                                <Col md={3}>
+                                    <h5>Further information (optional)</h5>
+                                </Col>
+                                <Row style={{marginBottom:"40px", marginTop: "20px"}}>
+                                    <Col>
+                                        <h9>Everything from here on is optional. Nevertheless our research showed that these addtional informations are beneficial
+                                            for your guideline to be understood by other designers.
+                                        </h9>
+                                    </Col>
+
+                                </Row>
                                 <Col md={3}>
                                     <h5>Negative design effects</h5>                                
                                 </Col>
@@ -279,28 +419,29 @@ class AddHeuristic extends Component{
                             </Row>
                             <Row className='form-group' style={{marginBottom:"60px"}}>
                                 <Label style={{marginBottom:"20px"}}><h2>Optional</h2></Label>
-                                <Col md={3}>
-                                    <h4>What System Level is adressed?</h4>
+                                <Col md={4}>
+                                    <h4>What Life Cycle Phase is adressed?</h4>
                                 </Col>
-                                <Col md={9}>
-                                    <h7>Please define the system level! You can choose more than one. If you do not chose the level, we assume that it works on every level.</h7>
+                                <Col md={8}>
+                                    <h7>You can choose more than one.<br/>
+                                        If you do not chose the level, we assume that it works on every level.</h7>
                                 </Col>
                                 <Col className="col-12 d-flex justify-content-between" md={6} style={{marginTop:"20px"}}>
-                                    <Control.checkbox model=".level_system" name="system" id="system"
+                                    <Control.checkbox model=".lcp_design" name="design" id="design"
                                             className= "btn-check"/>
-                                    <Label className="btn btn-outline-light" style={{color: 'black'}} for="system">system</Label>
+                                    <Label className="btn btn-outline-light" style={{color: 'black'}} for="design">design</Label>
                                     
-                                    <Control.checkbox model=".level_product" name="product" id="product"
+                                    <Control.checkbox model=".lcp_production" name="production" id="production"
                                             className= "btn-check"/>
-                                    <Label className="btn btn-outline-light" style={{color: 'black'}} for="product">product</Label>
+                                    <Label className="btn btn-outline-light" style={{color: 'black'}} for="production">production</Label>
                                     
-                                    <Control.checkbox model=".level_component" name="component" id="component"
+                                    <Control.checkbox model=".lcp_use" name="use" id="use"
                                             className= "btn-check"/>
-                                    <Label className="btn btn-outline-light" style={{color: 'black'}} for="component">component</Label>
+                                    <Label className="btn btn-outline-light" style={{color: 'black'}} for="use">use</Label>
 
-                                    <Control.checkbox model=".level_part" name="part" id="part"
+                                    <Control.checkbox model=".lcp_end of life" name="end of life" id="end of life"
                                             className= "btn-check"/>
-                                    <Label className="btn btn-outline-light" style={{color: 'black'}} for="part">part</Label>
+                                    <Label className="btn btn-outline-light" style={{color: 'black'}} for="end of life">end of life</Label>
 
                                 </Col>
 
@@ -483,12 +624,6 @@ class AddHeuristic extends Component{
                                 <Button type="submit" value="submit" color="light"> Hand in</Button>
                             </Row>
                         </LocalForm>
-
-
-                        
-                        {this.fileData()}
-
-
                     </div>
                 </div>
             </div>

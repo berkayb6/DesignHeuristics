@@ -51,3 +51,41 @@
   height: 60px;
   background-color: #FEE3DD;
 }
+
+.addYourHeuristicCardBody{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.addYourHeuristicImage{
+  height: 167px; 
+  width: 250px;
+  padding:10px;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 130px 0px  0px  0px ;
+}
+.addYourHeuristicCard{
+  height: auto;
+  width: auto;
+  border-radius: 130px 0px 130px 0px;
+}
+
+.heuristicDetailsCardBody{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.heuristicDetailsCardImage{
+  height: 133.53px; 
+  width: 200px;
+  padding:10px;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 130px 0px  0px  0px ;
+}
+.heuristicDetailsCard{
+  height: auto;
+  width: auto;
+  border-radius: 130px 0px 130px 0px;
+}

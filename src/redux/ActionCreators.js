@@ -128,18 +128,20 @@ export const addHeuristic = (heuristic) => ({
     payload: heuristic
 });
 
-export const postHeuristic = (designOrder,systemLevel,industry,rating,positiveEffects,negativeEffects,applicableIndustry,description,source) => (dispatch) =>{
-    console.log("test2: ", designOrder,systemLevel,industry,rating,positiveEffects,negativeEffects,applicableIndustry,description,source)
+export const postHeuristic = (designFor, positiveEffects, designPhase, title, negativeEffects, lifeCyclePhase, industry, rating, category, description, image, sources) => (dispatch) =>{
     const newHeuristic= {
-        designfor: designOrder,
-        level: systemLevel,
+        designFor: designFor,
+        positiveInfluence: positiveEffects,
+        designPhase: designPhase,
+        title: title,
+        negativeInfluence: negativeEffects,
+        lifeCyclePhase: lifeCyclePhase,
         industry: industry,
         rating: rating,
-        positiveInfluence: positiveEffects,
-        negativInfluence: negativeEffects,
-        applicableIndustry: applicableIndustry,
+        category: category,
         description: description,
-        sources: source
+        image: image,
+        sources: sources
     }
     const bearer = 'Bearer ' + localStorage.getItem('token');
 
