@@ -36,7 +36,7 @@ class Profile extends Component {
                         </div>
                     </div>
                 </div>
-                <div className='row row-content ' style={{justifyContent: "space-around"}}>
+                {/* <div className='row row-content ' style={{justifyContent: "space-around"}}>
     
                     <div id="test2" class="square">
                         <p style={{margin:"auto"}}>Circle text</p>
@@ -51,7 +51,7 @@ class Profile extends Component {
                         <p style={{margin:"auto"}}>Circasdle text</p>
                     </div>
                 </div>
-                    <SimpleExample start="test1" end="test2" end2="test3"/>
+                    <SimpleExample start="test1" end="test2" end2="test3"/> */}
             </div>
     
         )

@@ -21,11 +21,6 @@ class DHCollection extends Component{
         this.searchClicked = this.searchClicked.bind(this);
     }
 
-    
-
-    
-
-
     handleInputChange(event) {
         const target = event.target;
         const value = target.type === 'checkbox' ? target.checked : target.value;
@@ -38,8 +33,6 @@ class DHCollection extends Component{
     }
 
     handleSubmit(event) {
-        console.log('Current State is: ' + JSON.stringify(this.state));
-        alert('Current State is: ' + JSON.stringify(this.state));
         event.preventDefault();
     }
 
@@ -98,7 +91,28 @@ class DHCollection extends Component{
                                                 <option>sustainability</option>
                                                 <option>ergonomics</option>
                                                 <option>manufacturability</option>
-                                                <option>cost efficiency</option>
+                                                <option>cost</option>
+                                                <option>reliability</option>
+                                                <option>test</option>
+                                                <option>safety</option>
+                                                <option>quality</option>
+                                                <option>minimum risk</option>
+                                                <option>standards</option>
+                                                <option>assembly</option>
+                                                <option>inspection</option>
+                                                <option>logistics</option>
+                                                <option>low quantity production</option>
+                                                <option>supply chain</option>
+                                                <option>modularity</option>
+                                                <option>user-friendliness</option>
+                                                <option>aesthetics</option>
+                                                <option>serviceability</option>
+                                                <option>maintainability</option>
+                                                <option>repair</option>
+                                                <option>reuse</option>
+                                                <option>recyclability</option>
+                                                <option>disassembly</option>
+                                                <option>remanufacturing</option>
                                             </Input>
                                         </Col>
                                     </FormGroup>
@@ -113,6 +127,7 @@ class DHCollection extends Component{
                                                 <option>aircraft</option>
                                                 <option>furniture</option>
                                                 <option>household</option>
+                                                <option>all</option>
                                             </Input>
                                         </Col>
                                     </FormGroup>
@@ -126,7 +141,7 @@ class DHCollection extends Component{
                                                 <option>design</option>
                                                 <option>production</option>
                                                 <option>use</option>
-                                                <option>end of life</option>
+                                                <option>end</option>
                                             </Input>
                                         </Col>
                                     </FormGroup>
@@ -228,7 +243,7 @@ class Collection extends Component{
                         {heuristic.industry}
                     </div>
                     <div className='col-12 col-md-1' >
-                        {heuristic.level}
+                        {heuristic.lifeCyclePhase}
                     </div>
                     <div className='col-12 col-md-1' >
                         {heuristic.rating}
@@ -278,7 +293,7 @@ class Collection extends Component{
                                         <h3>Industry</h3>
                                     </div>
                                     <div className='col-12 col-md-1' >
-                                        <h3>Level</h3>
+                                        <h3>Life Cycle Phase</h3>
                                     </div>
                                     <div className='col-12 col-md-1' >
                                         <h3>Rating</h3>

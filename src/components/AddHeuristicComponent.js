@@ -53,7 +53,7 @@ class AddHeuristic extends Component{
     }
 
     onFileUpload = () => {
-        const url = 'https://localhost:3443/imageUpload';
+        const url = `${baseUrl}/imageUpload`;
 
         const config = {
             headers: {
@@ -101,10 +101,13 @@ class AddHeuristic extends Component{
 
     handleSubmit (values){
         var rating= 4;
-        values.preventDefault();
         var keys= Object.keys(values);
-        console.log("posEffect: ", keys.filter(value => value.startsWith('pos')))
-        var designPhase= keys.filter(value => value.startsWith('phase')).map(value=> value.slice(6));
+        var phases= keys.filter(value => value.startsWith('phase')).map(value=> value.slice(6));
+        var designPhase= phases[0]
+        for (var i=1; i< phases.length; i++){
+            designPhase= designPhase + ", " + phases[i]
+            
+        }
         var positiveEffects= keys.filter(value => value.startsWith('pos')).map(value=> value.slice(4));
         var negativeEffects= keys.filter(value => value.startsWith('neg')).map(value=> value.slice(4));
         var lifeCyclePhase= keys.filter(value => value.startsWith('lcp')).map(value=> value.slice(4));
@@ -119,7 +122,6 @@ class AddHeuristic extends Component{
                 image.push(value.name)
             }
         }
-        console.log("posEffect: ", positiveEffects)
         var sources= values.sources;
         return new Promise (resolve=> {
             resolve(this.props.postHeuristic(
@@ -168,19 +170,96 @@ class AddHeuristic extends Component{
                                     <h7>Tell us about the positive impact of your design advice! In the scientific community you differentiate between different DfX (Design for X)
                                         targets. To sort the guidelines for others better, it is easiest, you choose one or more of the following. If you think about another one, write us a mail.</h7>
                                 </Col>
-                                <Col className="col-12 d-flex justify-content-between" md={6} style={{marginTop:"20px"}}>
+                                <Row className="col-12 d-flex justify-content-between" md={3} style={{marginTop:"20px"}}>
+                                    
+                                    
+                                    <Control.checkbox model=".pos_minumumRisk" name="pos_minumumRisk" id="pos_minumumRisk"
+                                            className= "btn-check"/>
+                                    <Label className="btn btn-outline-success" for="pos_minumumRisk">minumum risk</Label>
+                                    
+                                    <Control.checkbox model=".pos_cost" name="pos_cost" id="pos_cost"
+                                            className= "btn-check"/>
+                                    <Label className="btn btn-outline-success" for="pos_cost">cost</Label>
+                                    
+                                    <Control.checkbox model=".pos_standards" name="pos_standards" id="pos_standards"
+                                            className= "btn-check"/>
+                                    <Label className="btn btn-outline-success" for="pos_standards">standards</Label>
+                                    
+                                    <Control.checkbox model=".pos_assembly" name="pos_assembly" id="pos_assembly"
+                                            className= "btn-check"/>
+                                    <Label className="btn btn-outline-success" for="pos_assembly">assembly</Label>
+                                    
+                                    <Control.checkbox model=".pos_inspection" name="pos_inspection" id="pos_inspection"
+                                            className= "btn-check"/>
+                                    <Label className="btn btn-outline-success" for="pos_inspection">inspection</Label>
+                                    
+                                    <Control.checkbox model=".pos_logistics" name="pos_logistics" id="pos_logistics"
+                                            className= "btn-check"/>
+                                    <Label className="btn btn-outline-success" for="pos_logistics">logistics</Label>
+                                    
+                                    <Control.checkbox model=".pos_lowQuantityProduction" name="pos_lowQuantityProduction" id="pos_lowQuantityProduction"
+                                            className= "btn-check"/>
+                                    <Label className="btn btn-outline-success" for="pos_lowQuantityProduction">low quantity production</Label>
+                                    
+                                    <Control.checkbox model=".pos_supplyChain" name="pos_supplyChain" id="pos_supplyChain"
+                                            className= "btn-check"/>
+                                    <Label className="btn btn-outline-success" for="pos_supplyChain">supply chain</Label>
+                                    
+                                    <Control.checkbox model=".pos_modularity" name="pos_modularity" id="pos_modularity"
+                                            className= "btn-check"/>
+                                    <Label className="btn btn-outline-success" for="pos_modularity">modularity</Label>
+                                    
+                                    <Control.checkbox model=".pos_userFriendliness" name="pos_userFriendliness" id="pos_userFriendliness"
+                                            className= "btn-check"/>
+                                    <Label className="btn btn-outline-success" for="pos_userFriendliness">user friendliness</Label>
+                                    
+                                    <Control.checkbox model=".pos_aesthetics" name="pos_aesthetics" id="pos_aesthetics"
+                                            className= "btn-check"/>
+                                    <Label className="btn btn-outline-success" for="pos_aesthetics">aesthetics</Label>
+                                    
+                                    <Control.checkbox model=".pos_serviceability" name="pos_serviceability" id="pos_serviceability"
+                                            className= "btn-check"/>
+                                    <Label className="btn btn-outline-success" for="pos_serviceability">serviceability</Label>
+                                    
+                                    <Control.checkbox model=".pos_maintainability" name="pos_maintainability" id="pos_maintainability"
+                                            className= "btn-check"/>
+                                    <Label className="btn btn-outline-success" for="pos_maintainability">maintainability</Label>
+                                    
+                                    <Control.checkbox model=".pos_repair" name="pos_repair" id="pos_repair"
+                                            className= "btn-check"/>
+                                    <Label className="btn btn-outline-success" for="pos_repair">repair</Label>
+                                    
+                                    <Control.checkbox model=".pos_reuse" name="pos_reuse" id="pos_reuse"
+                                            className= "btn-check"/>
+                                    <Label className="btn btn-outline-success" for="pos_reuse">reuse</Label>
+                                    
+                                    <Control.checkbox model=".pos_recyclability" name="pos_recyclability" id="pos_recyclability"
+                                            className= "btn-check"/>
+                                    <Label className="btn btn-outline-success" for="pos_recyclability">recyclability</Label>
+                                    
+                                    <Control.checkbox model=".pos_disassembly" name="pos_disassembly" id="pos_disassembly"
+                                            className= "btn-check"/>
+                                    <Label className="btn btn-outline-success" for="pos_disassembly">disassembly</Label>
+                                    
+                                    <Control.checkbox model=".pos_remanufacturing" name="pos_remanufacturing" id="pos_remanufacturing"
+                                            className= "btn-check"/>
+                                    <Label className="btn btn-outline-success" for="pos_remanufacturing">remanufacturing</Label>
+                                    
                                     <Control.checkbox model=".pos_sustainability" name="pos_sustainability" id="pos_sustainability"
                                             className= "btn-check"/>
                                     <Label className="btn btn-outline-success" for="pos_sustainability">sustainability</Label>
+                                    
                                     
                                     <Control.checkbox model=".pos_manufacturability" name="pos_manufacturability" id="pos_manufacturability"
                                             className= "btn-check"/>
                                     <Label className="btn btn-outline-success" for="pos_manufacturability">manufacturability</Label>
                                     
+                                    
                                     <Control.checkbox model=".pos_ergonomics" name="pos_ergonomics" id="pos_ergonomics"
                                             className= "btn-check"/>
                                     <Label className="btn btn-outline-success" for="pos_ergonomics">ergonomics</Label>
-                                </Col>
+                                    
+                                </Row>
                             </Row>
                             <Row className='form-group' style={{marginBottom:"60px"}}>
                                 <Col md={2}>
@@ -301,10 +380,26 @@ class AddHeuristic extends Component{
                                     <h7>This is the core information you give others! Please use your words carefully and check before hand, if 
                                         somebody else already posted your guideline. You can easily also add more information to an already guideline.</h7>
                                 </Col>
+                                <Row className='form-group' style={{marginBottom:"20px"}}>
+                                    <Col>
+                                        <h4>1. Order Verb  </h4>
+                                    </Col>
+                                    <Row>
+                                        <Col md={6}>
+                                            <Control.text model='.orderVerb' id="orderVerb" name="orderVerb"  
+                                                className= "form-control"/>
+                                        </Col>
+                                        <Col md={6}>
+                                            <p>
+                                            What should be done with the artifact? Use a verb! Should be designed a certain way? write <strong>Design.</strong> Should something be avoided? Write <strong>Avoid.</strong> In the next field you can be more precise about it.
+                                            </p>
+                                        </Col>
+                                    </Row>
+                                </Row>
                                 <Row  className='form-group' style={{marginBottom:"20px", marginTop:"20px"}}>
                                     
                                     <Col>
-                                        <h4>1. Artifact  </h4>
+                                        <h4>2. Artifact  </h4>
                                     </Col>
                                     <Row>
                                         <Col md={6}>
@@ -320,7 +415,7 @@ class AddHeuristic extends Component{
                                 </Row>
                                 <Row className='form-group' style={{marginBottom:"20px"}}>
                                     <Col >
-                                        <h4>2. Artifact Restriction/Extension (optional) </h4>
+                                        <h4>3. Artifact Restriction/Extension (optional) </h4>
                                     </Col>
                                     <Row>
                                         <Col md={6}>
@@ -334,22 +429,7 @@ class AddHeuristic extends Component{
                                         </Col>
                                     </Row>
                                 </Row>
-                                <Row className='form-group' style={{marginBottom:"20px"}}>
-                                    <Col>
-                                        <h4>3. Order Verb  </h4>
-                                    </Col>
-                                    <Row>
-                                        <Col md={6}>
-                                            <Control.text model='.orderVerb' id="orderVerb" name="orderVerb"  
-                                                className= "form-control"/>
-                                        </Col>
-                                        <Col md={6}>
-                                            <p>
-                                            What should be done with the artifact? Use a verb! Should be designed a certain way? write <strong>Design.</strong> Should something be avoided? Write <strong>Avoid.</strong> In the next field you can be more precise about it.
-                                            </p>
-                                        </Col>
-                                    </Row>
-                                </Row>
+                                
                                 <Row className='form-group' style={{marginBottom:"20px"}}>
                                     <Col>
                                         <h4>4. Order Adverb  </h4>
@@ -376,7 +456,7 @@ class AddHeuristic extends Component{
                                 </Col>
                                 <Col md={9}>
                                     <p>
-                                        {this.state.checkOrderVerb + " " + this.state.checkArtifactRestriction + " " + this.state.checkArtifact + " " + this.state.checkOrderAdverb}
+                                        {this.state.checkOrderVerb + " " + this.state.checkArtifact + " " + this.state.checkArtifactRestriction + " " + this.state.checkOrderAdverb}
                                     </p>
                                 </Col>
                             </Row>
@@ -402,19 +482,94 @@ class AddHeuristic extends Component{
                                 <Col md={9}>
                                     <h7>Are there any possible trade offs? e.g.: cost efficiency. You can choose more than one but also none. Please contact us if you cannot find the reaction you are looking for!</h7>
                                 </Col>
-                                <Col className="col-12 d-flex justify-content-between" md={6} style={{marginTop:"20px"}}>
+                                <Row className="col-12 d-flex justify-content-between" md={3} style={{marginTop:"20px"}}>
+                                    <Control.checkbox model=".neg_minumumRisk" name="neg_minumumRisk" id="neg_minumumRisk"
+                                            className= "btn-check"/>
+                                    <Label className="btn btn-outline-danger" for="neg_minumumRisk">minumum risk</Label>
+                                    
+                                    <Control.checkbox model=".neg_cost" name="neg_cost" id="neg_cost"
+                                            className= "btn-check"/>
+                                    <Label className="btn btn-outline-danger" for="neg_cost">cost</Label>
+                                    
+                                    <Control.checkbox model=".neg_standards" name="neg_standards" id="neg_standards"
+                                            className= "btn-check"/>
+                                    <Label className="btn btn-outline-danger" for="neg_standards">standards</Label>
+                                    
+                                    <Control.checkbox model=".neg_assembly" name="neg_assembly" id="neg_assembly"
+                                            className= "btn-check"/>
+                                    <Label className="btn btn-outline-danger" for="neg_assembly">assembly</Label>
+                                    
+                                    <Control.checkbox model=".neg_inspection" name="neg_inspection" id="neg_inspection"
+                                            className= "btn-check"/>
+                                    <Label className="btn btn-outline-danger" for="neg_inspection">inspection</Label>
+                                    
+                                    <Control.checkbox model=".neg_logistics" name="neg_logistics" id="neg_logistics"
+                                            className= "btn-check"/>
+                                    <Label className="btn btn-outline-danger" for="neg_logistics">logistics</Label>
+                                    
+                                    <Control.checkbox model=".neg_lowQuantityProduction" name="neg_lowQuantityProduction" id="neg_lowQuantityProduction"
+                                            className= "btn-check"/>
+                                    <Label className="btn btn-outline-danger" for="neg_lowQuantityProduction">low quantity production</Label>
+                                    
+                                    <Control.checkbox model=".neg_supplyChain" name="neg_supplyChain" id="neg_supplyChain"
+                                            className= "btn-check"/>
+                                    <Label className="btn btn-outline-danger" for="neg_supplyChain">supply chain</Label>
+                                    
+                                    <Control.checkbox model=".neg_modularity" name="neg_modularity" id="neg_modularity"
+                                            className= "btn-check"/>
+                                    <Label className="btn btn-outline-danger" for="neg_modularity">modularity</Label>
+                                    
+                                    <Control.checkbox model=".neg_userFriendliness" name="neg_userFriendliness" id="neg_userFriendliness"
+                                            className= "btn-check"/>
+                                    <Label className="btn btn-outline-danger" for="neg_userFriendliness">user friendliness</Label>
+                                    
+                                    <Control.checkbox model=".neg_aesthetics" name="neg_aesthetics" id="neg_aesthetics"
+                                            className= "btn-check"/>
+                                    <Label className="btn btn-outline-danger" for="neg_aesthetics">aesthetics</Label>
+                                    
+                                    <Control.checkbox model=".neg_serviceability" name="neg_serviceability" id="neg_serviceability"
+                                            className= "btn-check"/>
+                                    <Label className="btn btn-outline-danger" for="neg_serviceability">serviceability</Label>
+                                    
+                                    <Control.checkbox model=".neg_maintainability" name="neg_maintainability" id="neg_maintainability"
+                                            className= "btn-check"/>
+                                    <Label className="btn btn-outline-danger" for="neg_maintainability">maintainability</Label>
+                                    
+                                    <Control.checkbox model=".neg_repair" name="neg_repair" id="neg_repair"
+                                            className= "btn-check"/>
+                                    <Label className="btn btn-outline-danger" for="neg_repair">repair</Label>
+                                    
+                                    <Control.checkbox model=".neg_reuse" name="neg_reuse" id="neg_reuse"
+                                            className= "btn-check"/>
+                                    <Label className="btn btn-outline-danger" for="neg_reuse">reuse</Label>
+                                    
+                                    <Control.checkbox model=".neg_recyclability" name="neg_recyclability" id="neg_recyclability"
+                                            className= "btn-check"/>
+                                    <Label className="btn btn-outline-danger" for="neg_recyclability">recyclability</Label>
+                                    
+                                    <Control.checkbox model=".neg_disassembly" name="neg_disassembly" id="neg_disassembly"
+                                            className= "btn-check"/>
+                                    <Label className="btn btn-outline-danger" for="neg_disassembly">disassembly</Label>
+                                    
+                                    <Control.checkbox model=".neg_remanufacturing" name="neg_remanufacturing" id="neg_remanufacturing"
+                                            className= "btn-check"/>
+                                    <Label className="btn btn-outline-danger" for="neg_remanufacturing">remanufacturing</Label>
+                                    
                                     <Control.checkbox model=".neg_sustainability" name="neg_sustainability" id="neg_sustainability"
                                             className= "btn-check"/>
                                     <Label className="btn btn-outline-danger" for="neg_sustainability">sustainability</Label>
+                                    
                                     
                                     <Control.checkbox model=".neg_manufacturability" name="neg_manufacturability" id="neg_manufacturability"
                                             className= "btn-check"/>
                                     <Label className="btn btn-outline-danger" for="neg_manufacturability">manufacturability</Label>
                                     
+                                    
                                     <Control.checkbox model=".neg_ergonomics" name="neg_ergonomics" id="neg_ergonomics"
                                             className= "btn-check"/>
                                     <Label className="btn btn-outline-danger" for="neg_ergonomics">ergonomics</Label>
-                                </Col>
+                                    
+                                </Row>
 
                             </Row>
                             <Row className='form-group' style={{marginBottom:"60px"}}>
@@ -439,9 +594,9 @@ class AddHeuristic extends Component{
                                             className= "btn-check"/>
                                     <Label className="btn btn-outline-light" style={{color: 'black'}} for="use">use</Label>
 
-                                    <Control.checkbox model=".lcp_end of life" name="end of life" id="end of life"
+                                    <Control.checkbox model=".lcp_end" name="end" id="end"
                                             className= "btn-check"/>
-                                    <Label className="btn btn-outline-light" style={{color: 'black'}} for="end of life">end of life</Label>
+                                    <Label className="btn btn-outline-light" style={{color: 'black'}} for="end">end</Label>
 
                                 </Col>
 

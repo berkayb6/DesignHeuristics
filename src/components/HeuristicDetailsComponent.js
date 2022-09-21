@@ -11,7 +11,7 @@ function RenderDetailItem({item, type, id}){
      * 
      */
     if (type=== 'phase'){
-        return(
+        return( 
             <Card className='heuristicDetailsCard align-items-center'>
                 <Row className='heuristicDetailsCardBody'>
                     <Col md={6}>
@@ -115,7 +115,6 @@ class HeuristicDetails extends Component{
         /**To set the selected heuristic as the selected one, it is defined to avoid writing more codes */
         const selectedHeuristic= this.props.selectedOne;
         const id = selectedHeuristic._id;
-        console.log("sH: ", selectedHeuristic)
         /**Since each property of the seleceted heuristic has a different kind of visuality,
          * the type of these properties has been defined in each variable to improve the simplicity and
          * avoid more coding!
@@ -123,7 +122,8 @@ class HeuristicDetails extends Component{
          * Each item or property will be rendered via the function defined above (RenderDetailItem)
          * The functions seeks for two property: item that should be rendered, and the type of that */
         
-        const designPhase= selectedHeuristic.designPhase.map((phase)=>{
+        var phases = selectedHeuristic.designPhase.split(/[ ,]+/);
+        const designPhase= phases.map((phase)=>{
             let type= 'phase';
             return(
                 <Col md={6} className="text-center">
@@ -131,6 +131,7 @@ class HeuristicDetails extends Component{
                 </Col>
             )
         })
+        
         const positiveInfluence= selectedHeuristic.positiveInfluence.map((influence)=>{
             let type= 'positive';
             return(
