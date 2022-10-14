@@ -53,7 +53,7 @@ class AddHeuristic extends Component{
     }
 
     onFileUpload = () => {
-        const url = `${baseUrl}/imageUpload`;
+        const url = `${baseUrl}imageUpload`;
 
         const config = {
             headers: {
@@ -108,8 +108,8 @@ class AddHeuristic extends Component{
             designPhase= designPhase + ", " + phases[i]
             
         }
-        var positiveEffects= keys.filter(value => value.startsWith('pos')).map(value=> value.slice(4));
-        var negativeEffects= keys.filter(value => value.startsWith('neg')).map(value=> value.slice(4));
+        var positiveEffects= keys.filter(value => value.startsWith('pos_')).map(value=> value.slice(4));
+        var negativeEffects= keys.filter(value => value.startsWith('neg_')).map(value=> value.slice(4));
         var lifeCyclePhase= keys.filter(value => value.startsWith('lcp')).map(value=> value.slice(4));
         var industry= keys.filter(value => value.startsWith('ind')).map(value=> value.slice(4));
         var title = this.state.checkOrderVerb + " " + this.state.checkArtifactRestriction + " " + this.state.checkArtifact + " " + this.state.checkOrderAdverb;
@@ -122,7 +122,7 @@ class AddHeuristic extends Component{
                 image.push(value.name)
             }
         }
-        var sources= values.sources;
+        var sources= values.source;
         return new Promise (resolve=> {
             resolve(this.props.postHeuristic(
                 designFor,
@@ -336,7 +336,7 @@ class AddHeuristic extends Component{
                                         <Card className='addYourHeuristicCard align-items-center'>
                                             <Row className='addYourHeuristicCardBody'>
                                                 <Col md={3}>
-                                                    <CardImg src= {`${baseUrl}assets/software.jpg`} className='addYourHeuristicImage'/>
+                                                    <CardImg src= {`${baseUrl}assets/software-system.jpg`} className='addYourHeuristicImage'/>
                                                 </Col>
                                                 <Col md={4}>
                                                     <CardTitle style={{display: "flex",color: "black", justifyContent:'center', alignItems:'center'}}> <h3><strong>Sofware/System</strong></h3> </CardTitle>                
@@ -380,26 +380,10 @@ class AddHeuristic extends Component{
                                     <h7>This is the core information you give others! Please use your words carefully and check before hand, if 
                                         somebody else already posted your guideline. You can easily also add more information to an already guideline.</h7>
                                 </Col>
-                                <Row className='form-group' style={{marginBottom:"20px"}}>
-                                    <Col>
-                                        <h4>1. Order Verb  </h4>
-                                    </Col>
-                                    <Row>
-                                        <Col md={6}>
-                                            <Control.text model='.orderVerb' id="orderVerb" name="orderVerb"  
-                                                className= "form-control"/>
-                                        </Col>
-                                        <Col md={6}>
-                                            <p>
-                                            What should be done with the artifact? Use a verb! Should be designed a certain way? write <strong>Design.</strong> Should something be avoided? Write <strong>Avoid.</strong> In the next field you can be more precise about it.
-                                            </p>
-                                        </Col>
-                                    </Row>
-                                </Row>
                                 <Row  className='form-group' style={{marginBottom:"20px", marginTop:"20px"}}>
                                     
                                     <Col>
-                                        <h4>2. Artifact  </h4>
+                                        <h4>1. Artifact  </h4>
                                     </Col>
                                     <Row>
                                         <Col md={6}>
@@ -415,7 +399,7 @@ class AddHeuristic extends Component{
                                 </Row>
                                 <Row className='form-group' style={{marginBottom:"20px"}}>
                                     <Col >
-                                        <h4>3. Artifact Restriction/Extension (optional) </h4>
+                                        <h4>2. Artifact Restriction/Extension (optional) </h4>
                                     </Col>
                                     <Row>
                                         <Col md={6}>
@@ -429,7 +413,22 @@ class AddHeuristic extends Component{
                                         </Col>
                                     </Row>
                                 </Row>
-                                
+                                <Row className='form-group' style={{marginBottom:"20px"}}>
+                                    <Col>
+                                        <h4>3. Order Verb  </h4>
+                                    </Col>
+                                    <Row>
+                                        <Col md={6}>
+                                            <Control.text model='.orderVerb' id="orderVerb" name="orderVerb"  
+                                                className= "form-control"/>
+                                        </Col>
+                                        <Col md={6}>
+                                            <p>
+                                            What should be done with the artifact? Use a verb! Should be designed a certain way? write <strong>Design.</strong> Should something be avoided? Write <strong>Avoid.</strong> In the next field you can be more precise about it.
+                                            </p>
+                                        </Col>
+                                    </Row>
+                                </Row>
                                 <Row className='form-group' style={{marginBottom:"20px"}}>
                                     <Col>
                                         <h4>4. Order Adverb  </h4>
@@ -582,6 +581,10 @@ class AddHeuristic extends Component{
                                         If you do not chose the level, we assume that it works on every level.</h7>
                                 </Col>
                                 <Col className="col-12 d-flex justify-content-between" md={6} style={{marginTop:"20px"}}>
+                                    <Control.checkbox model=".lcp_all" name="all" id="all"
+                                            className= "btn-check"/>
+                                    <Label className="btn btn-outline-light" style={{color: 'black'}} for="all">all</Label>
+
                                     <Control.checkbox model=".lcp_design" name="design" id="design"
                                             className= "btn-check"/>
                                     <Label className="btn btn-outline-light" style={{color: 'black'}} for="design">design</Label>
@@ -609,10 +612,14 @@ class AddHeuristic extends Component{
                                     <h7>Please define the industry! You can choose more than one. If you do not chose the industry, we assume that it works in every industry.</h7>
                                 </Col>
                                 <Col className="col-12 d-flex justify-content-between" md={6} style={{marginTop:"20px"}}>
+                                    <Control.checkbox model=".ind_all" name="all" id="all"
+                                            className= "btn-check"/>
+                                    <Label className="btn btn-outline-light" style={{color: 'black'}} for="all">all</Label>
+
                                     <Control.checkbox model=".ind_aircraft" name="aircraft" id="aircraft"
                                             className= "btn-check"/>
                                     <Label className="btn btn-outline-light" style={{color: 'black'}} for="aircraft">aircraft</Label>
-                                    
+
                                     <Control.checkbox model=".ind_furniture" name="furniture" id="furniture"
                                             className= "btn-check"/>
                                     <Label className="btn btn-outline-light" style={{color: 'black'}} for="furniture">furniture</Label>

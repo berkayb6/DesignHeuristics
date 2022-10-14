@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import {Navbar, NavbarBrand, Nav, NavbarToggler, Collapse, NavItem,
-Button, Modal, ModalHeader, ModalBody, Form, Input, FormGroup, Label} from 'reactstrap';
+Button, Card, CardImg} from 'reactstrap';
 import {NavLink} from 'react-router-dom';
+import { baseUrl } from '../shared/baseUrl';
 
 class Header extends Component{
     
@@ -45,6 +46,11 @@ class Header extends Component{
               
                         <Collapse isOpen={this.state.isNavOpen} navbar>
                             <Nav navbar >
+                            <Nav className='col-12 col-md-3' navbar>
+                                <Card className='logo'>
+                                    <CardImg src= {`${baseUrl}assets/BD-logo.png`} width={20} height={50}/>
+                                </Card>
+                            </Nav>
                             <NavItem >
                                 <NavLink className="nav-link" to="/selectyourway" style={{color:"black"}}>
                                     <span className='fa-lg' ><strong>Home</strong></span> 

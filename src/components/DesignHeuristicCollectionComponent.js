@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import HeuristicDetails from './HeuristicDetailsComponent';
 import {Link} from 'react-router-dom';
-import { Form, FormGroup, Col, Label, Input,Button, Card, CardTitle, CardBody, CardText, Modal, ModalHeader, ModalBody } from 'reactstrap';
+import { Form, FormGroup, Col, Container, Row, Label, Input,Button, Card, CardTitle, CardBody, CardText, Modal, ModalHeader, ModalBody } from 'reactstrap';
 import Header from './HeaderComponent';
 import { Loading } from './LoadingComponent';
 
@@ -52,9 +52,27 @@ class DHCollection extends Component{
         }
     }
     
+    
 
     render(){
-       
+        let designForArray = [];       
+        this.props.heuristics.map((heuristic)=>{
+            heuristic.designFor.map((item)=>{
+                let splitted= item.split(/[ ,]+/)
+                splitted.map((arrayItem)=>{
+                    designForArray.push(arrayItem)
+                })
+            });
+        })
+        let uniqueDesignFor= [... new Set(designForArray)]
+        const designForOptions= uniqueDesignFor.map((item)=>{
+            return(
+                <option>
+                    {item}
+                </option>
+            )
+        })
+
         return(
             <>
                 <Header auth={this.props.auth}
@@ -88,31 +106,7 @@ class DHCollection extends Component{
                                                     value={this.state.designfor}
                                                     placeholder="change the property"
                                                     onChange={this.handleInputChange}>
-                                                <option>sustainability</option>
-                                                <option>ergonomics</option>
-                                                <option>manufacturability</option>
-                                                <option>cost</option>
-                                                <option>reliability</option>
-                                                <option>test</option>
-                                                <option>safety</option>
-                                                <option>quality</option>
-                                                <option>minimum risk</option>
-                                                <option>standards</option>
-                                                <option>assembly</option>
-                                                <option>inspection</option>
-                                                <option>logistics</option>
-                                                <option>low quantity production</option>
-                                                <option>supply chain</option>
-                                                <option>modularity</option>
-                                                <option>user-friendliness</option>
-                                                <option>aesthetics</option>
-                                                <option>serviceability</option>
-                                                <option>maintainability</option>
-                                                <option>repair</option>
-                                                <option>reuse</option>
-                                                <option>recyclability</option>
-                                                <option>disassembly</option>
-                                                <option>remanufacturing</option>
+                                                {designForOptions}
                                             </Input>
                                         </Col>
                                     </FormGroup>
@@ -142,6 +136,7 @@ class DHCollection extends Component{
                                                 <option>production</option>
                                                 <option>use</option>
                                                 <option>end</option>
+                                                <option>all</option>
                                             </Input>
                                         </Col>
                                     </FormGroup>
@@ -167,7 +162,27 @@ class DHCollection extends Component{
                     isLoading= {this.props.heuristicsLoading}
                     errMess= {this.props.heuristiscErrMess}
                     item= {this.props.heuristics.filter(item => {
-                            return item.designFor[0]=== this.state.designfor && item.industry[0]=== this.state.industry && item.lifeCyclePhase[0]=== this.state.lifeCyclePhase
+                            if(this.state.industry=== "all"){
+                                if(this.state.lifeCyclePhase==="all"){
+                                    return item.designFor[0]=== this.state.designfor
+                                }
+                                else{
+                                    return item.designFor[0]=== this.state.designfor  && item.lifeCyclePhase[0]=== this.state.lifeCyclePhase || item.lifeCyclePhase[0]=== "all"
+                                }
+                            }
+
+                            if(this.state.lifeCyclePhase==="all"){
+                                if(this.state.industry=== "all"){
+                                    return item.designFor[0]=== this.state.designfor
+                                }
+                                else{
+                                    return item.designFor[0]=== this.state.designfor  && item.industry[0]=== this.state.industry || item.industry[0]=== "all"
+                                }
+                            }
+
+                            else{
+                                return item.designFor[0]=== this.state.designfor && (item.industry[0]=== this.state.industry || item.industry[0]=== "all") && (item.lifeCyclePhase[0]=== this.state.lifeCyclePhase || item.lifeCyclePhase[0]=== "all")
+                            }
                         })
                     }
                     comments= {this.props.heuristics}
@@ -220,43 +235,30 @@ class Collection extends Component{
          * A short explanation about the heuristic stands as the last column. If the user wants to have more information
          * about this specific heuristic, s/he should click on the explanation to toggle the pop-up.
          */
-
         const heuristic= this.props.item.map((heuristic)=>{
             return(
-                <div className='row align-items-center'>
-                    <div className='col-12 col-md-2' >
-                        
-                        {heuristic.designFor}
-                    </div>
-                    {/* <div className='col-12 col-md-2' >
-                        {heuristic.industry.map((industry)=>{
-                            return(
-                                <div>
-                                    {industry}
-                                </div>
-                            )
-                        })}
-                        
-                    </div> */}
-                    <div className='col-12 col-md-2' >
-                        
-                        {heuristic.industry}
-                    </div>
-                    <div className='col-12 col-md-1' >
-                        {heuristic.lifeCyclePhase}
-                    </div>
-                    <div className='col-12 col-md-1' >
+                <Row className='d-flex align-items-center'>
+                    <Col md={2} >
+                        {heuristic.designFor.join(", ")}
+                    </Col>
+                    <Col md={2} >
+                        {heuristic.industry.join(", ")}
+                    </Col>
+                    <Col md={2} >
+                        {heuristic.lifeCyclePhase.join(", ")}
+                    </Col>
+                    <Col md={1} >
                         {heuristic.rating}
-                    </div>
-                    <div className='col-12 col-md-6' >
+                    </Col>
+                    <Col md={5} >
                         <Card key={heuristic.id}>
                             <CardBody >
                                 <CardText onClick={()=>this.toggleModal(heuristic)}> {heuristic.title}</CardText>
                             </CardBody>
                         </Card>
-                    </div>
-                </div>
-        )
+                    </Col>
+                </Row>
+            )
         })
 
         if (this.props.isSearchClicked){
@@ -281,13 +283,33 @@ class Collection extends Component{
             }
             else
                 return(
-                    <>
+                    <Container fluid style={{ paddingLeft: 30, paddingRight: 0 }}>
+                        <Row className='d-flex '>
+                            <Col md={2}>
+                                <h3>Design for</h3>
+                            </Col>
+                            <Col md={2}>
+                                <h3>Industry</h3>
+                            </Col>
+                            <Col md={2}>
+                                <h3>Life Cycle Phase</h3>
+                            </Col>
+                            <Col md={1}>
+                                <h3>Rating</h3>
+                            </Col>
+                            <Col md={5}>
+                                <h3>Applicable heuristic</h3>
+                            </Col>
+                        </Row>
+                        <Row className='d-flex'>
+                                {heuristic}
+                        </Row>
 
-                        <div style={{backgroundColor:"#C9E2FF"}}>
+                        {/* <div style={{backgroundColor:"#C9E2FF"}}>
                             <div className='container'>
                                 <div className='row row-header'>
                                     <div className='col-12 col-md-2' >
-                                        <h3>Design for</h3>
+                                        
                                     </div>
                                     <div className='col-12 col-md-2' >
                                         <h3>Industry</h3>
@@ -312,7 +334,7 @@ class Collection extends Component{
 
                             </div>
                             
-                        </div>
+                        </div> */}
 
                         {/**If the user has clicked on the explanation, then the modal will be shown. 
                          * For this to be rendered properly, the information which heuristic has been clicked,
@@ -327,7 +349,7 @@ class Collection extends Component{
                             </ModalBody>
                         </Modal>
                         
-                    </>
+                    </Container>
                 )
 
             }

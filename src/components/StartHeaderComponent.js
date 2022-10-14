@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import {Navbar, Nav, NavbarToggler, Collapse, NavItem,
-Button, Modal, ModalHeader, ModalBody, Form, Input, FormGroup, Label} from 'reactstrap';
+Button, Modal, ModalHeader, ModalBody, Form, Input, FormGroup, Label, Image, Card, CardImg} from 'reactstrap';
 import {NavLink} from 'react-router-dom';
+import { baseUrl } from '../shared/baseUrl';
 import Start from './StartComponent';
 
 class StartHeader extends Component{
@@ -57,6 +58,11 @@ class StartHeader extends Component{
                         <NavbarToggler onClick={this.toggleNav}/>
                         
                         <Collapse isOpen={this.state.isNavOpen} navbar>
+                            <Nav className='col-12 col-md-2' navbar>
+                                <Card className='logo'>
+                                    <CardImg src= {`${baseUrl}assets/BD-logo.png`} width={20} height={50}/>
+                                </Card>
+                            </Nav>
                             <Nav navbar>
                                 <NavItem>
                                     {/**Since there are two pages that have similar heading being "Select Your Way" and "Select Your Mode",

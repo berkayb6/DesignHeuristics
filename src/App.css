@@ -89,3 +89,13 @@
   width: auto;
   border-radius: 130px 0px 130px 0px;
 }
+
+.logo {
+  margin-right: auto;
+  margin-left: auto;
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0);
+  padding: 10px;
+  text-align: center;
+  border: none;
+}

@@ -50,8 +50,8 @@ function Start (props) {
 
                 <div className='col-12 col-md-5'>
                     
-                    <Card>
-                        <CardImg src= {`${baseUrl}assets/bycle.jpg`} width={100} height={250}/>
+                    <Card className='logo'>
+                        <CardImg src= {`${baseUrl}assets/startSeite.png`} width={200} height={500}/>
                     </Card>
 
                 
