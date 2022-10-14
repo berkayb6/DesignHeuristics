@@ -117,11 +117,21 @@ class DHCollection extends Component{
                                                     value={this.state.industry}
                                                     placeholder="change the property"
                                                     onChange={this.handleInputChange}>
+                                                <option>all</option>
                                                 <option>automotive</option>
                                                 <option>aircraft</option>
                                                 <option>furniture</option>
                                                 <option>household</option>
-                                                <option>all</option>
+                                                <option>metal production and processing</option>
+                                                <option>manufacture of metal products</option>
+                                                <option>production of data processing equipment</option>
+                                                <option>production of electrical equipment</option>
+                                                <option>electric motors</option>
+                                                <option>mechnanical engineering</option>
+                                                <option>vehicle construction</option>
+                                                <option>ship and boat building</option>
+                                                <option>rail vehicles</option>
+                                                <option>clothing</option>
                                             </Input>
                                         </Col>
                                     </FormGroup>
@@ -132,11 +142,11 @@ class DHCollection extends Component{
                                                     value={this.state.lifeCyclePhase}
                                                     placeholder="change the property"
                                                     onChange={this.handleInputChange}>
+                                                <option>all</option>
                                                 <option>design</option>
                                                 <option>production</option>
                                                 <option>use</option>
                                                 <option>end</option>
-                                                <option>all</option>
                                             </Input>
                                         </Col>
                                     </FormGroup>

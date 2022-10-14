@@ -15,7 +15,8 @@ function RenderDetailItem({item, type, id}){
             <Card className='heuristicDetailsCard align-items-center'>
                 <Row className='heuristicDetailsCardBody'>
                     <Col md={6}>
-                        <CardImg src= {`${baseUrl}assets/${item}.jpg`} className='heuristicDetailsCardImage'/>
+                        {console.log(item)}
+                        <CardImg src= {`${baseUrl}assets/${item.replace(/ /g,'')}.jpg`} className='heuristicDetailsCardImage'/>
                     </Col>
                     <Col md={6}>
                         <CardTitle style={{display: "flex", justifyContent:'center', alignItems:'center', color: "black"}}> <h3><strong>{item}</strong></h3> </CardTitle>                
@@ -122,7 +123,7 @@ class HeuristicDetails extends Component{
          * Each item or property will be rendered via the function defined above (RenderDetailItem)
          * The functions seeks for two property: item that should be rendered, and the type of that */
         
-        var phases = selectedHeuristic.designPhase.split(/[ ,]+/);
+        var phases = selectedHeuristic.designPhase.split(/[,]+/);
         const designPhase= phases.map((phase)=>{
             let type= 'phase';
             return(

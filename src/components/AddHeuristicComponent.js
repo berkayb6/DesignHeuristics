@@ -330,9 +330,9 @@ class AddHeuristic extends Component{
                                     </Label>
                                 </Col>
                                 <Col className="col-12 d-flex justify-content-between"  style={{marginTop:"20px"}}>
-                                    <Control.checkbox model=".phase_software" name="software" id="software"
+                                    <Control.checkbox model=".phase_software-system" name="software-system" id="software-system"
                                         className= "btn-check"/>
-                                    <Label className=" btn-outline-success" for="software">                                           
+                                    <Label className=" btn-outline-success" for="software-system">                                           
                                         <Card className='addYourHeuristicCard align-items-center'>
                                             <Row className='addYourHeuristicCardBody'>
                                                 <Col md={3}>
@@ -611,10 +611,50 @@ class AddHeuristic extends Component{
                                 <Col md={9}>
                                     <h7>Please define the industry! You can choose more than one. If you do not chose the industry, we assume that it works in every industry.</h7>
                                 </Col>
-                                <Col className="col-12 d-flex justify-content-between" md={6} style={{marginTop:"20px"}}>
+                                <Row className="col-12 d-flex justify-content-between" md={3} style={{marginTop:"20px"}}>
                                     <Control.checkbox model=".ind_all" name="all" id="all"
                                             className= "btn-check"/>
                                     <Label className="btn btn-outline-light" style={{color: 'black'}} for="all">all</Label>
+
+                                    <Control.checkbox model=".ind_metal production and processing" name="metal production and processing" id="metal production and processing"
+                                            className= "btn-check"/>
+                                    <Label className="btn btn-outline-light" style={{color: 'black'}} for="metal production and processing">metal production and processing</Label>
+                                    
+                                    <Control.checkbox model=".ind_manufacture of metal products" name="manufacture of metal products" id="manufacture of metal products"
+                                            className= "btn-check"/>
+                                    <Label className="btn btn-outline-light" style={{color: 'black'}} for="manufacture of metal products">manufacture of metal products</Label>
+
+                                    <Control.checkbox model=".ind_production of data processing equipment" name="production of data processing equipment" id="production of data processing equipment"
+                                            className= "btn-check"/>
+                                    <Label className="btn btn-outline-light" style={{color: 'black'}} for="production of data processing equipment">production of data processing equipment</Label>
+
+                                    <Control.checkbox model=".ind_production of electrical_equipment" name="production of electrical_equipment" id="production of electrical_equipment"
+                                            className= "btn-check"/>
+                                    <Label className="btn btn-outline-light" style={{color: 'black'}} for="production of electrical_equipment">production of electrical equipment</Label>
+
+                                    <Control.checkbox model=".ind_electric motors" name="electric motors" id="electric motors"
+                                            className= "btn-check"/>
+                                    <Label className="btn btn-outline-light" style={{color: 'black'}} for="electric motors">electric motors</Label>
+
+                                    <Control.checkbox model=".ind_mechnanical engineering" name="mechnanical engineering" id="mechnanical engineering"
+                                            className= "btn-check"/>
+                                    <Label className="btn btn-outline-light" style={{color: 'black'}} for="mechnanical engineering">mechnanical engineering</Label>
+
+                                    <Control.checkbox model=".ind_vehicle construction" name="vehicle construction" id="vehicle construction"
+                                            className= "btn-check"/>
+                                     <Label className="btn btn-outline-light" style={{color: 'black'}} for="vehicle construction">vehicle construction</Label>
+
+                                    <Control.checkbox model=".ind_ship and boat building" name="ship and boat building" id="ship and boat building"
+                                            className= "btn-check"/>
+                                    <Label className="btn btn-outline-light" style={{color: 'black'}} for="ship and boat building">ship and boat building</Label>
+
+                                    <Control.checkbox model=".ind_rail vehicles" name="rail vehicles" id="rail vehicles"
+                                            className= "btn-check"/>
+                                    <Label className="btn btn-outline-light" style={{color: 'black'}} for="rail vehicles">rail vehicles</Label>
+
+                                    <Control.checkbox model=".ind_clothing" name="clothing" id="clothing"
+                                            className= "btn-check"/>
+                                    <Label className="btn btn-outline-light" style={{color: 'black'}} for="clothing">clothing</Label>
 
                                     <Control.checkbox model=".ind_aircraft" name="aircraft" id="aircraft"
                                             className= "btn-check"/>
@@ -631,7 +671,7 @@ class AddHeuristic extends Component{
                                     <Control.checkbox model=".ind_automotive" name="automotive" id="automotive"
                                             className= "btn-check"/>
                                     <Label className="btn btn-outline-light" style={{color: 'black'}} for="automotive">automotive</Label>
-                                </Col>
+                                </Row>
 
                             </Row>
                             <Row className='form-group' style={{marginBottom:"20px"}}>
