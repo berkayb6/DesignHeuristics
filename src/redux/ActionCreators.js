@@ -145,7 +145,6 @@ export const postHeuristic = (designFor, positiveEffects, designPhase, title, ne
     }
     const bearer = 'Bearer ' + localStorage.getItem('token');
 
-    console.log("new Heur: ", newHeuristic)
     return fetch (baseUrl + 'heuristics', {
         method: 'POST',
         body: JSON.stringify(newHeuristic),
@@ -181,26 +180,36 @@ export const postHeuristic = (designFor, positiveEffects, designPhase, title, ne
 // FETCHING USERS
 
 export const fetchUsers= () => (dispatch) => {
-    return fetch(baseUrl + 'users')
-       .then (response => {
-           /** When an error from the server is encountered  */
 
-           if (response.ok)
-               return response;
-           else
-               var error= new Error('Error '+ response.status + ': ' + response.statusText);
-               error.response= response;
-               throw error;
-       },
+    const bearer = 'Bearer ' + localStorage.getItem('token');
 
-       /** When no response from the server is encountered  */
-       error=> {
-           var errmess= new Error(error.message);
-           throw errmess;
-       })
-       .then (response => response.json())
-       .then (users => dispatch(addUsers(users)))
-       .catch( error => dispatch(usersFailed(error.message)));
+    return fetch(baseUrl + 'users',{
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': bearer
+        },
+        credentials: 'same-origin'
+    })
+    .then (response => {
+        /** When an error from the server is encountered  */
+
+        if (response.ok)
+            return response;
+        else
+            var error= new Error('Error '+ response.status + ': ' + response.statusText);
+            error.response= response;
+            throw error;
+    },
+
+    /** When no response from the server is encountered  */
+    error=> {
+        var errmess= new Error(error.message);
+        throw errmess;
+    })
+    .then (response => response.json())
+    .then (users => dispatch(addUsers(users)))
+    .catch( error => dispatch(usersFailed(error.message)));
 }
 
 export const usersFailed= (errmess) => ({

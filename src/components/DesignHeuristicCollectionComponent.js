@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import HeuristicDetails from './HeuristicDetailsComponent';
 import {Link} from 'react-router-dom';
 import { Form, FormGroup, Col, Container, Row, Label, Input,Button, Card, CardTitle, CardBody, CardText, Modal, ModalHeader, ModalBody } from 'reactstrap';
@@ -12,7 +12,8 @@ class DHCollection extends Component{
         this.state = {
             designfor: 'sustainability',
             industry: 'automotive',
-            lifeCyclePhase: 'design',
+            lifeCyclePhase: 'all',
+            designPhase: 'material selection',
             isSearchClicked: false
         };
 
@@ -151,6 +152,21 @@ class DHCollection extends Component{
                                         </Col>
                                     </FormGroup>
                                     <FormGroup row>
+                                        <Label htmlFor="designPhase" md={5}><h4>Design Phase</h4></Label>
+                                        <Col md={7}>
+                                            <Input type="select" name="designPhase"
+                                                    value={this.state.designPhase}
+                                                    placeholder="change the property"
+                                                    onChange={this.handleInputChange}>
+                                                <option>material selection</option>
+                                                <option>construction</option>
+                                                <option>process selection</option>
+                                                <option>software-system</option>
+                                                <option>others</option>
+                                            </Input>
+                                        </Col>
+                                    </FormGroup>
+                                    <FormGroup row>
                                     <Col md={{size: 10, offset: 2}}>
                                         <Button onClick={this.searchClicked} type="submit" color="primary">
                                             Search
@@ -174,36 +190,121 @@ class DHCollection extends Component{
                     item= {this.props.heuristics.filter(item => {
                             if(this.state.industry=== "all"){
                                 if(this.state.lifeCyclePhase==="all"){
-                                    return item.designFor[0]=== this.state.designfor
+                                    return item.designFor[0]=== this.state.designfor && item.designPhase[0] === this.state.designPhase
                                 }
                                 else{
-                                    return item.designFor[0]=== this.state.designfor  && item.lifeCyclePhase[0]=== this.state.lifeCyclePhase || item.lifeCyclePhase[0]=== "all"
+                                    return item.designFor[0]=== this.state.designfor && item.designPhase[0] === this.state.designPhase && item.lifeCyclePhase[0]=== this.state.lifeCyclePhase || item.lifeCyclePhase[0]=== "all"
                                 }
                             }
 
                             if(this.state.lifeCyclePhase==="all"){
                                 if(this.state.industry=== "all"){
-                                    return item.designFor[0]=== this.state.designfor
+                                    return item.designFor[0]=== this.state.designfor && item.designPhase[0] === this.state.designPhase
                                 }
                                 else{
-                                    return item.designFor[0]=== this.state.designfor  && item.industry[0]=== this.state.industry || item.industry[0]=== "all"
+                                    return item.designFor[0]=== this.state.designfor  && item.industry[0]=== this.state.industry || item.industry[0]=== "all" && item.designPhase[0] === this.state.designPhase
                                 }
                             }
 
                             else{
-                                return item.designFor[0]=== this.state.designfor && (item.industry[0]=== this.state.industry || item.industry[0]=== "all") && (item.lifeCyclePhase[0]=== this.state.lifeCyclePhase || item.lifeCyclePhase[0]=== "all")
+                                return item.designFor[0]=== this.state.designfor && item.designPhase[0] === this.state.designPhase&& (item.industry[0]=== this.state.industry || item.industry[0]=== "all") && (item.lifeCyclePhase[0]=== this.state.lifeCyclePhase || item.lifeCyclePhase[0]=== "all")
                             }
                         })
                     }
                     comments= {this.props.heuristics}
                     postComment= {this.props.postComment}
                     style = {{minHeight: "100vh"}}/>
+
+                {/* <List 
+                    item= {this.props.heuristics.filter(item => {
+                            if(this.state.industry=== "all"){
+                                if(this.state.lifeCyclePhase==="all"){
+                                    return item.designFor[0]=== this.state.designfor && item.designPhase[0] === this.state.designPhase
+                                }
+                                else{
+                                    return item.designFor[0]=== this.state.designfor && item.designPhase[0] === this.state.designPhase && item.lifeCyclePhase[0]=== this.state.lifeCyclePhase || item.lifeCyclePhase[0]=== "all"
+                                }
+                            }
+
+                            if(this.state.lifeCyclePhase==="all"){
+                                if(this.state.industry=== "all"){
+                                    return item.designFor[0]=== this.state.designfor && item.designPhase[0] === this.state.designPhase
+                                }
+                                else{
+                                    return item.designFor[0]=== this.state.designfor  && item.industry[0]=== this.state.industry || item.industry[0]=== "all" && item.designPhase[0] === this.state.designPhase
+                                }
+                            }
+
+                            else{
+                                return item.designFor[0]=== this.state.designfor && item.designPhase[0] === this.state.designPhase&& (item.industry[0]=== this.state.industry || item.industry[0]=== "all") && (item.lifeCyclePhase[0]=== this.state.lifeCyclePhase || item.lifeCyclePhase[0]=== "all")
+                            }
+                        })
+                    }
+                    style = {{minHeight: "100vh"}}/> */}
             </>
         )
     }
 }
 export default DHCollection;
 
+
+function List(props){
+
+    console.log("item:", props.item)
+
+    const [sampleData, setSampleData] = useState(props.item)
+    console.log("sample: ", sampleData)
+    useEffect(()=>{
+        var test= props.item;
+        console.log("test: ", test)
+        // setSampleData(props.item)
+    }, [sampleData])
+
+    function handleSort() {
+        const sortedData = [...sampleData].sort((a,b) =>{
+            return a.title > b.title ? 1: -1
+        })
+        setSampleData(sortedData)
+    }
+
+    const components= sampleData.map((object)=>{
+        return(
+            <Row className='d-flex align-items-center'>
+                <Col md={2} >
+                    {object.designFor.join(", ")}
+                </Col>
+                <Col md={1} >
+                    {object.industry.join(", ")}
+                </Col>
+                <Col md={2} >
+                    {object.lifeCyclePhase.join(", ")}
+                </Col>
+                <Col md={2} >
+                    {object.designPhase.join(", ")}
+                </Col>
+                <Col md={1} >
+                    {object.rating}
+                </Col>
+                <Col md={4} >
+                    <Card key={object.id}>
+                        <CardBody >
+                            <CardText onClick={()=>this.toggleModal(object)}> {object.title}</CardText>
+                        </CardBody>
+                    </Card>
+                </Col>
+            </Row>
+        )
+    })
+
+    return(
+        <>
+            <button onClick= {handleSort} id="sort-a-z">Sort A-Z</button>
+            <ul>
+                {components}
+            </ul>
+        </>
+    )
+}
 
 class Collection extends Component{
 
@@ -215,15 +316,27 @@ class Collection extends Component{
         
         this.toggleModal=this.toggleModal.bind(this);
         this.closeModal=this.closeModal.bind(this);
+        this.handleSort=this.handleSort.bind(this)
 
         /**To define the selected heuristic and pass it into the HeuristicDetailsComponent the state
          * contains selectedHeuristic as an empty string.
          */
         this.state = {
-          isModalOpen: false,
-          selectedHeuristic: ''
+            heuristics: props.item,
+            isModalOpen: false,
+            selectedHeuristic: ''
         };
         
+    }
+
+    handleSort() {
+        const sortedData = [...this.props.item].sort((a,b) =>{
+            return a.title > b.title ? 1: -1
+        })
+        console.log("sorted: ", sortedData)
+        // this.setState({
+        //     heuristics: sortedData
+        // })
     }
 
     toggleModal(selectedOne){
@@ -251,16 +364,19 @@ class Collection extends Component{
                     <Col md={2} >
                         {heuristic.designFor.join(", ")}
                     </Col>
-                    <Col md={2} >
+                    <Col md={1} >
                         {heuristic.industry.join(", ")}
                     </Col>
                     <Col md={2} >
                         {heuristic.lifeCyclePhase.join(", ")}
                     </Col>
+                    <Col md={2} >
+                        {heuristic.designPhase.join(", ")}
+                    </Col>
                     <Col md={1} >
                         {heuristic.rating}
                     </Col>
-                    <Col md={5} >
+                    <Col md={4} >
                         <Card key={heuristic.id}>
                             <CardBody >
                                 <CardText onClick={()=>this.toggleModal(heuristic)}> {heuristic.title}</CardText>
@@ -294,57 +410,30 @@ class Collection extends Component{
             else
                 return(
                     <Container fluid style={{ paddingLeft: 30, paddingRight: 0 }}>
+                        <button onClick={this.handleSort()} id="sort-a-z">Sort A-Z</button>
                         <Row className='d-flex '>
                             <Col md={2}>
                                 <h3>Design for</h3>
                             </Col>
-                            <Col md={2}>
+                            <Col md={1}>
                                 <h3>Industry</h3>
                             </Col>
                             <Col md={2}>
                                 <h3>Life Cycle Phase</h3>
                             </Col>
+                            <Col md={2}>
+                                <h3>Design Phase</h3>
+                            </Col>
                             <Col md={1}>
                                 <h3>Rating</h3>
                             </Col>
-                            <Col md={5}>
+                            <Col md={4}>
                                 <h3>Applicable heuristic</h3>
                             </Col>
                         </Row>
                         <Row className='d-flex'>
                                 {heuristic}
                         </Row>
-
-                        {/* <div style={{backgroundColor:"#C9E2FF"}}>
-                            <div className='container'>
-                                <div className='row row-header'>
-                                    <div className='col-12 col-md-2' >
-                                        
-                                    </div>
-                                    <div className='col-12 col-md-2' >
-                                        <h3>Industry</h3>
-                                    </div>
-                                    <div className='col-12 col-md-1' >
-                                        <h3>Life Cycle Phase</h3>
-                                    </div>
-                                    <div className='col-12 col-md-1' >
-                                        <h3>Rating</h3>
-                                    </div>
-                                    <div className='col-12 col-md-6' >
-
-                                        <h3>Applicable heuristic</h3>
-                                    </div>
-                                </div>
-                                <div className='row row-content'>
-
-                                    {heuristic}
-                                
-
-                                </div>
-
-                            </div>
-                            
-                        </div> */}
 
                         {/**If the user has clicked on the explanation, then the modal will be shown. 
                          * For this to be rendered properly, the information which heuristic has been clicked,

@@ -24,7 +24,7 @@ class Profile extends Component {
                         <h1 style={{marginTop: "150px", marginBottom: "50px"}}><strong>Your Profile</strong></h1>
                         <div className='col-12 '>
                             <h3><strong>Email</strong></h3>
-                            <p> Test@Test.com</p>
+                            <p> {JSON.parse(localStorage.getItem('creds')).username}</p>
                         </div>
                         <div className='col-12 '> 
                             <h3><strong>Password</strong></h3>

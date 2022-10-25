@@ -134,6 +134,7 @@ class Main extends Component {
              */
             return(
                 <div className='startpage' style = {{minHeight:"100vh"}}>
+                    {console.log("users: ", this.props)}
                     <DHCollection heuristics={this.props.heuristics.heuristics}
                         heuristicsLoading= {this.props.heuristics.isLoading}
                         heuristiscErrMess= {this.props.heuristics.errMess}

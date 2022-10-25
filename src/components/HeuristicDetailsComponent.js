@@ -2,6 +2,7 @@ import React, { Component, useState } from 'react';
 import { Form, FormGroup, Col, Label, Input,Button, Card, CardTitle, CardBody, CardText, CardImg, Row} from 'reactstrap';
 import { LocalForm, Control} from 'react-redux-form';
 import {baseUrl} from '../shared/baseUrl';
+import ReactStars from "react-rating-stars-component";
 import { toHaveDescription } from '@testing-library/jest-dom/dist/matchers';
 
 /** Please read first the explanation under HeuristicDetails */
@@ -15,7 +16,6 @@ function RenderDetailItem({item, type, id}){
             <Card className='heuristicDetailsCard align-items-center'>
                 <Row className='heuristicDetailsCardBody'>
                     <Col md={6}>
-                        {console.log(item)}
                         <CardImg src= {`${baseUrl}assets/${item.replace(/ /g,'')}.jpg`} className='heuristicDetailsCardImage'/>
                     </Col>
                     <Col md={6}>
@@ -123,7 +123,7 @@ class HeuristicDetails extends Component{
          * Each item or property will be rendered via the function defined above (RenderDetailItem)
          * The functions seeks for two property: item that should be rendered, and the type of that */
         
-        var phases = selectedHeuristic.designPhase.split(/[,]+/);
+        var phases = selectedHeuristic.designPhase[0].split(/[,]+/);
         const designPhase= phases.map((phase)=>{
             let type= 'phase';
             return(
@@ -197,7 +197,20 @@ class HeuristicDetails extends Component{
             )
         })
 
-
+        const secondExample = {
+            size: 30,
+            count: 5,
+            activeColor: "yellow",
+            value: 0,
+            isHalf: false,
+            emptyIcon: <i className="fa fa-star" />,
+            halfIcon: <i className="fa fa-star-half-alt" />,
+            filledIcon: <i className="fa fa-star" />,
+            onChange: newValue => {
+                console.log(`Example 2: new value is ${newValue}`);
+            }
+        };
+        
         return (
             <div className='container'>
                 <div className='row row-header align-items-center'>
@@ -274,6 +287,10 @@ class HeuristicDetails extends Component{
                     <Row>
                         <h4><b>Comments</b></h4> 
                         {comments}
+                    </Row>
+                    <Row style={{fontFamily: "sans-serif"}}>
+                        <h4><b>Rate the heuristic</b></h4>
+                        <ReactStars {...secondExample} />
                     </Row>
                     <LocalForm onSubmit={(values)=>{this.sendComment(values)}}>
                         <Row className='form-group'>
