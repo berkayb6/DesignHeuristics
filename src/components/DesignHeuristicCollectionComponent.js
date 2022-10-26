@@ -183,8 +183,7 @@ class DHCollection extends Component{
                 {/** The Collection component needs the information which options the user selected.
                  * According to the selections, corresponding heuristics will be shown to the user
                  */}
-                <Collection heuristics={this.props.heuristics}
-                    isSearchClicked={this.state.isSearchClicked}
+                <Collection isSearchClicked={this.state.isSearchClicked}
                     isLoading= {this.props.heuristicsLoading}
                     errMess= {this.props.heuristiscErrMess}
                     item= {this.props.heuristics.filter(item => {
@@ -257,38 +256,104 @@ function List(props){
     useEffect(()=>{
         var test= props.item;
         console.log("test: ", test)
-        // setSampleData(props.item)
-    }, [sampleData])
+        setSampleData(props.item)
+    }, [props.item])
 
-    function handleSort() {
+    const sortedData = [...sampleData].sort((a,b) =>{
+        return a.title > b.title ? 1: -1
+    })
+    setSampleData(sortedData)
+
+    // const components= sampleData.map((object)=>{
+    //     return(
+    //         <Row className='d-flex align-items-center'>
+    //             <Col md={2} >
+    //                 {object.designFor.join(", ")}
+    //             </Col>
+    //             <Col md={1} >
+    //                 {object.industry.join(", ")}
+    //             </Col>
+    //             <Col md={2} >
+    //                 {object.lifeCyclePhase.join(", ")}
+    //             </Col>
+    //             <Col md={2} >
+    //                 {object.designPhase.join(", ")}
+    //             </Col>
+    //             <Col md={1} >
+    //                 {object.rating}
+    //             </Col>
+    //             <Col md={4} >
+    //                 <Card key={object.id}>
+    //                     <CardBody >
+    //                         <CardText onClick={()=>this.toggleModal(object)}> {object.title}</CardText>
+    //                     </CardBody>
+    //                 </Card>
+    //             </Col>
+    //         </Row>
+    //     )
+    // })
+
+    return(
+        <Collection item= {sampleData}/>
+    )
+}
+
+function Collection (props){
+
+    /** Collection Component has also an property which is showing the details of a specific heuristic
+     * that the user clicked on. To show that as a pop-up (modal), it contains the HeuristicDetailsComponent inside of it.
+     */
+
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [selectedHeuristic, setSelectedHeuristic] = useState('')
+    const [sampleData, setSampleData] = useState(props.item)
+
+    useEffect(()=>{
+        var test= props.item;
+        console.log("test: ", test)
+        setSampleData(props.item)
+    }, [props.item])
+
+    function handleSort(){
         const sortedData = [...sampleData].sort((a,b) =>{
             return a.title > b.title ? 1: -1
         })
         setSampleData(sortedData)
+    
     }
 
-    const components= sampleData.map((object)=>{
+    function toggleModal(selectedOne){
+        setIsModalOpen(!isModalOpen)
+        setSelectedHeuristic(selectedOne)
+    }
+
+    function closeModal(){
+        setIsModalOpen(!isModalOpen)
+
+    }
+
+    const heuristic= sampleData.map((heuristic)=>{
         return(
             <Row className='d-flex align-items-center'>
                 <Col md={2} >
-                    {object.designFor.join(", ")}
+                    {heuristic.designFor.join(", ")}
                 </Col>
                 <Col md={1} >
-                    {object.industry.join(", ")}
+                    {heuristic.industry.join(", ")}
                 </Col>
                 <Col md={2} >
-                    {object.lifeCyclePhase.join(", ")}
+                    {heuristic.lifeCyclePhase.join(", ")}
                 </Col>
                 <Col md={2} >
-                    {object.designPhase.join(", ")}
+                    {heuristic.designPhase.join(", ")}
                 </Col>
                 <Col md={1} >
-                    {object.rating}
+                    {heuristic.rating}
                 </Col>
                 <Col md={4} >
-                    <Card key={object.id}>
+                    <Card key={heuristic.id}>
                         <CardBody >
-                            <CardText onClick={()=>this.toggleModal(object)}> {object.title}</CardText>
+                            <CardText onClick={()=>toggleModal(heuristic)}> {heuristic.title}</CardText>
                         </CardBody>
                     </Card>
                 </Col>
@@ -296,167 +361,85 @@ function List(props){
         )
     })
 
-    return(
-        <>
-            <button onClick= {handleSort} id="sort-a-z">Sort A-Z</button>
-            <ul>
-                {components}
-            </ul>
-        </>
-    )
-}
-
-class Collection extends Component{
-
-    /** Collection Component has also an property which is showing the details of a specific heuristic
-     * that the user clicked on. To show that as a pop-up (modal), it contains the HeuristicDetailsComponent inside of it.
-     */
-    constructor(props) {
-        super(props);
-        
-        this.toggleModal=this.toggleModal.bind(this);
-        this.closeModal=this.closeModal.bind(this);
-        this.handleSort=this.handleSort.bind(this)
-
-        /**To define the selected heuristic and pass it into the HeuristicDetailsComponent the state
-         * contains selectedHeuristic as an empty string.
-         */
-        this.state = {
-            heuristics: props.item,
-            isModalOpen: false,
-            selectedHeuristic: ''
-        };
-        
-    }
-
-    handleSort() {
-        const sortedData = [...this.props.item].sort((a,b) =>{
-            return a.title > b.title ? 1: -1
-        })
-        console.log("sorted: ", sortedData)
-        // this.setState({
-        //     heuristics: sortedData
-        // })
-    }
-
-    toggleModal(selectedOne){
-        this.setState({
-            isModalOpen: !this.state.isModalOpen,
-            selectedHeuristic: selectedOne
-        });
-    }
-
-    closeModal(){
-        this.setState({
-            isModalOpen: !this.state.isModalOpen
-        });
-    }
-
-    render(){
+    
         
         /** The heuristic defined just below contains all the informations of heuristics that the user wants to see: designfor, level etc.
          * A short explanation about the heuristic stands as the last column. If the user wants to have more information
          * about this specific heuristic, s/he should click on the explanation to toggle the pop-up.
          */
-        const heuristic= this.props.item.map((heuristic)=>{
+        
+
+    if (props.isSearchClicked){
+
+        if (props.isLoading) {
             return(
-                <Row className='d-flex align-items-center'>
-                    <Col md={2} >
-                        {heuristic.designFor.join(", ")}
-                    </Col>
-                    <Col md={1} >
-                        {heuristic.industry.join(", ")}
-                    </Col>
-                    <Col md={2} >
-                        {heuristic.lifeCyclePhase.join(", ")}
-                    </Col>
-                    <Col md={2} >
-                        {heuristic.designPhase.join(", ")}
-                    </Col>
-                    <Col md={1} >
-                        {heuristic.rating}
-                    </Col>
-                    <Col md={4} >
-                        <Card key={heuristic.id}>
-                            <CardBody >
-                                <CardText onClick={()=>this.toggleModal(heuristic)}> {heuristic.title}</CardText>
-                            </CardBody>
-                        </Card>
-                    </Col>
-                </Row>
-            )
-        })
-
-        if (this.props.isSearchClicked){
-
-            if (this.props.isLoading) {
-                return(
-                    <div className='container'>
-                        <div className='row'>
-                            <Loading/>
-                        </div>
+                <div className='container'>
+                    <div className='row'>
+                        <Loading/>
                     </div>
-                )
-            }
-            else if (this.props.errMess){
-                return(
-                    <div className='container'>
-                        <div className='row'>
-                            <h4>{this.props.errMess}</h4>
-                        </div>
-                    </div>
-                )
-            }
-            else
-                return(
-                    <Container fluid style={{ paddingLeft: 30, paddingRight: 0 }}>
-                        <button onClick={this.handleSort()} id="sort-a-z">Sort A-Z</button>
-                        <Row className='d-flex '>
-                            <Col md={2}>
-                                <h3>Design for</h3>
-                            </Col>
-                            <Col md={1}>
-                                <h3>Industry</h3>
-                            </Col>
-                            <Col md={2}>
-                                <h3>Life Cycle Phase</h3>
-                            </Col>
-                            <Col md={2}>
-                                <h3>Design Phase</h3>
-                            </Col>
-                            <Col md={1}>
-                                <h3>Rating</h3>
-                            </Col>
-                            <Col md={4}>
-                                <h3>Applicable heuristic</h3>
-                            </Col>
-                        </Row>
-                        <Row className='d-flex'>
-                                {heuristic}
-                        </Row>
-
-                        {/**If the user has clicked on the explanation, then the modal will be shown. 
-                         * For this to be rendered properly, the information which heuristic has been clicked,
-                         * will be sent to the component HeuristicDetails along with all data of that heuristic.
-                         */}
-
-                        <Modal className='modal-lg'  isOpen={this.state.isModalOpen} toggle={this.closeModal} >
-                            <ModalHeader className='startpage' toggle={this.closeModal}></ModalHeader>
-                            <ModalBody className='startpage'>
-                                <HeuristicDetails selectedOne= {this.state.selectedHeuristic} 
-                                    postComment= {this.props.postComment} />
-                            </ModalBody>
-                        </Modal>
-                        
-                    </Container>
-                )
-
-            }
-        else
-            return(
-                <div>
-
                 </div>
             )
-    }
+        }
+        else if (props.errMess){
+            return(
+                <div className='container'>
+                    <div className='row'>
+                        <h4>{props.errMess}</h4>
+                    </div>
+                </div>
+            )
+        }
+        else
+            return(
+                <Container fluid style={{ paddingLeft: 30, paddingRight: 0 }}>
+                    
+                    <Row className='d-flex align-items-center'>
+                        <Col md={2}>
+                            <h3>Design for</h3>
+                        </Col>
+                        <Col md={1}>
+                            <h3>Industry</h3>
+                        </Col>
+                        <Col md={2}>
+                            <h3>Life Cycle Phase</h3>
+                        </Col>
+                        <Col md={2}>
+                            <h3>Design Phase</h3>
+                        </Col>
+                        <Col md={1}>
+                            <h3>Rating</h3>
+                        </Col>
+                        <Col md={3} className='d-flex align-items-center'>
+                            <h3>Applicable heuristic</h3>
+                            <i onClick={()=>handleSort()} className="fa fa-arrow-down"></i>
+                        </Col>
+                    </Row>
+                    <Row className='d-flex'>
+                            {heuristic}
+                    </Row>
+
+                    {/**If the user has clicked on the explanation, then the modal will be shown. 
+                     * For this to be rendered properly, the information which heuristic has been clicked,
+                     * will be sent to the component HeuristicDetails along with all data of that heuristic.
+                     */}
+
+                    <Modal className='modal-lg'  isOpen={isModalOpen} toggle={()=>closeModal()} >
+                        <ModalHeader className='startpage' toggle={()=>closeModal()}></ModalHeader>
+                        <ModalBody className='startpage'>
+                            <HeuristicDetails selectedOne= {selectedHeuristic} 
+                                postComment= {props.postComment} />
+                        </ModalBody>
+                    </Modal>
+                    
+                </Container>
+            )
+
+        }
+    else
+        return(
+            <div>
+
+            </div>
+        )
+    
 }
