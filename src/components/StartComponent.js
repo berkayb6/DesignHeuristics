@@ -14,8 +14,14 @@ function Start (props) {
             
             {/**Header part includes the TU-logo and the name of the department */}
             <div className='row row-header home-page-header'>
+                <div className='col-12 col-md-2'>
+                    <Card className='logo'>
+                        <CardImg src= {`${baseUrl}assets/BD-logo.png`} width={20} height={50}/>
+                    </Card>
+                </div>
                 <div className='col-12 col-sm-12'>
-                    <h5><strong>Department of Industrial Information Technology</strong></h5>
+                    <h7>An Application by the Department of <br/>Industrial Information Technology of  TU Berlin</h7>
+
                 </div>
             </div>
             <div className='row row-content align-items-center'>
@@ -51,7 +57,7 @@ function Start (props) {
                 <div className='col-12 col-md-5'>
                     
                     <Card className='logo'>
-                        <CardImg src= {`${baseUrl}assets/startSeite.png`} width={200} height={500}/>
+                        <CardImg src= {`${baseUrl}assets/startSeite.jpg`} width={200} height={500}/>
                     </Card>
 
                 

@@ -1,8 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import Header from './HeaderComponent';
+import HeuristicDetails from './HeuristicDetailsComponent';
 import {Link} from 'react-router-dom';
-import { Form, FormGroup, Col, Label, Input,Button, Card, CardTitle, CardBody, CardText, Modal, ModalHeader, ModalBody } from 'reactstrap';
-import { MDBInput, MDBCol } from "mdbreact";
+import { Form, FormGroup, Col, Container, Row, Label, Input,Button, Card, CardTitle, CardBody, CardText, Modal, ModalHeader, ModalBody } from 'reactstrap';
+import { MDBInputGroup, MDBInput, MDBIcon, MDBBtn, MDBSwitch } from 'mdb-react-ui-kit';
+import { Loading } from './LoadingComponent';
 
 class Search extends Component{
 
@@ -11,9 +13,12 @@ class Search extends Component{
 
         this.state = {
             designfor: 'sustainability',
-            industry: 'automobility',
-            level: 'system',
-            isSearchClicked: false
+            industry: 'automotive',
+            lifeCyclePhase: 'all',
+            designPhase: 'material selection',
+            isSearchClicked: false,
+            isSearchEnabled: false,
+            search: []
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -33,7 +38,12 @@ class Search extends Component{
     }
 
     handleSubmit(event) {
-        
+        console.log("value: ", event.target.value)
+        this.setState(
+            {
+                search: event.target.value.split(' ')
+            }
+        )
         console.log('Current State is: ' + JSON.stringify(this.state));
         alert('Current State is: ' + JSON.stringify(this.state));
         event.preventDefault();
@@ -56,15 +66,35 @@ class Search extends Component{
     }
 
     render(){
+        let searchResults;
+        if (this.state.search.length) {
+            const searchPattern = new RegExp(this.state.search.map(term => `(?=.*${term})`).join(''), 'i');
+          
+            searchResults= this.props.heuristics.filter(heuristic => {
 
-        const Searching = () => {
-            return (
-                <MDBCol md="6">
-                    <MDBInput hint="Search" type="text" containerClass="mt-0" />
-                    
-                </MDBCol>
-            )
+                return heuristic.title.toLowerCase().match(searchPattern)
+            })
+        } else {
+            searchResults= this.props.heuristics
         }
+
+        let designForArray = [];       
+        this.props.heuristics.map((heuristic)=>{
+            heuristic.designFor.map((item)=>{
+                let splitted= item.split(/[ ,]+/)
+                splitted.map((arrayItem)=>{
+                    designForArray.push(arrayItem)
+                })
+            });
+        })
+        let uniqueDesignFor= [... new Set(designForArray)]
+        const designForOptions= uniqueDesignFor.map((item)=>{
+            return(
+                <option>
+                    {item}
+                </option>
+            )
+        })
 
         return(
             <>
@@ -77,12 +107,18 @@ class Search extends Component{
                         <div className='col-12 col-md-6 offset-md-1' >
                             <h2><strong>Search</strong></h2>
                             for the design heuristics you really need
-                            <Searching/>
+                            <MDBInputGroup>
+                                <MDBInput onChange={(e) => this.setState({search: e.target.value.split(' ')})}/>
+                                <MDBBtn onClick={this.searchClicked} rippleColor='dark'>
+                                    <MDBIcon icon='search' />
+                                </MDBBtn>
+                            </MDBInputGroup>
                         </div>
 
                         <div className='col-12 col-md-5  '>
                             <div className='col-12'>
-                                <h3><strong>Do you want to filter beforehand?</strong></h3>
+                                <h4><strong><MDBSwitch id='flexSwitchCheckDefault' label='Do you want to filter beforehand?' onChange={() => 
+                                    this.setState({ isSearchEnabled: !this.state.isSearchEnabled })} /></strong></h4>
                             </div>
                             <div className="col-12 col-md-9">
                                 <Form onSubmit={this.handleSubmit}>
@@ -93,10 +129,7 @@ class Search extends Component{
                                                     value={this.state.designfor}
                                                     placeholder="change the property"
                                                     onChange={this.handleInputChange}>
-                                                <option>sustainability</option>
-                                                <option>ergonomics</option>
-                                                <option>manufacturability</option>
-                                                <option>cost efficiency</option>
+                                                {designForOptions}
                                             </Input>
                                         </Col>
                                     </FormGroup>
@@ -107,34 +140,54 @@ class Search extends Component{
                                                     value={this.state.industry}
                                                     placeholder="change the property"
                                                     onChange={this.handleInputChange}>
-                                                <option>automobility</option>
-                                                <option>airospace</option>
+                                                <option>all</option>
+                                                <option>automotive</option>
+                                                <option>aircraft</option>
                                                 <option>furniture</option>
-                                                <option>household goods</option>
+                                                <option>household</option>
+                                                <option>metal production and processing</option>
+                                                <option>manufacture of metal products</option>
+                                                <option>production of data processing equipment</option>
+                                                <option>production of electrical equipment</option>
+                                                <option>electric motors</option>
+                                                <option>mechnanical engineering</option>
+                                                <option>vehicle construction</option>
+                                                <option>ship and boat building</option>
+                                                <option>rail vehicles</option>
+                                                <option>clothing</option>
                                             </Input>
                                         </Col>
                                     </FormGroup>
                                     <FormGroup row>
-                                        <Label htmlFor="level" md={5}><h4>Level</h4></Label>
+                                        <Label htmlFor="lifeCyclePhase" md={5}><h4>Life Cycle Phase</h4></Label>
                                         <Col md={7}>
-                                            <Input type="select" name="level"
-                                                    value={this.state.level}
+                                            <Input type="select" name="lifeCyclePhase"
+                                                    value={this.state.lifeCyclePhase}
                                                     placeholder="change the property"
                                                     onChange={this.handleInputChange}>
-                                                <option>system</option>
-                                                <option>product</option>
-                                                <option>component</option>
-                                                <option>part</option>
+                                                <option>all</option>
+                                                <option>design</option>
+                                                <option>production</option>
+                                                <option>use</option>
+                                                <option>end</option>
                                             </Input>
                                         </Col>
                                     </FormGroup>
                                     <FormGroup row>
-                                    <Col md={{size: 10, offset: 2}}>
-                                        <Button onClick={this.searchClicked} type="submit" color="primary">
-                                            Search
-                                        </Button>
-                                    </Col>
-                                </FormGroup>
+                                        <Label htmlFor="designPhase" md={5}><h4>Design Phase</h4></Label>
+                                        <Col md={7}>
+                                            <Input type="select" name="designPhase"
+                                                    value={this.state.designPhase}
+                                                    placeholder="change the property"
+                                                    onChange={this.handleInputChange}>
+                                                <option>material selection</option>
+                                                <option>construction</option>
+                                                <option>process selection</option>
+                                                <option>software-system</option>
+                                                <option>others</option>
+                                            </Input>
+                                        </Col>
+                                    </FormGroup>
                                 </Form>
                             </div>
                                
@@ -142,8 +195,182 @@ class Search extends Component{
                     </div>
 
                 </div>
+
+                <Collection isSearchClicked={this.state.isSearchClicked}
+                    isLoading= {this.props.heuristicsLoading}
+                    errMess= {this.props.heuristiscErrMess}
+                    
+                    item= {this.state.isSearchEnabled ? searchResults.filter(item => {
+                        if(this.state.industry=== "all"){
+                            if(this.state.lifeCyclePhase==="all"){
+                                return String(item.designPhase[0]).includes(this.state.designPhase) && String(item.designFor[0]).includes(this.state.designfor)
+                            }
+                            else{
+                                return String(item.designPhase[0]).includes(this.state.designPhase) && (String(item.lifeCyclePhase[0]).includes(this.state.lifeCyclePhase) || String(item.lifeCyclePhase[0]).includes("all")) && String(item.designFor[0]).includes(this.state.designfor)
+                            }
+                        }
+                        else{
+                            if(this.state.lifeCyclePhase==="all"){
+                                
+                                return (String(item.industry[0]).includes(this.state.industry) || String(item.industry[0]).includes("all")) && String(item.designPhase[0]).includes(this.state.designPhase) && String(item.designFor[0]).includes(this.state.designfor)
+                            }
+                            else{
+                                return String(item.designPhase[0]).includes(this.state.designPhase) && (String(item.industry[0]).includes(this.state.industry) || String(item.industry[0]).includes("all")) && String(item.designFor[0]).includes(this.state.designfor) && (String(item.lifeCyclePhase[0]).includes(this.state.lifeCyclePhase) || String(item.lifeCyclePhase[0]).includes("all"))
+                            }
+                        }
+                    }) :
+                    searchResults}
+                    comments= {this.props.heuristics}
+                    postComment= {this.props.postComment}
+                    style = {{minHeight: "100vh"}}/>
             </>
         )
     }
 }
 export default Search;
+
+function Collection (props){
+
+    /** Collection Component has also an property which is showing the details of a specific heuristic
+     * that the user clicked on. To show that as a pop-up (modal), it contains the HeuristicDetailsComponent inside of it.
+     */
+
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [selectedHeuristic, setSelectedHeuristic] = useState('')
+    const [sampleData, setSampleData] = useState(props.item)
+
+    useEffect(()=>{
+        setSampleData(props.item)
+    }, [props.item])
+
+    function handleSort(){
+        const sortedData = [...sampleData].sort((a,b) =>{
+            return a.title > b.title ? 1: -1
+        })
+        setSampleData(sortedData)
+    
+    }
+
+    function toggleModal(selectedOne){
+        setIsModalOpen(!isModalOpen)
+        setSelectedHeuristic(selectedOne)
+    }
+
+    function closeModal(){
+        setIsModalOpen(!isModalOpen)
+
+    }
+
+    console.log("item: ", props.item)
+
+    const heuristic= sampleData.map((heuristic)=>{
+        return(
+            <Row className='d-flex align-items-center'>
+                <Col md={2} >
+                    {heuristic.designFor.join(", ")}
+                </Col>
+                <Col md={1} >
+                    {heuristic.industry.join(", ")}
+                </Col>
+                <Col md={2} >
+                    {heuristic.lifeCyclePhase.join(", ")}
+                </Col>
+                <Col md={2} >
+                    {heuristic.designPhase.join(", ")}
+                </Col>
+                <Col md={1} >
+                    {heuristic.rating}
+                </Col>
+                <Col md={4} >
+                    <Card key={heuristic.id}>
+                        <CardBody >
+                            <CardText onClick={()=>toggleModal(heuristic)}> {heuristic.title}</CardText>
+                        </CardBody>
+                    </Card>
+                </Col>
+            </Row>
+        )
+    })
+
+    
+        
+        /** The heuristic defined just below contains all the informations of heuristics that the user wants to see: designfor, level etc.
+         * A short explanation about the heuristic stands as the last column. If the user wants to have more information
+         * about this specific heuristic, s/he should click on the explanation to toggle the pop-up.
+         */
+        
+
+    if (props.isSearchClicked){
+
+        if (props.isLoading) {
+            return(
+                <div className='container'>
+                    <div className='row'>
+                        <Loading/>
+                    </div>
+                </div>
+            )
+        }
+        else if (props.errMess){
+            return(
+                <div className='container'>
+                    <div className='row'>
+                        <h4>{props.errMess}</h4>
+                    </div>
+                </div>
+            )
+        }
+        else
+            return(
+                <Container fluid style={{ paddingLeft: 30, paddingRight: 0 }}>
+                    
+                    <Row className='d-flex align-items-center'>
+                        <Col md={2}>
+                            <h3>Design for</h3>
+                        </Col>
+                        <Col md={1}>
+                            <h3>Industry</h3>
+                        </Col>
+                        <Col md={2}>
+                            <h3>Life Cycle Phase</h3>
+                        </Col>
+                        <Col md={2}>
+                            <h3>Design Phase</h3>
+                        </Col>
+                        <Col md={1}>
+                            <h3>Rating</h3>
+                        </Col>
+                        <Col md={3} className='d-flex align-items-center'>
+                            <h3>Applicable heuristic</h3>
+                            <i onClick={()=>handleSort()} className="fa fa-arrow-down"></i>
+                        </Col>
+                    </Row>
+                    <Row className='d-flex'>
+                            {heuristic}
+                    </Row>
+
+                    {/**If the user has clicked on the explanation, then the modal will be shown. 
+                     * For this to be rendered properly, the information which heuristic has been clicked,
+                     * will be sent to the component HeuristicDetails along with all data of that heuristic.
+                     */}
+
+                    <Modal className='modal-lg'  isOpen={isModalOpen} toggle={()=>closeModal()} >
+                        <ModalHeader className='startpage' toggle={()=>closeModal()}></ModalHeader>
+                        <ModalBody className='startpage'>
+                            <HeuristicDetails selectedOne= {selectedHeuristic} 
+                                postComment= {props.postComment} />
+                        </ModalBody>
+                    </Modal>
+                    
+                </Container>
+            )
+
+        }
+    else
+        return(
+            <div>
+
+            </div>
+        )
+    
+}

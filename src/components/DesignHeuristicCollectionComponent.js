@@ -186,117 +186,35 @@ class DHCollection extends Component{
                 <Collection isSearchClicked={this.state.isSearchClicked}
                     isLoading= {this.props.heuristicsLoading}
                     errMess= {this.props.heuristiscErrMess}
+                    
                     item= {this.props.heuristics.filter(item => {
                             if(this.state.industry=== "all"){
                                 if(this.state.lifeCyclePhase==="all"){
-                                    return item.designFor[0]=== this.state.designfor && item.designPhase[0] === this.state.designPhase
+                                    return String(item.designPhase[0]).includes(this.state.designPhase) && String(item.designFor[0]).includes(this.state.designfor)
                                 }
                                 else{
-                                    return item.designFor[0]=== this.state.designfor && item.designPhase[0] === this.state.designPhase && item.lifeCyclePhase[0]=== this.state.lifeCyclePhase || item.lifeCyclePhase[0]=== "all"
+                                    return String(item.designPhase[0]).includes(this.state.designPhase) && (String(item.lifeCyclePhase[0]).includes(this.state.lifeCyclePhase) || String(item.lifeCyclePhase[0]).includes("all")) && String(item.designFor[0]).includes(this.state.designfor)
                                 }
                             }
-
-                            if(this.state.lifeCyclePhase==="all"){
-                                if(this.state.industry=== "all"){
-                                    return item.designFor[0]=== this.state.designfor && item.designPhase[0] === this.state.designPhase
-                                }
-                                else{
-                                    return item.designFor[0]=== this.state.designfor  && item.industry[0]=== this.state.industry || item.industry[0]=== "all" && item.designPhase[0] === this.state.designPhase
-                                }
-                            }
-
                             else{
-                                return item.designFor[0]=== this.state.designfor && item.designPhase[0] === this.state.designPhase&& (item.industry[0]=== this.state.industry || item.industry[0]=== "all") && (item.lifeCyclePhase[0]=== this.state.lifeCyclePhase || item.lifeCyclePhase[0]=== "all")
+                                if(this.state.lifeCyclePhase==="all"){
+                                    
+                                    return (String(item.industry[0]).includes(this.state.industry) || String(item.industry[0]).includes("all")) && String(item.designPhase[0]).includes(this.state.designPhase) && String(item.designFor[0]).includes(this.state.designfor)
+                                }
+                                else{
+                                    return String(item.designPhase[0]).includes(this.state.designPhase) && (String(item.industry[0]).includes(this.state.industry) || String(item.industry[0]).includes("all")) && String(item.designFor[0]).includes(this.state.designfor) && (String(item.lifeCyclePhase[0]).includes(this.state.lifeCyclePhase) || String(item.lifeCyclePhase[0]).includes("all"))
+                                }
                             }
                         })
                     }
                     comments= {this.props.heuristics}
                     postComment= {this.props.postComment}
                     style = {{minHeight: "100vh"}}/>
-
-                {/* <List 
-                    item= {this.props.heuristics.filter(item => {
-                            if(this.state.industry=== "all"){
-                                if(this.state.lifeCyclePhase==="all"){
-                                    return item.designFor[0]=== this.state.designfor && item.designPhase[0] === this.state.designPhase
-                                }
-                                else{
-                                    return item.designFor[0]=== this.state.designfor && item.designPhase[0] === this.state.designPhase && item.lifeCyclePhase[0]=== this.state.lifeCyclePhase || item.lifeCyclePhase[0]=== "all"
-                                }
-                            }
-
-                            if(this.state.lifeCyclePhase==="all"){
-                                if(this.state.industry=== "all"){
-                                    return item.designFor[0]=== this.state.designfor && item.designPhase[0] === this.state.designPhase
-                                }
-                                else{
-                                    return item.designFor[0]=== this.state.designfor  && item.industry[0]=== this.state.industry || item.industry[0]=== "all" && item.designPhase[0] === this.state.designPhase
-                                }
-                            }
-
-                            else{
-                                return item.designFor[0]=== this.state.designfor && item.designPhase[0] === this.state.designPhase&& (item.industry[0]=== this.state.industry || item.industry[0]=== "all") && (item.lifeCyclePhase[0]=== this.state.lifeCyclePhase || item.lifeCyclePhase[0]=== "all")
-                            }
-                        })
-                    }
-                    style = {{minHeight: "100vh"}}/> */}
             </>
         )
     }
 }
 export default DHCollection;
-
-
-function List(props){
-
-    console.log("item:", props.item)
-
-    const [sampleData, setSampleData] = useState(props.item)
-    console.log("sample: ", sampleData)
-    useEffect(()=>{
-        var test= props.item;
-        console.log("test: ", test)
-        setSampleData(props.item)
-    }, [props.item])
-
-    const sortedData = [...sampleData].sort((a,b) =>{
-        return a.title > b.title ? 1: -1
-    })
-    setSampleData(sortedData)
-
-    // const components= sampleData.map((object)=>{
-    //     return(
-    //         <Row className='d-flex align-items-center'>
-    //             <Col md={2} >
-    //                 {object.designFor.join(", ")}
-    //             </Col>
-    //             <Col md={1} >
-    //                 {object.industry.join(", ")}
-    //             </Col>
-    //             <Col md={2} >
-    //                 {object.lifeCyclePhase.join(", ")}
-    //             </Col>
-    //             <Col md={2} >
-    //                 {object.designPhase.join(", ")}
-    //             </Col>
-    //             <Col md={1} >
-    //                 {object.rating}
-    //             </Col>
-    //             <Col md={4} >
-    //                 <Card key={object.id}>
-    //                     <CardBody >
-    //                         <CardText onClick={()=>this.toggleModal(object)}> {object.title}</CardText>
-    //                     </CardBody>
-    //                 </Card>
-    //             </Col>
-    //         </Row>
-    //     )
-    // })
-
-    return(
-        <Collection item= {sampleData}/>
-    )
-}
 
 function Collection (props){
 
@@ -309,8 +227,6 @@ function Collection (props){
     const [sampleData, setSampleData] = useState(props.item)
 
     useEffect(()=>{
-        var test= props.item;
-        console.log("test: ", test)
         setSampleData(props.item)
     }, [props.item])
 

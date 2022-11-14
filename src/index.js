@@ -5,6 +5,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'font-awesome/css/font-awesome.css';
+import { initAmplitude } from './utilities/amplitude.js';
+
+initAmplitude();
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

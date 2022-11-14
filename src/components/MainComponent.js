@@ -134,7 +134,6 @@ class Main extends Component {
              */
             return(
                 <div className='startpage' style = {{minHeight:"100vh"}}>
-                    {console.log("users: ", this.props)}
                     <DHCollection heuristics={this.props.heuristics.heuristics}
                         heuristicsLoading= {this.props.heuristics.isLoading}
                         heuristiscErrMess= {this.props.heuristics.errMess}
@@ -162,7 +161,13 @@ class Main extends Component {
         const SearchPage = () => {
             return(
                 <div className='startpage' style = {{minHeight:"100vh"}}>
-                    <Search auth={this.props.auth}
+                    <Search heuristics={this.props.heuristics.heuristics}
+                        heuristicsLoading= {this.props.heuristics.isLoading}
+                        heuristiscErrMess= {this.props.heuristics.errMess}
+                        comments={this.props.comments.comments}
+                        commentsErrMess= {this.props.comments.errMess}
+                        postComment={this.props.postComment}
+                        auth={this.props.auth}
                         logoutUser={this.props.logoutUser}/>
                 </div>
             )
