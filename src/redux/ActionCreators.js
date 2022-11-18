@@ -128,14 +128,14 @@ export const addHeuristic = (heuristic) => ({
     payload: heuristic
 });
 
-export const postHeuristic = (designFor, positiveEffects, designPhase, title, negativeEffects, lifeCyclePhase, industry, rating, category, description, image, sources) => (dispatch) =>{
+export const postHeuristic = (designFor, positiveEffects, productDimension, title, negativeEffects, phase, industry, rating, category, description, image, sources) => (dispatch) =>{
     const newHeuristic= {
         designFor: designFor,
         positiveInfluence: positiveEffects,
-        designPhase: designPhase,
+        productDimension: productDimension,
         title: title,
         negativeInfluence: negativeEffects,
-        lifeCyclePhase: lifeCyclePhase,
+        phase: phase,
         industry: industry,
         rating: rating,
         category: category,

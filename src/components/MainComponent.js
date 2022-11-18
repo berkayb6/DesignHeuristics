@@ -31,7 +31,7 @@ const mapStateToProps = state => {
  */
 const mapDispatchToProps = (dispatch) => ({
     postComment: (heuristicId, author, comment) => dispatch(postComment(heuristicId, author, comment)),
-    postHeuristic: (designFor, positiveEffects, designPhase, title, negativeEffects, lifeCyclePhase, industry, rating, category, description, image, sources) => dispatch(postHeuristic(designFor, positiveEffects, designPhase, title, negativeEffects, lifeCyclePhase, industry, rating, category, description, image, sources)),
+    postHeuristic: (designFor, positiveEffects, productDimension, title, negativeEffects, phase, industry, rating, category, description, image, sources) => dispatch(postHeuristic(designFor, positiveEffects, productDimension, title, negativeEffects, phase, industry, rating, category, description, image, sources)),
     uploadImage: (data) => dispatch(uploadImage(data)),
     register: (email, password, subscription, library, yourHeuristics, projects) => dispatch(register(email, password, subscription, library, yourHeuristics, projects)),
     loginUser: (creds) => dispatch(loginUser(creds)),

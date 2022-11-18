@@ -102,15 +102,15 @@ class AddHeuristic extends Component{
     handleSubmit (values){
         var rating= 4;
         var keys= Object.keys(values);
-        var phases= keys.filter(value => value.startsWith('phase')).map(value=> value.slice(6));
-        var designPhase= phases[0]
+        var phases= keys.filter(value => value.startsWith('dimension')).map(value=> value.slice(10));
+        var productDimension= phases[0]
         for (var i=1; i< phases.length; i++){
-            designPhase= designPhase + ", " + phases[i]
+            productDimension= productDimension + ", " + phases[i]
             
         }
         var positiveEffects= keys.filter(value => value.startsWith('pos_')).map(value=> value.slice(4));
         var negativeEffects= keys.filter(value => value.startsWith('neg_')).map(value=> value.slice(4));
-        var lifeCyclePhase= keys.filter(value => value.startsWith('lcp')).map(value=> value.slice(4));
+        var phase= keys.filter(value => value.startsWith('phase')).map(value=> value.slice(6));
         var industry= keys.filter(value => value.startsWith('ind')).map(value=> value.slice(4));
         var title = this.state.checkOrderVerb + " " + this.state.checkArtifactRestriction + " " + this.state.checkArtifact + " " + this.state.checkOrderAdverb;
         var designFor= positiveEffects; 
@@ -127,10 +127,10 @@ class AddHeuristic extends Component{
             resolve(this.props.postHeuristic(
                 designFor,
                 positiveEffects,
-                designPhase,
+                productDimension,
                 title,
                 negativeEffects,
-                lifeCyclePhase,
+                phase,
                 industry,
                 rating,
                 category,
@@ -266,14 +266,14 @@ class AddHeuristic extends Component{
                                     <h2>Step 2</h2>
                                 </Col>
                                 <Col md={3}>
-                                    <h5>Design Phase</h5>
+                                    <h5>Product Dimension</h5>
                                 </Col>
                                 <Col md={9}>
-                                    <h7>Let’s start with something easy. Tell us, in which design phase your guideline can be used? 
+                                    <h7>Let’s start with something easy. Tell us, in which product dimension your guideline can be used? 
                                         This helps other users to find your guideline! If you want, you can also choose more than one.</h7>
                                 </Col>
                                 <Col className="col-12 d-flex justify-content-between"  style={{marginTop:"20px"}}>
-                                    <Control.checkbox model=".phase_materialSelection" name="materialSelection" id="materialSelection"
+                                    <Control.checkbox model=".dimension_materialSelection" name="materialSelection" id="materialSelection"
                                         className= "btn-check"/>
                                     <Label  className=" btn-outline-success" for="materialSelection">
                                         <Card className='addYourHeuristicCard align-items-center'>
@@ -292,7 +292,7 @@ class AddHeuristic extends Component{
                                     </Label>
                                 </Col>
                                 <Col className="col-12 d-flex justify-content-between"  style={{marginTop:"20px"}}>
-                                    <Control.checkbox model=".phase_construction" name="construction" id="construction"
+                                    <Control.checkbox model=".dimension_construction" name="construction" id="construction"
                                         className= "btn-check"/>
                                     <Label className=" btn-outline-success" for="construction">
                                         <Card className='addYourHeuristicCard align-items-center'>
@@ -311,7 +311,7 @@ class AddHeuristic extends Component{
                                     </Label>
                                 </Col>
                                 <Col className="col-12 d-flex justify-content-between"  style={{marginTop:"20px"}}>
-                                    <Control.checkbox model=".phase_processSelection" name="processSelection" id="processSelection"
+                                    <Control.checkbox model=".dimension_processSelection" name="processSelection" id="processSelection"
                                         className= "btn-check"/>
                                     <Label className=" btn-outline-success" for="processSelection">    
                                         <Card className='addYourHeuristicCard align-items-center'>
@@ -330,7 +330,7 @@ class AddHeuristic extends Component{
                                     </Label>
                                 </Col>
                                 <Col className="col-12 d-flex justify-content-between"  style={{marginTop:"20px"}}>
-                                    <Control.checkbox model=".phase_software-system" name="software-system" id="software-system"
+                                    <Control.checkbox model=".dimension_software-system" name="software-system" id="software-system"
                                         className= "btn-check"/>
                                     <Label className=" btn-outline-success" for="software-system">                                           
                                         <Card className='addYourHeuristicCard align-items-center'>
@@ -349,7 +349,7 @@ class AddHeuristic extends Component{
                                     </Label>
                                 </Col>
                                 <Col className="col-12 d-flex justify-content-between"  style={{marginTop:"20px"}}>
-                                    <Control.checkbox model=".phase_others" name="others" id="others"
+                                    <Control.checkbox model=".dimension_others" name="others" id="others"
                                         className= "btn-check"/>
                                     <Label className=" btn-outline-success" for="others">
                                         <Card className='addYourHeuristicCard align-items-center'>
@@ -574,30 +574,30 @@ class AddHeuristic extends Component{
                             <Row className='form-group' style={{marginBottom:"60px"}}>
                                 <Label style={{marginBottom:"20px"}}><h2>Optional</h2></Label>
                                 <Col md={4}>
-                                    <h4>What Life Cycle Phase is adressed?</h4>
+                                    <h4>What Phase is adressed?</h4>
                                 </Col>
                                 <Col md={8}>
                                     <h7>You can choose more than one.<br/>
                                         If you do not chose the level, we assume that it works on every level.</h7>
                                 </Col>
                                 <Col className="col-12 d-flex justify-content-between" md={6} style={{marginTop:"20px"}}>
-                                    <Control.checkbox model=".lcp_all" name="all" id="all"
+                                    <Control.checkbox model=".phase_all" name="all" id="all"
                                             className= "btn-check"/>
                                     <Label className="btn btn-outline-light" style={{color: 'black'}} for="all">all</Label>
 
-                                    <Control.checkbox model=".lcp_design" name="design" id="design"
+                                    <Control.checkbox model=".phase_design" name="design" id="design"
                                             className= "btn-check"/>
                                     <Label className="btn btn-outline-light" style={{color: 'black'}} for="design">design</Label>
                                     
-                                    <Control.checkbox model=".lcp_production" name="production" id="production"
+                                    <Control.checkbox model=".phase_production" name="production" id="production"
                                             className= "btn-check"/>
                                     <Label className="btn btn-outline-light" style={{color: 'black'}} for="production">production</Label>
                                     
-                                    <Control.checkbox model=".lcp_use" name="use" id="use"
+                                    <Control.checkbox model=".phase_use" name="use" id="use"
                                             className= "btn-check"/>
                                     <Label className="btn btn-outline-light" style={{color: 'black'}} for="use">use</Label>
 
-                                    <Control.checkbox model=".lcp_end" name="end" id="end"
+                                    <Control.checkbox model=".phase_end" name="end" id="end"
                                             className= "btn-check"/>
                                     <Label className="btn btn-outline-light" style={{color: 'black'}} for="end">end</Label>
 

@@ -11,7 +11,7 @@ function RenderDetailItem({item, type, id}){
      * there are different kind of rendering. To do the right rendering, the type variable is used.
      * 
      */
-    if (type=== 'phase'){
+    if (type=== 'dimension'){
         return( 
             <Card className='heuristicDetailsCard align-items-center'>
                 <Row className='heuristicDetailsCardBody'>
@@ -50,7 +50,7 @@ function RenderDetailItem({item, type, id}){
             </CardImg>
         )  
     }
-    if (type=== 'lcp'){
+    if (type=== 'phase'){
         return (
             <Card className='justify-content-center' style={{ height: "50px", width: "auto"}}>
                 <CardBody >
@@ -123,12 +123,12 @@ class HeuristicDetails extends Component{
          * Each item or property will be rendered via the function defined above (RenderDetailItem)
          * The functions seeks for two property: item that should be rendered, and the type of that */
         
-        var phases = selectedHeuristic.designPhase[0].split(/[,]+/);
-        const designPhase= phases.map((phase)=>{
-            let type= 'phase';
+        var dimensions = selectedHeuristic.productDimension[0].split(/[,]+/);
+        const productDimension= dimensions.map((dimension)=>{
+            let type= 'dimension';
             return(
                 <Col md={6} className="text-center">
-                    <RenderDetailItem item={phase} type={type}/>
+                    <RenderDetailItem item={dimension} type={type}/>
                 </Col>
             )
         })
@@ -162,8 +162,8 @@ class HeuristicDetails extends Component{
             )
         })
 
-        const lifeCyclePhase = selectedHeuristic.lifeCyclePhase.map((phase)=> {
-            let type= "lcp";
+        const phase = selectedHeuristic.phase.map((phase)=> {
+            let type= "phase";
             return(
                 <Col md={4} className="text-center">
                     <RenderDetailItem item={phase} type={type}/>
@@ -243,8 +243,8 @@ class HeuristicDetails extends Component{
                      */}
                     
                     <Row>
-                        <h4><b>Addressed Design Phase </b></h4> 
-                        {designPhase}
+                        <h4><b>Addressed Product Dimension </b></h4> 
+                        {productDimension}
                     </Row>
                     <Row>
                         <h4><b>Possible positive influence </b></h4> 
@@ -263,8 +263,8 @@ class HeuristicDetails extends Component{
                         {applicableIndustry}
                     </Row>
                     <Row>
-                        <h4><b> Adressed Life Cycle Phase</b></h4>
-                        {lifeCyclePhase}
+                        <h4><b> Adressed Phase</b></h4>
+                        {phase}
                     </Row>
                     <Row>
                         <h4><b>Description</b></h4> 

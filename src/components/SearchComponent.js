@@ -13,9 +13,9 @@ class Search extends Component{
 
         this.state = {
             designfor: 'sustainability',
-            industry: 'automotive',
-            lifeCyclePhase: 'all',
-            designPhase: 'material selection',
+            industry: 'all',
+            phase: 'all',
+            productDimension: 'all',
             isSearchClicked: false,
             isSearchEnabled: false,
             search: []
@@ -159,10 +159,10 @@ class Search extends Component{
                                         </Col>
                                     </FormGroup>
                                     <FormGroup row>
-                                        <Label htmlFor="lifeCyclePhase" md={5}><h4>Life Cycle Phase</h4></Label>
+                                        <Label htmlFor="phase" md={5}><h4>Phase</h4></Label>
                                         <Col md={7}>
-                                            <Input type="select" name="lifeCyclePhase"
-                                                    value={this.state.lifeCyclePhase}
+                                            <Input type="select" name="phase"
+                                                    value={this.state.phase}
                                                     placeholder="change the property"
                                                     onChange={this.handleInputChange}>
                                                 <option>all</option>
@@ -174,12 +174,13 @@ class Search extends Component{
                                         </Col>
                                     </FormGroup>
                                     <FormGroup row>
-                                        <Label htmlFor="designPhase" md={5}><h4>Design Phase</h4></Label>
+                                        <Label htmlFor="productDimension" md={5}><h4>Product Dimension</h4></Label>
                                         <Col md={7}>
-                                            <Input type="select" name="designPhase"
-                                                    value={this.state.designPhase}
+                                            <Input type="select" name="productDimension"
+                                                    value={this.state.productDimension}
                                                     placeholder="change the property"
                                                     onChange={this.handleInputChange}>
+                                                <option>all</option>
                                                 <option>material selection</option>
                                                 <option>construction</option>
                                                 <option>process selection</option>
@@ -202,20 +203,41 @@ class Search extends Component{
                     
                     item= {this.state.isSearchEnabled ? searchResults.filter(item => {
                         if(this.state.industry=== "all"){
-                            if(this.state.lifeCyclePhase==="all"){
-                                return String(item.designPhase[0]).includes(this.state.designPhase) && String(item.designFor[0]).includes(this.state.designfor)
+                            if(this.state.phase==="all"){
+                                if(this.state.productDimension==="all"){
+                                    return String(item.designFor[0]).includes(this.state.designfor)
+                                }
+                                else{
+                                    return String(item.productDimension[0]).includes(this.state.productDimension) && String(item.designFor[0]).includes(this.state.designfor)
+                                }
                             }
                             else{
-                                return String(item.designPhase[0]).includes(this.state.designPhase) && (String(item.lifeCyclePhase[0]).includes(this.state.lifeCyclePhase) || String(item.lifeCyclePhase[0]).includes("all")) && String(item.designFor[0]).includes(this.state.designfor)
+                                if(this.state.productDimension==="all"){
+                                    return (String(item.phase[0]).includes(this.state.phase) || String(item.phase[0]).includes("all")) && String(item.designFor[0]).includes(this.state.designfor)
+
+                                }
+                                else{
+                                    return String(item.productDimension[0]).includes(this.state.productDimension) && (String(item.phase[0]).includes(this.state.phase) || String(item.phase[0]).includes("all")) && String(item.designFor[0]).includes(this.state.designfor)
+                                }
                             }
                         }
                         else{
-                            if(this.state.lifeCyclePhase==="all"){
-                                
-                                return (String(item.industry[0]).includes(this.state.industry) || String(item.industry[0]).includes("all")) && String(item.designPhase[0]).includes(this.state.designPhase) && String(item.designFor[0]).includes(this.state.designfor)
+                            if(this.state.phase==="all"){
+                                if(this.state.productDimension==="all"){
+                                    return (String(item.industry[0]).includes(this.state.industry) || String(item.industry[0]).includes("all")) && String(item.designFor[0]).includes(this.state.designfor)
+                                }
+                                else{
+                                    return (String(item.industry[0]).includes(this.state.industry) || String(item.industry[0]).includes("all")) && String(item.productDimension[0]).includes(this.state.productDimension) && String(item.designFor[0]).includes(this.state.designfor)
+                                }
                             }
                             else{
-                                return String(item.designPhase[0]).includes(this.state.designPhase) && (String(item.industry[0]).includes(this.state.industry) || String(item.industry[0]).includes("all")) && String(item.designFor[0]).includes(this.state.designfor) && (String(item.lifeCyclePhase[0]).includes(this.state.lifeCyclePhase) || String(item.lifeCyclePhase[0]).includes("all"))
+                                if(this.state.productDimension==="all"){
+                                    return (String(item.industry[0]).includes(this.state.industry) || String(item.industry[0]).includes("all")) && String(item.designFor[0]).includes(this.state.designfor) && (String(item.phase[0]).includes(this.state.phase) || String(item.phase[0]).includes("all"))
+
+                                }
+                                else{
+                                    return String(item.productDimension[0]).includes(this.state.productDimension) && (String(item.industry[0]).includes(this.state.industry) || String(item.industry[0]).includes("all")) && String(item.designFor[0]).includes(this.state.designfor) && (String(item.phase[0]).includes(this.state.phase) || String(item.phase[0]).includes("all"))
+                                }
                             }
                         }
                     }) :
@@ -261,8 +283,6 @@ function Collection (props){
 
     }
 
-    console.log("item: ", props.item)
-
     const heuristic= sampleData.map((heuristic)=>{
         return(
             <Row className='d-flex align-items-center'>
@@ -273,10 +293,10 @@ function Collection (props){
                     {heuristic.industry.join(", ")}
                 </Col>
                 <Col md={2} >
-                    {heuristic.lifeCyclePhase.join(", ")}
+                    {heuristic.phase.join(", ")}
                 </Col>
                 <Col md={2} >
-                    {heuristic.designPhase.join(", ")}
+                    {heuristic.productDimension.join(", ")}
                 </Col>
                 <Col md={1} >
                     {heuristic.rating}
@@ -332,10 +352,10 @@ function Collection (props){
                             <h3>Industry</h3>
                         </Col>
                         <Col md={2}>
-                            <h3>Life Cycle Phase</h3>
+                            <h3>Phase</h3>
                         </Col>
                         <Col md={2}>
-                            <h3>Design Phase</h3>
+                            <h3>Product Dimension</h3>
                         </Col>
                         <Col md={1}>
                             <h3>Rating</h3>
