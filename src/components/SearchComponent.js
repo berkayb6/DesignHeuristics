@@ -38,13 +38,11 @@ class Search extends Component{
     }
 
     handleSubmit(event) {
-        console.log("value: ", event.target.value)
         this.setState(
             {
                 search: event.target.value.split(' ')
             }
         )
-        console.log('Current State is: ' + JSON.stringify(this.state));
         alert('Current State is: ' + JSON.stringify(this.state));
         event.preventDefault();
     }
@@ -66,16 +64,41 @@ class Search extends Component{
     }
 
     render(){
-        let searchResults;
+        
+        let searchTitel, searchDescription, searchCategory, result
+        var description= this.props.heuristics.filter(function( element ) {
+                
+            return element.description !== undefined;
+        });
+        var category= this.props.heuristics.filter(function( element ) {
+            
+            return element.category[0] !== undefined;
+        });
+        const _ = require("lodash")
         if (this.state.search.length) {
             const searchPattern = new RegExp(this.state.search.map(term => `(?=.*${term})`).join(''), 'i');
-          
-            searchResults= this.props.heuristics.filter(heuristic => {
+           
+            searchTitel= (this.props.heuristics.filter(heuristic => {
+                
+                return (heuristic.title.toLowerCase().match(searchPattern))
+                
+            })) 
+            searchDescription= (description.filter(
+                heuristic => {
+                    
+                    return (heuristic.description.toLowerCase().match(searchPattern))
+                }
+            ))
+            searchCategory= (category.filter(
+                heuristic => {
+                    
+                    return (heuristic.category[0].toLowerCase().match(searchPattern))
+                }
+            ))
 
-                return heuristic.title.toLowerCase().match(searchPattern)
-            })
+            result= _.unionBy(searchTitel, searchDescription, searchCategory, '_id')
         } else {
-            searchResults= this.props.heuristics
+            result= this.props.heuristics
         }
 
         let designForArray = [];       
@@ -201,7 +224,7 @@ class Search extends Component{
                     isLoading= {this.props.heuristicsLoading}
                     errMess= {this.props.heuristiscErrMess}
                     
-                    item= {this.state.isSearchEnabled ? searchResults.filter(item => {
+                    item= {this.state.isSearchEnabled ? result.filter(item => {
                         if(this.state.industry=== "all"){
                             if(this.state.phase==="all"){
                                 if(this.state.productDimension==="all"){
@@ -241,7 +264,7 @@ class Search extends Component{
                             }
                         }
                     }) :
-                    searchResults}
+                    result}
                     comments= {this.props.heuristics}
                     postComment= {this.props.postComment}
                     style = {{minHeight: "100vh"}}/>

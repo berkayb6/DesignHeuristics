@@ -42,15 +42,15 @@ class Login extends Component{
         await (this.props.auth.isAuthenticated)
 
 
-        if (!this.props.auth.isAuthenticated){
-            console.log("a")
-            alert('Your username or password does not match!');
-        }
+        // if (!this.props.auth.isAuthenticated){
+        //     console.log("a")
+        //     alert('Your username or password does not match!');
+        // }
         
-        if (this.props.auth.isAuthenticated)  {
-            console.log("b")
-            this.props.history.push("/your-profile")
-        }
+        // if (this.props.auth.isAuthenticated)  {
+        //     console.log("b")
+        //     this.props.history.push("/your-profile")
+        // }
         
     }
 

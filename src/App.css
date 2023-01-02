@@ -99,3 +99,7 @@
   text-align: center;
   border: none;
 }
+
+.requiredStyle{
+  color: red;
+}

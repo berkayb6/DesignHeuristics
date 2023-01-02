@@ -1,9 +1,18 @@
 import React, { Component } from 'react';
-import { Control, LocalForm } from 'react-redux-form';
-import { Col, Label, Row, Input, Button, Card, CardBody, CardImg, CardTitle, CardText } from 'reactstrap';
+import { Control, LocalForm, Errors, actions} from 'react-redux-form';
+import { Col, Label, Row, Input, Button, Card, CardBody, CardImg, CardTitle, CardText, Modal, ModalHeader, ModalBody } from 'reactstrap';
 import {baseUrl} from '../shared/baseUrl';
 import Header from './HeaderComponent';
 import axios from 'axios';
+
+const required = (val) => val && val.length;
+
+
+function checkAndLook (model, value){
+    return (dispatch) => {
+        dispatch(actions.change(model, value))
+    }
+}
 
 class AddHeuristic extends Component{
     
@@ -19,11 +28,16 @@ class AddHeuristic extends Component{
             checkArtifact: "",
             checkArtifactRestriction: "",
             checkOrderVerb: "",
-            checkOrderAdverb: ""
+            checkOrderAdverb: "",
+            isModalOpen: false,
+            checkboxRequired: false
         }
         this.handleSubmit=this.handleSubmit.bind(this);
         this.postReq=this.postReq.bind(this);
         this.handleChange=this.handleChange.bind(this);
+        this.closeModal= this.closeModal.bind(this);
+        this.step1 = React.createRef();
+        this.step2 = React.createRef()  
     }
 
     handleChange = e => {
@@ -99,20 +113,50 @@ class AddHeuristic extends Component{
     }
 
 
+    closeModal(){
+        this.setState({
+            isModalOpen: !this.state.isModalOpen
+        })
+
+    }
+
     handleSubmit (values){
         var rating= 4;
         var keys= Object.keys(values);
+        var positiveEffects= keys.filter(value => value.startsWith('pos_')).map(value=> value.slice(4));
+        
+
         var phases= keys.filter(value => value.startsWith('dimension')).map(value=> value.slice(10));
         var productDimension= phases[0]
         for (var i=1; i< phases.length; i++){
             productDimension= productDimension + ", " + phases[i]
-            
         }
-        var positiveEffects= keys.filter(value => value.startsWith('pos_')).map(value=> value.slice(4));
+
+        if (positiveEffects.length===0){
+            if (phases.length===0){
+                this.step1.current.style={visibility:"visible"};
+                this.step2.current.style={visibility:"visible"};
+                this.step1.current.scrollIntoView();
+                return
+            }else{
+                this.step1.current.style={visibility:"visible"};
+                this.step2.current.style={visibility:"hidden"};
+                this.step1.current.scrollIntoView();
+                return
+            }
+        }else{
+            if (phases.length===0){
+                this.step1.current.style={visibility:"hidden"};
+                this.step2.current.style={visibility:"visible"};
+                this.step2.current.scrollIntoView();
+                return
+            }
+        }
+
         var negativeEffects= keys.filter(value => value.startsWith('neg_')).map(value=> value.slice(4));
         var phase= keys.filter(value => value.startsWith('phase')).map(value=> value.slice(6));
         var industry= keys.filter(value => value.startsWith('ind')).map(value=> value.slice(4));
-        var title = this.state.checkOrderVerb + " " + this.state.checkArtifactRestriction + " " + this.state.checkArtifact + " " + this.state.checkOrderAdverb;
+        var title = this.state.checkOrderVerb + " " + this.state.checkArtifact + " " + this.state.checkArtifactRestriction + " " + this.state.checkOrderAdverb;
         var designFor= positiveEffects; 
         var category= values.categories;
         var description= values.description;
@@ -142,13 +186,13 @@ class AddHeuristic extends Component{
     }
 
     async postReq (values) {
-        
         await this.handleSubmit(values);
         this.onFileUpload();
-    
     }
-    render(){
 
+  
+
+    render(){
         return(
             
             <div>
@@ -156,22 +200,25 @@ class AddHeuristic extends Component{
                     logoutUser={this.props.logoutUser}/>
                 <div className='container'>
                     <div className='row row-content'>
-                        <LocalForm onSubmit={values=> this.postReq(values) }>
+                        <LocalForm onSubmit={values=> this.postReq(values)}>
                             <Label className='align-items-center' style={{marginBottom:"20px"}}><h2>You want to share your knowledge? Great!<br/>
                                 We will help you set up your guide line with 5 easy steps.</h2></Label>
                             <Row className='form-group' style={{marginBottom:"60px"}}>
-                                <Col md={2}>
-                                    <h2>Step 1</h2>
+                                <Col md={2} >
+                                    <h2 name="required" id="required">Step 1</h2>
                                 </Col>
                                 <Col md={3}>
                                     <h5>Positive design effects</h5>
                                 </Col>
+                                <Row md={12}>
+                                    <Label className='align-items-center'> <h6 className="requiredStyle" ref={this.step1} style={{visibility:"hidden"}}> At least one of positive design effects should be selected! </h6></Label>
+                                </Row>
                                 <Col md={9}>
                                     <h7>Tell us about the positive impact of your design advice! In the scientific community you differentiate between different DfX (Design for X)
                                         targets. To sort the guidelines for others better, it is easiest, you choose one or more of the following. If you think about another one, write us a mail.</h7>
                                 </Col>
+
                                 <Row className="col-12 d-flex justify-content-between" md={3} style={{marginTop:"20px"}}>
-                                    
                                     
                                     <Control.checkbox model=".pos_minumumRisk" name="pos_minumumRisk" id="pos_minumumRisk"
                                             className= "btn-check"/>
@@ -249,11 +296,9 @@ class AddHeuristic extends Component{
                                             className= "btn-check"/>
                                     <Label className="btn btn-outline-success" for="pos_sustainability">sustainability</Label>
                                     
-                                    
                                     <Control.checkbox model=".pos_manufacturability" name="pos_manufacturability" id="pos_manufacturability"
                                             className= "btn-check"/>
                                     <Label className="btn btn-outline-success" for="pos_manufacturability">manufacturability</Label>
-                                    
                                     
                                     <Control.checkbox model=".pos_ergonomics" name="pos_ergonomics" id="pos_ergonomics"
                                             className= "btn-check"/>
@@ -268,6 +313,10 @@ class AddHeuristic extends Component{
                                 <Col md={3}>
                                     <h5>Product Dimension</h5>
                                 </Col>
+                                <Row md={12}>
+                                    <Label className='align-items-center'> <h6 className="requiredStyle" ref={this.step2} style={{visibility:"hidden"}}> At least one of product dimensions should be selected! </h6></Label>
+                                </Row>
+
                                 <Col md={9}>
                                     <h7>Let’s start with something easy. Tell us, in which product dimension your guideline can be used? 
                                         This helps other users to find your guideline! If you want, you can also choose more than one.</h7>
@@ -388,7 +437,17 @@ class AddHeuristic extends Component{
                                     <Row>
                                         <Col md={6}>
                                             <Control.text model='.artifact' id="artifact" name="artifact"  
-                                                className= "form-control"/>
+                                                className= "form-control"
+                                                validators= {{
+                                                    required
+                                                }}/>
+                                            <Errors
+                                                className='text-danger'
+                                                model=".artifact"
+                                                show="touched"
+                                                messages= {{
+                                                    required: 'Required '
+                                                }} />
                                         </Col>
                                         <Col md={6}>
                                             <p>
@@ -420,7 +479,17 @@ class AddHeuristic extends Component{
                                     <Row>
                                         <Col md={6}>
                                             <Control.text model='.orderVerb' id="orderVerb" name="orderVerb"  
-                                                className= "form-control"/>
+                                                className= "form-control"
+                                                validators= {{
+                                                    required
+                                                }}/>
+                                            <Errors
+                                                className='text-danger'
+                                                model=".orderVerb"
+                                                show="touched"
+                                                messages= {{
+                                                    required: 'Required '
+                                                }} />
                                         </Col>
                                         <Col md={6}>
                                             <p>
@@ -431,7 +500,7 @@ class AddHeuristic extends Component{
                                 </Row>
                                 <Row className='form-group' style={{marginBottom:"20px"}}>
                                     <Col>
-                                        <h4>4. Order Adverb  </h4>
+                                        <h4>4. Order Adverb (optional)</h4>
                                     </Col>
                                     <Row>
                                         <Col md={6}>
@@ -826,6 +895,12 @@ class AddHeuristic extends Component{
                                 <Button type="submit" value="submit" color="light"> Hand in</Button>
                             </Row>
                         </LocalForm>
+                        <Modal className='modal-lg'  isOpen={this.state.isModalOpen} toggle={()=>this.closeModal()} >
+                            <ModalHeader className='startpage' toggle={()=>this.closeModal()}></ModalHeader>
+                            <ModalBody className='startpage'>
+                                asdasd
+                            </ModalBody>
+                        </Modal>
                     </div>
                 </div>
             </div>
