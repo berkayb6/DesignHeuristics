@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {Loading} from './LoadingComponent';
 import Start from './StartComponent';
 import MoreInfo from './MoreInfoComponent';
 import Login from './LoginPageComponent';
@@ -8,13 +9,16 @@ import RegisterCompleted from './RegisterCompletedComponent';
 import YourWay from './SelectYourWayComponent';
 import YourMode from './SelectYourMode';
 import DHCollection from './DesignHeuristicCollectionComponent';
-import AddHeuristic from './AddHeuristicComponent'
+import AddHeuristic from './AddHeuristicComponent';
+import HeuristicDetails from './HeuristicDetailsComponent';
 import Search from './SearchComponent';
 import ForgotPassword from './ForgotPasswordComponent';
+import Heuristic from './Heuristic';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { postComment, fetchHeuristics, fetchComments, loginUser, logoutUser, register, fetchUsers, postHeuristic, uploadImage } from '../redux/ActionCreators';
 import { actions } from 'react-redux-form';
+import { type } from '@testing-library/user-event/dist/type';
 
 /** Data will come from the server. Users will be deleted afterwards, when the backend is deployed.*/
 const mapStateToProps = state => {
@@ -41,20 +45,20 @@ const mapDispatchToProps = (dispatch) => ({
     fetchComments: () => {dispatch(fetchComments())},
     resetFeedbackForm: () => {dispatch(actions.reset('feedback'))} //
 })
+var pathDefined= false;
 
 class Main extends Component {
     constructor(props){
         super (props);
-        
+        this.heuristics= [];
     }
     /** After the work has been loaded to browser, the corresponding data will be fetched. */
     componentDidMount(){
         this.props.fetchHeuristics();
         this.props.fetchComments();
         this.props.fetchUsers();
+        
     }
-    
-
     render (){
         const StartPage= ()=> {
             return (
@@ -63,7 +67,15 @@ class Main extends Component {
 
                 </div>
             );
+
         }
+        if (this.props.heuristics.isLoading===false && pathDefined===false ){
+            for (let i=0; i <this.props.heuristics.heuristics.length; i++){
+                this.heuristics.push(new Heuristic(this.props.heuristics.heuristics[i]))
+            }
+            pathDefined= true
+        }
+        
                 
         const MoreInfos =() =>{
             return(
@@ -116,7 +128,7 @@ class Main extends Component {
                 </div>
             )
         }
-
+        
         const ProfilePage = () => {
             return(
                 <div className='startpage' style = {{minHeight:"100vh"}}>
@@ -142,7 +154,6 @@ class Main extends Component {
                         postComment={this.props.postComment}
                         auth={this.props.auth}
                         logoutUser={this.props.logoutUser}/>
-                    
                 </div>
             )
         }
@@ -180,31 +191,64 @@ class Main extends Component {
                 </div>
             )
         }
-        
-        return (
-            <div>
                 
-                {/**
-                 * Defining the paths of pages and assigning the component to each path
-                 * Redirect: If any given path does not exist, then it will redirect to start page.
-                 */}
-                <Switch>
-                    <Route path='/start' component={StartPage}/>
-                    <Route exact path='/moreinfo' component={MoreInfos}/>
-                    <Route path='/selectyourway' component={SelectYourWay}/>
-                    <Route path='/login' component={LoginPage}/>
-                    <Route path='/register' component={RegisterPage}/>
-                    <Route path='/register-completed' component={RegisterCompletedPage}/>
-                    <Route path='/your-profile' component={ProfilePage}/>
-                    <Route path='/selectyourmode' component={SelectYourMode}/>
-                    <Route path='/design-heuristic-collection' component={DesignHeuristicCollection}/>
-                    <Route path='/add-your-own-heuristic' component={AddYourOwnHeuristic}/>
-                    <Route path='/search' component={SearchPage}/>
-                    <Route path='/forgot-your-password' component={ForgotYourPassword}/>
-                    <Redirect to="/start" />
-                </Switch>
-            </div>
-        )
+        const routeComponents = this.heuristics.map((heuristic) => <Route exact path={heuristic.path} component={
+            
+            () => {
+                return(
+                    <div className='startpage' style = {{minHeight:"100vh"}}>
+                        <HeuristicDetails selectedHeuristic={heuristic.heuristic}
+                            heuristicsLoading= {this.props.heuristics.isLoading}
+                            heuristiscErrMess= {this.props.heuristics.errMess}
+                            postComment={this.props.postComment}
+                            auth={this.props.auth}
+                            logoutUser={this.props.logoutUser}/>
+                    </div>
+                )
+            }
+    
+        } />);
+
+        if (this.props.heuristics.isLoading){
+            return (
+                
+                <div className="container">
+                    <div className="row">
+                        <Loading />
+                    </div>
+                </div>
+            )
+
+        }
+
+        
+        else
+            return(
+                <div>
+                    
+                    
+                    {/**
+                     * Defining the paths of pages and assigning the component to each path
+                     * Redirect: If any given path does not exist, then it will redirect to start page.
+                     */}
+                    <Switch>
+                        <Route path='/start' component={StartPage}/>
+                        <Route exact path='/moreinfo' component={MoreInfos}/>
+                        <Route path='/selectyourway' component={SelectYourWay}/>
+                        <Route path='/login' component={LoginPage}/>
+                        <Route path='/register' component={RegisterPage}/>
+                        <Route path='/register-completed' component={RegisterCompletedPage}/>
+                        <Route path='/your-profile' component={ProfilePage}/>
+                        <Route path='/selectyourmode' component={SelectYourMode}/>
+                        <Route path='/design-heuristic-collection' component={DesignHeuristicCollection}/>
+                        <Route path='/add-your-own-heuristic' component={AddYourOwnHeuristic}/>
+                        <Route path='/search' component={SearchPage}/>
+                        <Route path='/forgot-your-password' component={ForgotYourPassword}/>
+                        {routeComponents}
+                        <Redirect to="/start" />
+                    </Switch>
+                </div>
+            )
             
                 
     }

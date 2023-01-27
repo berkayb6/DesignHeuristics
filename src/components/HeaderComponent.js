@@ -3,6 +3,7 @@ import {Navbar, NavbarBrand, Nav, NavbarToggler, Collapse, NavItem,
 Button, Card, CardImg} from 'reactstrap';
 import {NavLink} from 'react-router-dom';
 import { baseUrl } from '../shared/baseUrl';
+import { amplitude } from '../utilities/amplitude';
 
 class Header extends Component{
     
@@ -12,6 +13,7 @@ class Header extends Component{
         this.toggleNav = this.toggleNav.bind(this);
         this.toggleModal=this.toggleModal.bind(this);
         this.handleLogout = this.handleLogout.bind(this);
+        this.logClick = this.logClick.bind(this);
 
         this.state = {
           isNavOpen: false,
@@ -25,6 +27,10 @@ class Header extends Component{
             isNavOpen: !this.state.isNavOpen
             
         });
+    }
+
+    logClick(item){
+        amplitude.getInstance().logEvent(`${item}`)
     }
 
     toggleModal(){
@@ -57,7 +63,7 @@ class Header extends Component{
                                 </NavLink>
                             </NavItem>
                             <NavItem>
-                                <NavLink className="nav-link" to="/design-heuristic-collection" style={{color:"black"}}>
+                                <NavLink className="nav-link" onClick={this.logClick("dfxCollectionClicked")} to="/design-heuristic-collection" style={{color:"black"}}>
                                     <span className='fa-lg'><strong>DfX-Collection</strong></span>
                                 </NavLink>
                             </NavItem>
@@ -72,7 +78,7 @@ class Header extends Component{
                                 </NavLink>
                             </NavItem>
                             <NavItem>
-                                <NavLink className="nav-link" to="/search" style={{color:"black"}}>
+                                <NavLink className="nav-link" onClick={this.logClick("searchClicked")} to="/search" style={{color:"black"}}>
                                     <span className='fa-lg'><strong>Search</strong></span>
                                 </NavLink>
                             </NavItem>

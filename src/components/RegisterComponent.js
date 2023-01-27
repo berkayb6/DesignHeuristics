@@ -29,9 +29,6 @@ class Register extends Component{
         
     }
     
-    componentDidCatch(){
-        console.log( "test: ", this.props.users[this.props.users.length-1].projects)
-    }
         
     toggleNav(){
         
@@ -57,7 +54,6 @@ class Register extends Component{
         var yourHeuristics= [];
         var adminProjects= [];
         var participantProjects = [];
-        console.log("target: ",values)
         /** After completing registration, the user will be directed to another page called "register completed".
          *  Before that, the input data such as user's email, password and check status of subscription should be sent
          *  to the server. 

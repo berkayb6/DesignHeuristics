@@ -1,9 +1,11 @@
 import React, { Component, useEffect, useState } from 'react';
-import HeuristicDetails from './HeuristicDetailsComponent';
-import {Link} from 'react-router-dom';
+import {Link, withRouter } from 'react-router-dom';
+import Collection from './Collection';
 import { Form, FormGroup, Col, Container, Row, Label, Input,Button, Card, CardTitle, CardBody, CardText, Modal, ModalHeader, ModalBody } from 'reactstrap';
 import Header from './HeaderComponent';
 import { Loading } from './LoadingComponent';
+import { amplitude } from '../utilities/amplitude';
+import { identify } from 'amplitude-js';
 
 class DHCollection extends Component{
     constructor(props) {
@@ -20,6 +22,7 @@ class DHCollection extends Component{
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.searchClicked = this.searchClicked.bind(this);
+        this.logClick = this.logClick.bind(this);
     }
 
     handleInputChange(event) {
@@ -46,6 +49,7 @@ class DHCollection extends Component{
      */
 
     searchClicked(){
+        amplitude.getInstance().logEvent('heuristicSearchClicked')
         if (this.state.isSearchClicked===false){
             this.setState({
                 isSearchClicked:!this.state.isSearchClicked
@@ -53,8 +57,11 @@ class DHCollection extends Component{
         }
     }
     
+    logClick = () => {
+        amplitude.getInstance().logEvent('addYourOwnHeuristicClicked')
+    }
     
-
+    
     render(){
         let designForArray = [];       
         this.props.heuristics.map((heuristic)=>{
@@ -74,6 +81,9 @@ class DHCollection extends Component{
             )
         })
 
+        var identify= new amplitude.Identify(); 
+        amplitude.getInstance().identify(identify);
+        var deviceId = amplitude.getInstance().options.deviceId;
         return(
             <>
                 <Header auth={this.props.auth}
@@ -86,7 +96,7 @@ class DHCollection extends Component{
                             <h2><strong>Collection</strong></h2>
                             with all design heuristics available
                             <div className='row col-12 col-md-8' style={{marginTop:"100px"}}>
-                                <Link className='text-decoration-none card-block' style={{color:"black"}} to="/add-your-own-heuristic">
+                                <Link className='text-decoration-none card-block' onClick={this.logClick} style={{color:"black"}} to="/add-your-own-heuristic">
                                     <Card className='align-items-center'>
                                         <CardTitle ><h4 className='m-1' > <span className='fa fa-plus-circle'></span><strong> Add your own heuristic</strong></h4> </CardTitle>
                                     </Card>
@@ -187,7 +197,6 @@ class DHCollection extends Component{
                 <Collection isSearchClicked={this.state.isSearchClicked}
                     isLoading= {this.props.heuristicsLoading}
                     errMess= {this.props.heuristiscErrMess}
-                    
                     item= {this.props.heuristics.filter(item => {
                             if(this.state.industry=== "all"){
                                 if(this.state.phase==="all"){
@@ -238,146 +247,3 @@ class DHCollection extends Component{
 }
 export default DHCollection;
 
-function Collection (props){
-
-    /** Collection Component has also an property which is showing the details of a specific heuristic
-     * that the user clicked on. To show that as a pop-up (modal), it contains the HeuristicDetailsComponent inside of it.
-     */
-
-    const [isModalOpen, setIsModalOpen] = useState(false)
-    const [selectedHeuristic, setSelectedHeuristic] = useState('')
-    const [sampleData, setSampleData] = useState(props.item)
-
-    useEffect(()=>{
-        setSampleData(props.item)
-    }, [props.item])
-
-    function handleSort(){
-        const sortedData = [...sampleData].sort((a,b) =>{
-            return a.title > b.title ? 1: -1
-        })
-        setSampleData(sortedData)
-    
-    }
-
-    function toggleModal(selectedOne){
-        setIsModalOpen(!isModalOpen)
-        setSelectedHeuristic(selectedOne)
-    }
-
-    function closeModal(){
-        setIsModalOpen(!isModalOpen)
-
-    }
-
-    const heuristic= sampleData.map((heuristic)=>{
-        return(
-            <Row className='d-flex align-items-center'>
-                <Col md={2} >
-                    {heuristic.designFor.join(", ")}
-                </Col>
-                <Col md={1} >
-                    {heuristic.industry.join(", ")}
-                </Col>
-                <Col md={2} >
-                    {heuristic.phase.join(", ")}
-                </Col>
-                <Col md={2} >
-                    {heuristic.productDimension.join(", ")}
-                </Col>
-                <Col md={1} >
-                    {heuristic.rating}
-                </Col>
-                <Col md={4} >
-                    <Card key={heuristic.id}>
-                        <CardBody >
-                            <CardText onClick={()=>toggleModal(heuristic)}> {heuristic.title}</CardText>
-                        </CardBody>
-                    </Card>
-                </Col>
-            </Row>
-        )
-    })
-
-    
-        
-        /** The heuristic defined just below contains all the informations of heuristics that the user wants to see: designfor, level etc.
-         * A short explanation about the heuristic stands as the last column. If the user wants to have more information
-         * about this specific heuristic, s/he should click on the explanation to toggle the pop-up.
-         */
-        
-
-    if (props.isSearchClicked){
-
-        if (props.isLoading) {
-            return(
-                <div className='container'>
-                    <div className='row'>
-                        <Loading/>
-                    </div>
-                </div>
-            )
-        }
-        else if (props.errMess){
-            return(
-                <div className='container'>
-                    <div className='row'>
-                        <h4>{props.errMess}</h4>
-                    </div>
-                </div>
-            )
-        }
-        else
-            return(
-                <Container fluid style={{ paddingLeft: 30, paddingRight: 0 }}>
-                    
-                    <Row className='d-flex align-items-center'>
-                        <Col md={2}>
-                            <h3>Design for</h3>
-                        </Col>
-                        <Col md={1}>
-                            <h3>Industry</h3>
-                        </Col>
-                        <Col md={2}>
-                            <h3>Phase</h3>
-                        </Col>
-                        <Col md={2}>
-                            <h3>Product Dimension</h3>
-                        </Col>
-                        <Col md={1}>
-                            <h3>Rating</h3>
-                        </Col>
-                        <Col md={3} className='d-flex align-items-center'>
-                            <h3>Applicable heuristic</h3>
-                            <i onClick={()=>handleSort()} className="fa fa-arrow-down"></i>
-                        </Col>
-                    </Row>
-                    <Row className='d-flex'>
-                            {heuristic}
-                    </Row>
-
-                    {/**If the user has clicked on the explanation, then the modal will be shown. 
-                     * For this to be rendered properly, the information which heuristic has been clicked,
-                     * will be sent to the component HeuristicDetails along with all data of that heuristic.
-                     */}
-
-                    <Modal className='modal-lg'  isOpen={isModalOpen} toggle={()=>closeModal()} >
-                        <ModalHeader className='startpage' toggle={()=>closeModal()}></ModalHeader>
-                        <ModalBody className='startpage'>
-                            <HeuristicDetails selectedOne= {selectedHeuristic} 
-                                postComment= {props.postComment} />
-                        </ModalBody>
-                    </Modal>
-                    
-                </Container>
-            )
-
-        }
-    else
-        return(
-            <div>
-
-            </div>
-        )
-    
-}

@@ -7,13 +7,6 @@ import axios from 'axios';
 
 const required = (val) => val && val.length;
 
-
-function checkAndLook (model, value){
-    return (dispatch) => {
-        dispatch(actions.change(model, value))
-    }
-}
-
 class AddHeuristic extends Component{
     
     constructor(props){
