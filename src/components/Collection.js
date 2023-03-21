@@ -29,12 +29,12 @@ function Collection (props){
     
     }
 
-    function toggleModal(selectedOne){
+    function forwardHeuristicPage(selectedOne){
         amplitude.getInstance().logEvent(`${selectedOne.title}`)
-        var titleDashed= selectedOne.title.trim().replace(/\s+/g, '-').toLowerCase();
+        var heuristicUrl= selectedOne.shortId+ '/' + selectedOne.title.trim().replace(/\s+/g, '-').toLowerCase();
         setisHeuristicClicked(!isHeuristicClicked)
         setSelectedHeuristic(selectedOne)
-        props.history.push(titleDashed)
+        props.history.push(heuristicUrl)
         setIsModalOpen(!isModalOpen)
 
     }
@@ -64,7 +64,7 @@ function Collection (props){
                 <Col md={4} >
                     <Card key={heuristic.id}>
                         <CardBody >
-                            <CardText onClick={()=>toggleModal(heuristic)}> {heuristic.title}</CardText>
+                            <CardText onClick={()=>forwardHeuristicPage(heuristic)}> {heuristic.title}</CardText>
                         </CardBody>
                     </Card>
                 </Col>

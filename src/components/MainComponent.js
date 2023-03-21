@@ -14,11 +14,17 @@ import HeuristicDetails from './HeuristicDetailsComponent';
 import Search from './SearchComponent';
 import ForgotPassword from './ForgotPasswordComponent';
 import Heuristic from './Heuristic';
-import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
+import { Switch, Route, Redirect, withRouter, useLocation, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { createStore, StateMachineProvider } from 'little-state-machine';
 import { postComment, fetchHeuristics, fetchComments, loginUser, logoutUser, register, fetchUsers, postHeuristic, uploadImage } from '../redux/ActionCreators';
 import { actions } from 'react-redux-form';
 import { type } from '@testing-library/user-event/dist/type';
+import AddHeuristicComponent from './AddHeuristicComponent';
+import Step2 from './Step2';
+import Step3 from './Step3';
+import Step4 from './Step4';
+import Step5 from './step5';
 
 /** Data will come from the server. Users will be deleted afterwards, when the backend is deployed.*/
 const mapStateToProps = state => {
@@ -47,6 +53,17 @@ const mapDispatchToProps = (dispatch) => ({
 })
 var pathDefined= false;
 
+createStore({
+    heuristicDetails: {
+        artifact: "",
+        artifactRestriction: "",
+        orderVerb: "",
+        orderAdverb: "",
+        adressedSystemLevel: [],
+        artefactCategorization: [],
+        effects:[]
+    },
+})
 class Main extends Component {
     constructor(props){
         super (props);
@@ -75,7 +92,6 @@ class Main extends Component {
             }
             pathDefined= true
         }
-        
                 
         const MoreInfos =() =>{
             return(
@@ -157,7 +173,6 @@ class Main extends Component {
                 </div>
             )
         }
-
         const AddYourOwnHeuristic =()=>{
             return(
                 <div className='startpage' style = {{minHeight:"100vh"}}>
@@ -168,6 +183,64 @@ class Main extends Component {
                 </div>
             )
         }
+        const AddYourOwnHeuristicStep2 =()=>{
+            return(
+                <div className='startpage' style = {{minHeight:"100vh"}}>
+                    <Step2 auth={this.props.auth}
+                        logoutUser={this.props.logoutUser}
+                        uploadImage={this.props.uploadImage}
+                        postHeuristic={this.props.postHeuristic}/>
+                </div>
+            )
+        }
+
+        const AddYourOwnHeuristicStep3 =()=>{
+            return(
+                <div className='startpage' style = {{minHeight:"100vh"}}>
+                    <Step3 auth={this.props.auth}
+                        logoutUser={this.props.logoutUser}
+                        uploadImage={this.props.uploadImage}
+                        postHeuristic={this.props.postHeuristic}/>
+                </div>
+            )
+        }
+
+        const AddYourOwnHeuristicStep4 =()=>{
+            return(
+                <div className='startpage' style = {{minHeight:"100vh"}}>
+                    <Step4 auth={this.props.auth}
+                        logoutUser={this.props.logoutUser}
+                        uploadImage={this.props.uploadImage}
+                        postHeuristic={this.props.postHeuristic}/>
+                </div>
+            )
+        }
+        const AddYourOwnHeuristicStep5 =()=>{
+            return(
+                <div className='startpage' style = {{minHeight:"100vh"}}>
+                    <Step5 auth={this.props.auth}
+                        logoutUser={this.props.logoutUser}
+                        uploadImage={this.props.uploadImage}
+                        postHeuristic={this.props.postHeuristic}/>
+                </div>
+            )
+        }
+        // const Pages = () => {
+        //     const location= useLocation();
+        //     return (
+        //         <>
+        //             {/* <nav className="container">
+        //             <ul className="steps">
+        //             <li className={location.pathname === "/add-your-own-heuristic" ? "active" : ""}>
+        //                 <Link to="/add-your-own-heuristic"></Link>
+        //             </li>
+        //             </ul>
+        //         </nav> */}
+                
+        //         </>
+        //     )
+        // }
+
 
         const SearchPage = () => {
             return(
@@ -224,7 +297,7 @@ class Main extends Component {
         
         else
             return(
-                <div>
+                <StateMachineProvider>
                     
                     
                     {/**
@@ -241,13 +314,18 @@ class Main extends Component {
                         <Route path='/your-profile' component={ProfilePage}/>
                         <Route path='/selectyourmode' component={SelectYourMode}/>
                         <Route path='/design-heuristic-collection' component={DesignHeuristicCollection}/>
-                        <Route path='/add-your-own-heuristic' component={AddYourOwnHeuristic}/>
+                        {/* <Route path='/add-your-own-heuristic' component={AddYourOwnHeuristic}/> */}
                         <Route path='/search' component={SearchPage}/>
                         <Route path='/forgot-your-password' component={ForgotYourPassword}/>
                         {routeComponents}
+                        <Route path="/add-your-own-heuristic" component={AddYourOwnHeuristic} />
+                        <Route path="/step2" component={AddYourOwnHeuristicStep2} />
+                        <Route path="/step3" component={AddYourOwnHeuristicStep3} />
+                        <Route path="/step4" component={AddYourOwnHeuristicStep4} />
+                        <Route path="/step5" component={AddYourOwnHeuristicStep5} />
                         <Redirect to="/start" />
                     </Switch>
-                </div>
+                </StateMachineProvider>
             )
             
                 
