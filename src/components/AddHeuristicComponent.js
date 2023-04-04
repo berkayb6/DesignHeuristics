@@ -22,11 +22,29 @@ export default (props) =>{
         orderVerb: '',
         orderAdverb: ''
     });
+
+    const artifactCheck=React.createRef();
+    const orderVerbCheck=React.createRef();
+
     const { handleSubmit, errors, register } = useForm({
         defaultValues: state.heuristicDetails
     });
     const { push } = useHistory();
     const onSubmit = data => {
+        if(guideline.artifact===''){
+            artifactCheck.current.style={display:"visible"};
+            return
+        }
+        if (guideline.artifact!==''){
+            artifactCheck.current.style={display:"none"};
+        }
+        if(guideline.orderVerb===''){
+            orderVerbCheck.current.style={display:"visible"};
+            return
+        }
+        if (guideline.orderVerb!==''){
+            orderVerbCheck.current.style={display:"none"};
+        }
         actions.updateAction(guideline);
         push("/step2");
     };
@@ -34,7 +52,6 @@ export default (props) =>{
         const {id, value} = e.target; 
         setGuideline({...guideline, [id]: value})
     }
-    console.log( "state: ", state)
     return (
         <div>
             <Header auth={props.auth}
@@ -85,6 +102,8 @@ export default (props) =>{
                                     </Col>
                                 </Row>
                             </Row>
+                            <Label className='align-items-center'> <h6 className="requiredStyle" ref={artifactCheck} style={{display:"none"}}> You may have missed some information to share! </h6></Label>
+
                             <Row className='form-group' style={{marginBottom:"20px"}}>
                                 <Col >
                                     <h4>2. Artifact Restriction/Extension (optional) </h4>
@@ -108,17 +127,8 @@ export default (props) =>{
                                 <Row>
                                     <Col md={6}>
                                         <Control.text model='.orderVerb' id="orderVerb" name="orderVerb"  
-                                            className= "form-control"
-                                            validators= {{
-                                                required
-                                            }}/>
-                                        <Errors
-                                            className='text-danger'
-                                            model=".orderVerb"
-                                            show="touched"
-                                            messages= {{
-                                                required: 'Required '
-                                            }} />
+                                            className= "form-control"/>
+                                            
                                     </Col>
                                     <Col md={6}>
                                         <p>
@@ -127,6 +137,7 @@ export default (props) =>{
                                     </Col>
                                 </Row>
                             </Row>
+                            <Label className='align-items-center'> <h6 className="requiredStyle" ref={orderVerbCheck} style={{visibility:"hidden"}}> You may have missed some information to share! </h6></Label>
                             <Row className='form-group' style={{marginBottom:"20px"}}>
                                 <Col>
                                     <h4>4. Order Adverb (optional)</h4>
@@ -154,9 +165,52 @@ export default (props) =>{
                                 </p>
                             </Col>
                         </Row>
-                      
-                        <input type="submit" />
+                        <Row>
+                            <p>
+                                This will be the guideline you share with fellow designers. Is everything correct? Then click on Next Step!
+                            </p>
+                        </Row>
+                        <Row className='col-md offset-4' style={{marginBottom:"20px"}}>
+                            <Col >
+                                <Button type='submit' color='light'>Next Step!</Button>
+                            </Col>
+                        </Row>
+                        <Row className='col-md offset-4' style={{marginBottom:"40px"}}>
+                            <Col>
+                                Step <strong>1</strong> of 5
+                            </Col>
+                        </Row>
                     </form>
+                    <Col className='informationBackground'>
+                        <Row >
+                            <Row style={{position: 'relative'}}>
+                                <Card style={{ backgroundColor:'#89CAF4'}}>
+                                    <CardBody >
+                                        Our application helps users to identify the knowledge they need for their specific case. To do so, the guidelines in our application are formulated in a strict modular system. It sounds more complicated than it is and we will help you with examples.
+                                        <br/><br/>
+                                        The core is the guideline formulation: When you have an advice about product design, it is most helpful to give <strong>short order statements,</strong> which tell fellow designers exactly what to do. Of course you want to tell others what effect your guideline has. This will be done in the <strong>next steps!</strong>
+                                        <br/><br/>
+                                        <strong>Example: </strong>
+                                        Your department designs TVs and your company has a new policy to take back old TVs to recycle valuable parts in new TVs, to reduce the usage of materials. To make sure that other designers take into account the new policy in their designs, you formulate a design guideline for them. You tell them to locate valuable parts in the product at easily accessible places so that they can be taken out easily during the disassembly process.  
+                                        <br/><br/>
+                                        What are you adressing in your guideline?  <strong>parts!</strong>
+                                        Is it about all kinds of parts? No! There is a specification! Just <strong>valuable</strong> parts! 
+                                        What about valuable parts? They should be <strong>located at easily accessbile places!</strong>
+                                        <br/><br/>
+                                        You formulate your advice as: Locate valuable parts at easily accessible places!
+                                        <br/><br/>
+                                        Your Adressed Artifact is: parts
+                                        Your Artifact Speicifiaction is: that are valuable
+                                        Your Order Verb is: locate
+                                        Your Order Specification is:  at easily accessible places
+                                    </CardBody>
+                                </Card>
+                            </Row>
+                        </Row>
+                        <Col className='informationImage' >
+                            <CardImg src= {`${baseUrl}assets/information 1.png`} />
+                        </Col>
+                    </Col>
                 </div>
             </div>
 

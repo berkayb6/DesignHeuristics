@@ -25,6 +25,7 @@ import Step2 from './Step2';
 import Step3 from './Step3';
 import Step4 from './Step4';
 import Step5 from './step5';
+import YouRock from './YouRock';
 
 /** Data will come from the server. Users will be deleted afterwards, when the backend is deployed.*/
 const mapStateToProps = state => {
@@ -41,7 +42,7 @@ const mapStateToProps = state => {
  */
 const mapDispatchToProps = (dispatch) => ({
     postComment: (heuristicId, author, comment) => dispatch(postComment(heuristicId, author, comment)),
-    postHeuristic: (designFor, positiveEffects, productDimension, title, negativeEffects, phase, industry, rating, category, description, image, sources) => dispatch(postHeuristic(designFor, positiveEffects, productDimension, title, negativeEffects, phase, industry, rating, category, description, image, sources)),
+    postHeuristic: (title, adressedSystemLevel, artefactCategorization, positiveEffects, negativeEffects, orderCategory, orderCategorySpecification, industry, rating, description, image, sources) => dispatch(postHeuristic(title, adressedSystemLevel, artefactCategorization, positiveEffects, negativeEffects, orderCategory, orderCategorySpecification, industry, rating, description, image, sources)),
     uploadImage: (data) => dispatch(uploadImage(data)),
     register: (email, password, subscription, library, yourHeuristics, projects) => dispatch(register(email, password, subscription, library, yourHeuristics, projects)),
     loginUser: (creds) => dispatch(loginUser(creds)),
@@ -60,8 +61,7 @@ createStore({
         orderVerb: "",
         orderAdverb: "",
         adressedSystemLevel: [],
-        artefactCategorization: [],
-        effects:[]
+        artefactCategorization: []
     },
 })
 class Main extends Component {
@@ -173,6 +173,7 @@ class Main extends Component {
                 </div>
             )
         }
+        
         const AddYourOwnHeuristic =()=>{
             return(
                 <div className='startpage' style = {{minHeight:"100vh"}}>
@@ -225,23 +226,15 @@ class Main extends Component {
                 </div>
             )
         }
-        // const Pages = () => {
-        //     const location= useLocation();
-        //     return (
-        //         <>
-        //             {/* <nav className="container">
-        //             <ul className="steps">
-        //             <li className={location.pathname === "/add-your-own-heuristic" ? "active" : ""}>
-        //                 <Link to="/add-your-own-heuristic"></Link>
-        //             </li>
-        //             </ul>
-        //         </nav> */}
-                
-        //         </>
-        //     )
-        // }
 
-
+        const YouRockPage = () =>{
+            return(
+                <div className='startpage' style = {{minHeight:"100vh"}}>
+                    <YouRock auth={this.props.auth}
+                        logoutUser={this.props.logoutUser}/>
+                </div>
+            )
+        }
         const SearchPage = () => {
             return(
                 <div className='startpage' style = {{minHeight:"100vh"}}>
@@ -323,6 +316,7 @@ class Main extends Component {
                         <Route path="/step3" component={AddYourOwnHeuristicStep3} />
                         <Route path="/step4" component={AddYourOwnHeuristicStep4} />
                         <Route path="/step5" component={AddYourOwnHeuristicStep5} />
+                        <Route path="/you-rock" component={YouRockPage}/>
                         <Redirect to="/start" />
                     </Switch>
                 </StateMachineProvider>

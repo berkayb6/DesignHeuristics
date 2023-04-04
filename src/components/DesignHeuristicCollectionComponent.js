@@ -64,14 +64,14 @@ class DHCollection extends Component{
     
     render(){
         let designForArray = [];       
-        this.props.heuristics.map((heuristic)=>{
-            heuristic.designFor.map((item)=>{
-                let splitted= item.split(/[ ,]+/)
-                splitted.map((arrayItem)=>{
-                    designForArray.push(arrayItem)
-                })
-            });
-        })
+        // this.props.heuristics.map((heuristic)=>{
+        //     heuristic.designFor.map((item)=>{
+        //         let splitted= item.split(/[ ,]+/)
+        //         splitted.map((arrayItem)=>{
+        //             designForArray.push(arrayItem)
+        //         })
+        //     });
+        // })
         let uniqueDesignFor= [... new Set(designForArray)]
         const designForOptions= uniqueDesignFor.map((item)=>{
             return(
@@ -194,7 +194,7 @@ class DHCollection extends Component{
                 {/** The Collection component needs the information which options the user selected.
                  * According to the selections, corresponding heuristics will be shown to the user
                  */}
-                <Collection isSearchClicked={this.state.isSearchClicked}
+                {/* <Collection isSearchClicked={this.state.isSearchClicked}
                     isLoading= {this.props.heuristicsLoading}
                     errMess= {this.props.heuristiscErrMess}
                     item= {this.props.heuristics.filter(item => {
@@ -240,7 +240,7 @@ class DHCollection extends Component{
                     }
                     comments= {this.props.heuristics}
                     postComment= {this.props.postComment}
-                    style = {{minHeight: "100vh"}}/>
+                    style = {{minHeight: "100vh"}}/> */}
             </>
         )
     }

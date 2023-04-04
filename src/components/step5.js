@@ -3,7 +3,7 @@ import { useForm, ErrorMessage } from "react-hook-form";
 import { useHistory, Link, useLocation } from "react-router-dom";
 import { useStateMachine } from "little-state-machine";
 import { Control, LocalForm, Errors, actions} from 'react-redux-form';
-import { Row, Col, Card, FormGroup, Label, Input, CardBody, CardText, Button } from "reactstrap";
+import { Row, Col, Card, FormGroup, Label, Input, CardBody, CardText, Button, CardImg } from "reactstrap";
 import updateAction from "./updateAction";
 import Header from "./HeaderComponent";
 import {baseUrl} from '../shared/baseUrl';
@@ -27,7 +27,7 @@ const Step5 = props => {
         selectedFile3: null
     })
 
-    const [industry, setIndustry] = useState([]);
+    const [industries, setIndustries] = useState([]);
 
     const [extraInfo, setExtraInfo] = useState('');
 
@@ -38,8 +38,50 @@ const Step5 = props => {
     });
     const { push } = useHistory();
     const onSubmit = data => {
-        actions.updateAction(effects.negativeEffects);
-        push('/step5')
+        if (property[property.length-1].effectCategory==='Life Cycle Property'){
+            var newPropertyValues = [...property];
+            newPropertyValues[newPropertyValues.length-1].effectCategorySpecification= newPropertyValues[newPropertyValues.length-1].effectCategorySpecification + " during " + newPropertyValues[newPropertyValues.length-1].step5AdressedLifeCyclePhase.toLowerCase();
+            setProperty(newPropertyValues);
+        }
+        var rating= 4;
+        var title= state.heuristicDetails.orderVerb + " " + state.heuristicDetails.artifact + " " + state.heuristicDetails.artifactRestriction + " " + state.heuristicDetails.orderAdverb;
+        var adressedSystemLevel= state.heuristicDetails.adressedSystemLevel;
+        var artefactCategorization= state.heuristicDetails.artefactCategorization;
+        if (state.heuristicDetails.orderCategory=== "Life Cycle Property"){
+            var orderCategory= state.heuristicDetails.orderCategory;
+            var orderCategorySpecification= state.heuristicDetails.orderCategorySpecification + " during " + state.heuristicDetails.step3AdressedLifeCyclePhase;
+        }
+        else
+            var orderCategory= state.heuristicDetails.orderCategory;
+            var orderCategorySpecification= state.heuristicDetails.orderCategorySpecification
+        var positiveEffects= state.heuristicDetails.step4Effects;
+        var negativeEffects= effects.negativeEffects;
+        var industry= industries;
+        var description= extraInfo;
+        var sources= source;
+        var image= [];
+
+        for ( const[key, value] of Object.entries(file)){
+            if (value!== null){
+                image.push(value.name)
+            }
+        }
+
+        props.postHeuristic(
+            title, 
+            adressedSystemLevel, 
+            artefactCategorization, 
+            positiveEffects, 
+            negativeEffects, 
+            orderCategory, 
+            orderCategorySpecification, 
+            industry, 
+            rating, 
+            description, 
+            image, 
+            sources
+        )
+        push('/')
     };
   
     let handleOnChange = (i,e) => {
@@ -65,13 +107,13 @@ const Step5 = props => {
     let handleCheckChange = e =>{
         var value = e.target.id.slice(4)
         if (e.target.checked){
-            setIndustry([...industry, value])
+            setIndustries([...industries, value])
         }
-        var array= [...industry]
-        var index = industry.indexOf(value)
+        var array= [...industries]
+        var index = industries.indexOf(value)
         if (index !== -1) {
             array.splice(index, 1);
-            setIndustry(array);
+            setIndustries(array);
         }
     }
 
@@ -148,7 +190,6 @@ const Step5 = props => {
 
     return (
         <div>
-            {console.log("systemlevel: ", source)}
             <Header auth={props.auth}
                 logoutUser={props.logoutUser}/>
             <div className='container'>
@@ -348,69 +389,61 @@ const Step5 = props => {
                                 <Button className="fa fa-plus" type="button" onClick={() => addFormFields()}></Button>
                             </Col>
                         </Row>
-                        <Row className='form-group' style={{marginBottom:"60px"}}>
-                                <Col md={3}>
-                                    <h4>In which industry can your heuristic be used?</h4>
-                                </Col>
-                                <Col md={9}>
-                                    <h7>Please define the industry! You can choose more than one. If you do not chose the industry, we assume that it works in every industry.</h7>
-                                </Col>
-                                <Row className="col-12 d-flex justify-content-between" onChange={e=> handleCheckChange(e)} md={3} style={{marginTop:"20px"}}>
-                                    
-                                    <input type="checkbox" class="btn-check" id="ind_all" autocomplete="off"/>
-                                    <label class="btn btn-outline-secondary" style={{color: 'black'}} for="ind_all">all</label>                                    
+                        <Row className='form-group' style={{marginBottom:"60px", marginTop: '60px'}}>
+                            <Col md={3}>
+                                <h4>In which industry can your heuristic be used?</h4>
+                            </Col>
+                            <Col md={9}>
+                                <h7>Please define the industry! You can choose more than one. If you do not chose the industry, we assume that it works in every industry.</h7>
+                            </Col>
+                            <Row className="col-12 d-flex justify-content-between" onChange={e=> handleCheckChange(e)} md={3} style={{marginTop:"20px"}}>
+                                
+                                <input type="checkbox" class="btn-check" id="ind_all" autocomplete="off"/>
+                                <label class="btn btn-outline-secondary" style={{color: 'black'}} for="ind_all">all</label>                                    
 
-                                    <input type="checkbox" class="btn-check" id="ind_metal production and processing" autocomplete="off"/>
-                                    <label class="btn btn-outline-secondary" style={{color: 'black'}} for="ind_metal production and processing">metal production and processing</label>
+                                <input type="checkbox" class="btn-check" id="ind_metal production and processing" autocomplete="off"/>
+                                <label class="btn btn-outline-secondary" style={{color: 'black'}} for="ind_metal production and processing">metal production and processing</label>
 
-                                    <input type="checkbox" class="btn-check" id="ind_manufacture of metal products" autocomplete="off"/>
-                                    <label class="btn btn-outline-secondary" style={{color: 'black'}} for="ind_manufacture of metal products">manufacture of metal products</label>
-                                    
-                                    <input type="checkbox" class="btn-check" id="ind_production of data processing equipment" autocomplete="off"/>
-                                    <label class="btn btn-outline-secondary" style={{color: 'black'}} for="ind_production of data processing equipment">production of data processing equipment</label>
-                                    
-                                    <input type="checkbox" class="btn-check" id="ind_production of electrical equipment" autocomplete="off"/>
-                                    <label class="btn btn-outline-secondary" style={{color: 'black'}} for="ind_production of electrical equipment">production of electrical equipment</label>
-                                    
-                                    <input type="checkbox" class="btn-check" id="ind electric motors" autocomplete="off"/>
-                                    <label class="btn btn-outline-secondary" style={{color: 'black'}} for="ind electric motors">electric motors</label>
-                                    
-                                    <input type="checkbox" class="btn-check" id="ind_mechanical engineering" autocomplete="off"/>
-                                    <label class="btn btn-outline-secondary" style={{color: 'black'}} for="ind_mechanical engineering">mechanical engineering</label>
+                                <input type="checkbox" class="btn-check" id="ind_manufacture of metal products" autocomplete="off"/>
+                                <label class="btn btn-outline-secondary" style={{color: 'black'}} for="ind_manufacture of metal products">manufacture of metal products</label>
+                                
+                                <input type="checkbox" class="btn-check" id="ind_production of data processing equipment" autocomplete="off"/>
+                                <label class="btn btn-outline-secondary" style={{color: 'black'}} for="ind_production of data processing equipment">production of data processing equipment</label>
+                                
+                                <input type="checkbox" class="btn-check" id="ind_production of electrical equipment" autocomplete="off"/>
+                                <label class="btn btn-outline-secondary" style={{color: 'black'}} for="ind_production of electrical equipment">production of electrical equipment</label>
+                                
+                                <input type="checkbox" class="btn-check" id="ind_electric motors" autocomplete="off"/>
+                                <label class="btn btn-outline-secondary" style={{color: 'black'}} for="ind_electric motors">electric motors</label>
+                                
+                                <input type="checkbox" class="btn-check" id="ind_mechanical engineering" autocomplete="off"/>
+                                <label class="btn btn-outline-secondary" style={{color: 'black'}} for="ind_mechanical engineering">mechanical engineering</label>
+                                
+                                <input type="checkbox" class="btn-check" id="ind_vehicle construction" autocomplete="off"/>
+                                <label class="btn btn-outline-secondary" style={{color: 'black'}} for="ind_vehicle construction">vehicle construction</label>
+                                
+                                <input type="checkbox" class="btn-check" id="ind_ship and boat building" autocomplete="off"/>
+                                <label class="btn btn-outline-secondary" style={{color: 'black'}} for="ind_ship and boat building">ship and boat building</label>
 
-                                    {/* <Control.checkbox model=".ind_vehicle construction" name="vehicle construction" id="vehicle construction"
-                                            className= "btn-check"/>
-                                     <Label className="btn btn-outline-light" style={{color: 'black'}} for="vehicle construction">vehicle construction</Label>
+                                <input type="checkbox" class="btn-check" id="ind_rail vehicles" autocomplete="off"/>
+                                <label class="btn btn-outline-secondary" style={{color: 'black'}} for="ind_rail vehicles">rail vehicles</label>
+                                
+                                <input type="checkbox" class="btn-check" id="ind_clothing" autocomplete="off"/>
+                                <label class="btn btn-outline-secondary" style={{color: 'black'}} for="ind_clothing">clothing</label>
 
-                                    <Control.checkbox model=".ind_ship and boat building" name="ship and boat building" id="ship and boat building"
-                                            className= "btn-check"/>
-                                    <Label className="btn btn-outline-light" style={{color: 'black'}} for="ship and boat building">ship and boat building</Label>
+                                <input type="checkbox" class="btn-check" id="ind_aircraft" autocomplete="off"/>
+                                <label class="btn btn-outline-secondary" style={{color: 'black'}} for="ind_aircraft">aircraft</label>
+                                
+                                <input type="checkbox" class="btn-check" id="ind_furniture" autocomplete="off"/>
+                                <label class="btn btn-outline-secondary" style={{color: 'black'}} for="ind_furniture">furniture</label>
 
-                                    <Control.checkbox model=".ind_rail vehicles" name="rail vehicles" id="rail vehicles"
-                                            className= "btn-check"/>
-                                    <Label className="btn btn-outline-light" style={{color: 'black'}} for="rail vehicles">rail vehicles</Label>
-
-                                    <Control.checkbox model=".ind_clothing" name="clothing" id="clothing"
-                                            className= "btn-check"/>
-                                    <Label className="btn btn-outline-light" style={{color: 'black'}} for="clothing">clothing</Label>
-
-                                    <Control.checkbox model=".ind_aircraft" name="aircraft" id="aircraft"
-                                            className= "btn-check"/>
-                                    <Label className="btn btn-outline-light" style={{color: 'black'}} for="aircraft">aircraft</Label>
-
-                                    <Control.checkbox model=".ind_furniture" name="furniture" id="furniture"
-                                            className= "btn-check"/>
-                                    <Label className="btn btn-outline-light" style={{color: 'black'}} for="furniture">furniture</Label>
-                                    
-                                    <Control.checkbox model=".ind_household" name="household" id="household"
-                                            className= "btn-check"/>
-                                    <Label className="btn btn-outline-light" style={{color: 'black'}} for="household">household</Label>
-
-                                    <Control.checkbox model=".ind_automotive" name="automotive" id="automotive"
-                                            className= "btn-check"/>
-                                    <Label className="btn btn-outline-light" style={{color: 'black'}} for="automotive">automotive</Label> */}
-                                </Row>
-                                <Row className='form-group' style={{marginBottom:"20px"}}>
+                                <input type="checkbox" class="btn-check" id="ind_household" autocomplete="off"/>
+                                <label class="btn btn-outline-secondary" style={{color: 'black'}} for="ind_household">household</label>
+                                
+                                <input type="checkbox" class="btn-check" id="ind_automotive" autocomplete="off"/>
+                                <label class="btn btn-outline-secondary" style={{color: 'black'}} for="ind_automotive">automotive</label>
+                            </Row>
+                            <Row className='form-group' style={{marginBottom:"60px", marginTop: '60px'}}>
                                 <Col md={3}>
                                     <h4>Do you want to add pictures?</h4>
                                 </Col>
@@ -545,21 +578,145 @@ const Step5 = props => {
                                 </Col>
                             </Row>
                         </Row>
-                        <Row className="align-items-center">
-                            <Col md={6}>
-                                <Link className='text-decoration-none card-block' style={{color:"black"}} to="/step3">
-                                    <Card style={{width:"170px", float: "left",marginTop:"20px", borderRadius:"10px"}}>
+                        <Row className='col-md' style={{alignItems:'center', marginTop:'50px'}}>
+                            <Col md={4} className='col-md offset-2'>
+                                <Link className='text-decoration-none card-block' style={{color:"black"}} to="/step4">
+                                    <Card style={{width:"160px", float: "left", borderRadius:"10px"}}>
                                         <h3 style={{padding:"2px 20px 2px"}}><strong>Previous</strong></h3>
                                     </Card>
-                                        
                                 </Link>
                             </Col>
-                            <Col md={6}>
-                                <input className='btn-lg  btn-outline-secondary btn-light' style={{color:"black"}} type="submit" />
+                            <Col md={4}>
+                                <Button type='submit' className="btn-md" color='light'>Hand in!</Button>
                             </Col>
                         </Row>
-                                
+                        <Row className='col-md offset-4' style={{marginBottom:"40px", marginTop:"20px"}}>
+                            <Col>
+                                Step <strong>5</strong> of 5
+                            </Col>
+                        </Row>
                     </form>
+                    <Col className='informationBackground'>
+                        <Row >
+                            <Row style={{position: 'relative'}}>
+                                <Card style={{ backgroundColor:'#89CAF4'}}>
+                                    <CardBody >
+                                        Please help us in this step to categorize the effect of your advice.
+                                        <br/><br/>
+                                        This helps us not only with visualizing the knowledge assets on our website but also gives us the possibility to show others possible interrelational effects of your advice. Often guidelines have multiple effects on different dimensions of a product. 
+                                        <br/><br/>
+                                        When you think about our initial advice to locate valuable parts within the product to be easily reachable. The initial idea was to give the advice to increase the recyclability of the product. But it has more effects than that!
+                                        <br/><br/>
+                                        It also is beneficial regarding Design for Disassembly, mineral and fossil ressource use during raw material acquisition, water use during raw material acquisition, impact on clmate change through emissions during raw material acqusition, costs during raw material acqusition, energy use during raw material acqusition.
+                                        <br/><br/>
+                                        You wonder what other product properties there are? We got you!
+                                        <br/><br/>
+                                        <Row className="align-items-center" style={{marginBottom: '40px'}}>
+                                            <Col md={2}>
+                                                <CardImg src= {`${baseUrl}assets/kilo.png`} className='step2Image'/>
+                                            </Col>
+                                            <Col >
+                                                <Card style={{height: 'auto', backgroundColor:'#4BA6E2'}}>
+                                                    <CardBody>
+                                                        <Row style={{textAlign:'center', marginBottom: '20px'}}>
+                                                            <strong>Technical Product Properties</strong>
+                                                        </Row>
+                                                        <Row className="col-12 d-flex " style={{justifyContent:'space-around'}}>
+                                                            <Card className='informationCardInside'>Efficiency</Card>
+                                                            <Card className='informationCardInside'>Noise Level</Card>
+                                                            <Card className='informationCardInside'>Complexity</Card>
+                                                            <Card className='informationCardInside'>Internal Variety</Card>
+                                                            <Card className='informationCardInside'>Robustness</Card>
+                                                            <Card className='informationCardInside'>Temperature</Card>
+                                                            <Card className='informationCardInside'>Friction</Card>
+                                                            <Card className='informationCardInside'>Volume</Card>
+                                                            <Card className='informationCardInside'>Weight</Card>
+                                                            <Card className='informationCardInside'>Functions</Card>
+                                                            <Card className='informationCardInside'>Losses</Card>
+                                                            <Card className='informationCardInside'>Others</Card>
+                                                        </Row>
+                                                    </CardBody>
+                                                </Card>
+                                            </Col>
+                                        </Row>
+                                        <Row className="align-items-center" style={{marginBottom: '40px'}}>
+                                            <Col md={2}>
+                                                <CardImg src= {`${baseUrl}assets/recycle.png`} className='step2Image'/>
+                                            </Col>
+                                            <Col >
+                                                <Card style={{height: 'auto', backgroundColor:'#4BA6E2'}}>
+                                                    <CardBody>
+                                                        <Row style={{textAlign:'center', marginBottom: '20px'}}>
+                                                            <strong>Properties regarding specific life cycle phases</strong>
+                                                        </Row>
+                                                        <Row className="col-12 d-flex" style={{justifyContent:'space-around'}}>
+                                                            <Card className='informationCardInside'>Different DfX (Design for X) Goals</Card>
+                                                            <Card className='informationCardInside'>Ease of Design Changes</Card>
+                                                            <Card className='informationCardInside'>Amount of Produced Goods</Card>
+                                                            <Card className='informationCardInside'>Economies of Scale</Card>
+                                                            <Card className='informationCardInside'>Economies of Scope</Card>
+                                                            <Card className='informationCardInside'>Product Usage Intensity</Card>
+                                                            <Card className='informationCardInside'>Product Lifetime</Card>
+                                                            <Card className='informationCardInside'>Wear</Card>
+                                                            <Card className='informationCardInside'>Customer Value</Card>
+                                                            <Card className='informationCardInside'>Others</Card>
+                                                        </Row>
+                                                    </CardBody>
+                                                </Card>
+                                            </Col>
+                                        </Row>
+                                        <Row className="align-items-center">
+                                            <Col md={2}>
+                                                <CardImg src= {`${baseUrl}assets/co2.png`} className='step2Image'/>
+                                            </Col>
+                                            <Col >
+                                                <Card style={{height: 'auto', backgroundColor:'#4BA6E2'}}>
+                                                    <CardBody>
+                                                        <Row style={{textAlign:'center', marginBottom: '20px'}}>
+                                                            <strong>Properties regarding the complete life cycle</strong>
+                                                        </Row>
+                                                        <Row className="col-12 d-flex" style={{justifyContent:'space-around'}}>
+                                                            <Card className='informationCardInside'>Mineral and Fossil Use</Card>
+                                                            <Card className='informationCardInside'>General Material Use</Card>
+                                                            <Card className='informationCardInside'>Energy Use</Card>
+                                                            <Card className='informationCardInside'>Water Use</Card>
+                                                            <Card className='informationCardInside'>Land Use</Card>
+                                                            <Card className='informationCardInside'>Costs</Card>
+                                                            <Card className='informationCardInside'>Landfill/Waste</Card>
+                                                            <Card className='informationCardInside'>Impact on Climate Change through Emissions</Card>
+                                                            <Card className='informationCardInside'>Impact on Euthrophication</Card>
+                                                            <Card className='informationCardInside'>Impact on Acidification</Card>
+                                                            <Card className='informationCardInside'>Impact on POCP</Card>
+                                                            <Card className='informationCardInside'>Impact on Ozone Depletion</Card>
+                                                            <Card className='informationCardInside'>Particulate Matter</Card>
+                                                            <Card className='informationCardInside'>Impact on Ecotoxicity</Card>
+                                                            <Card className='informationCardInside'>Impact on Human Toxicity</Card>
+                                                            <Card className='informationCardInside'>Others</Card>
+                                                        </Row>
+                                                        <Row style={{textAlign:'center', marginBottom: '20px'}}>
+                                                            <strong>! Speciality here: Please also choose the adressed life cycle phase of the affected property! Possible Phases</strong>
+                                                        </Row>
+                                                        <Row className="col-12 d-flex" style={{justifyContent:'space-around'}}>
+                                                            <Card className='informationCardInside'>Design</Card>
+                                                            <Card className='informationCardInside'>Raw Material Acquisition</Card>
+                                                            <Card className='informationCardInside'>Production</Card>
+                                                            <Card className='informationCardInside'>Assembly</Card>
+                                                            <Card className='informationCardInside'>Distribution</Card>
+                                                            <Card className='informationCardInside'>Usage</Card>
+                                                            <Card className='informationCardInside'>After Use</Card>
+                                                        </Row>
+                                                    </CardBody>
+                                                </Card>
+                                            </Col>
+                                        </Row>
+                                    </CardBody>
+                                </Card>
+                            </Row>
+                        </Row>
+                        <Col className='informationImage' >
+                            <CardImg src= {`${baseUrl}assets/information 1.png`} />
+                        </Col>
+                    </Col>
                 </div>
             </div>
         </div>

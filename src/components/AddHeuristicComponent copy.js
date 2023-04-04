@@ -7,7 +7,7 @@ import Header from './HeaderComponent';
 
 const required = (val) => val && val.length;
 
-class AddHeuristic extends Component{
+class AddHeuristicCopy extends Component{
     
     constructor(props){
         super(props);
@@ -900,4 +900,4 @@ class AddHeuristic extends Component{
         )
     }
 }
-export default AddHeuristic;
+export default AddHeuristicCopy;

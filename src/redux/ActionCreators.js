@@ -128,21 +128,23 @@ export const addHeuristic = (heuristic) => ({
     payload: heuristic
 });
 
-export const postHeuristic = (designFor, positiveEffects, productDimension, title, negativeEffects, phase, industry, rating, category, description, image, sources) => (dispatch) =>{
+export const postHeuristic = (title, adressedSystemLevel, artefactCategorization, positiveEffects, negativeEffects, orderCategory, orderCategorySpecification, industry, rating, description, image, sources) => (dispatch) =>{
+    console.log("new1: ", )
     const newHeuristic= {
-        designFor: designFor,
-        positiveInfluence: positiveEffects,
-        productDimension: productDimension,
         title: title,
-        negativeInfluence: negativeEffects,
-        phase: phase,
+        adressedSystemLevel: adressedSystemLevel, 
+        artefactCategorization: artefactCategorization, 
+        orderCategory: orderCategory, 
+        orderCategorySpecification: orderCategorySpecification,
+        positiveEffects: positiveEffects,
+        negativeEffects: negativeEffects,
         industry: industry,
         rating: rating,
-        category: category,
         description: description,
         image: image,
         sources: sources
     }
+    console.log("new1: ", newHeuristic)
     const bearer = 'Bearer ' + localStorage.getItem('token');
 
     return fetch (baseUrl + 'heuristics', {
