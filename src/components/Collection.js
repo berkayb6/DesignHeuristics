@@ -38,25 +38,32 @@ function Collection (props){
         setIsModalOpen(!isModalOpen)
 
     }
-
+    console.log("item: ", props.item)
     function closeModal(){
         setIsModalOpen(!isModalOpen)
-        //props.history.push('/design-heuristic-collection')
     }
     const heuristic= sampleData.map((heuristic)=>{
+        var effectCategory=heuristic.positiveEffects.map(( positiveEffect) =>{
+            return  positiveEffect.effectCategory})
+
+        var effectCategorySpecification=heuristic.positiveEffects.map(( positiveEffect) =>{
+            return  positiveEffect.effectCategorySpecification})
+
+            {console.log("heuristics: ", heuristic)}
         return(
             <Row className='d-flex align-items-center'>
                 <Col md={2} >
-                    {heuristic.designFor.join(", ")}
+                    
+                    {effectCategory.join(", ")}
                 </Col>
                 <Col md={1} >
-                    {heuristic.industry.join(", ")}
+                    {effectCategorySpecification.join(", ")}
                 </Col>
                 <Col md={2} >
-                    {heuristic.phase.join(", ")}
+                    {heuristic.adressedSystemLevel}
                 </Col>
                 <Col md={2} >
-                    {heuristic.productDimension.join(", ")}
+                    {heuristic.artefactCategorization}
                 </Col>
                 <Col md={1} >
                     {heuristic.rating}
@@ -106,16 +113,16 @@ function Collection (props){
                         
                         <Row className='d-flex align-items-center'>
                             <Col md={2}>
-                                <h3>Design for</h3>
+                                <h3>Effect Category</h3>
                             </Col>
                             <Col md={1}>
-                                <h3>Industry</h3>
+                                <h3>Effect Specification</h3>
                             </Col>
                             <Col md={2}>
-                                <h3>Phase</h3>
+                                <h3>Adressed System Level</h3>
                             </Col>
                             <Col md={2}>
-                                <h3>Product Dimension</h3>
+                                <h3>Artefact Categorization</h3>
                             </Col>
                             <Col md={1}>
                                 <h3>Rating</h3>
@@ -130,58 +137,6 @@ function Collection (props){
                         </Row>
                     </Container>
                 )
-           
-            // else
-            //     {console.log("url: ", props.heuristicUrl.name)}
-            //     return(
-            //         <Container fluid style={{ paddingLeft: 30, paddingRight: 0 }}>
-                        
-            //             <Row className='d-flex align-items-center'>
-            //                 <Col md={2}>
-            //                     <h3>Design for</h3>
-            //                 </Col>
-            //                 <Col md={1}>
-            //                     <h3>Industry</h3>
-            //                 </Col>
-            //                 <Col md={2}>
-            //                     <h3>Phase</h3>
-            //                 </Col>
-            //                 <Col md={2}>
-            //                     <h3>Product Dimension</h3>
-            //                 </Col>
-            //                 <Col md={1}>
-            //                     <h3>Rating</h3>
-            //                 </Col>
-            //                 <Col md={3} className='d-flex align-items-center'>
-            //                     <h3>Applicable heuristic</h3>
-            //                     <i onClick={()=>handleSort()} className="fa fa-arrow-down"></i>
-            //                 </Col>
-            //             </Row>
-            //             <Row className='d-flex'>
-            //                     {heuristic}
-            //             </Row>
-
-            //             {/* {console.log(url)} */}
-
-            //             {/**If the user has clicked on the explanation, then the modal will be shown. 
-            //              * For this to be rendered properly, the information which heuristic has been clicked,
-            //              * will be sent to the component HeuristicDetails along with all data of that heuristic.
-            //              */}
-
-            //             <Link className='text-decoration-none card-block'style={{color:"black"}} to={props.heuristicUrl.name}>
-            //                  <HeuristicDetails selectedOne= {selectedHeuristic} 
-            //                         postComment= {props.postComment} /> 
-            //             </Link>
-            //             {/* <Modal className='modal-lg' isOpen={isModalOpen} toggle={()=>closeModal()} >
-            //                 <ModalHeader className='startpage' toggle={()=>closeModal()}></ModalHeader>
-            //                 <ModalBody className='startpage'>
-            //                     <HeuristicDetails selectedOne= {selectedHeuristic} 
-            //                         postComment= {props.postComment} />
-            //                 </ModalBody>
-            //             </Modal> */}
-                        
-            //         </Container>
-            //     )
 
     }
     else

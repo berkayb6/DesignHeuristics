@@ -12,10 +12,12 @@ class DHCollection extends Component{
         super(props);
 
         this.state = {
-            designfor: 'sustainability',
-            industry: 'all',
-            phase: 'all',
-            productDimension: 'all',
+            effectCategory: 'Technical Property',
+            effectSpecification: 'default',
+            adressedLifeCyclePhase:"default",
+            adressedSystemLevel: 'All',
+            artefactCategorization: 'default',
+            role: 'All',
             isSearchClicked: false
         };
 
@@ -72,6 +74,7 @@ class DHCollection extends Component{
         //         })
         //     });
         // })
+        
         let uniqueDesignFor= [... new Set(designForArray)]
         const designForOptions= uniqueDesignFor.map((item)=>{
             return(
@@ -111,71 +114,248 @@ class DHCollection extends Component{
                             <div className="col-12 col-md-9">
                                 <Form onSubmit={this.handleSubmit}>
                                     <FormGroup row>
-                                        <Label htmlFor="designfor" md={5}><h4>Design for</h4></Label>
+                                        <Label htmlFor="effectCategory" md={5}><h4>Effect Category</h4></Label>
                                         <Col md={7}>
-                                            <Input type="select" name="designfor"
-                                                    value={this.state.designfor}
-                                                    placeholder="change the property"
+                                            <Input type="select" name="effectCategory"
+                                                    value={this.state.effectCategory}
                                                     onChange={this.handleInputChange}>
-                                                {designForOptions}
+                                                <option>Technical Property</option>
+                                                <option>Life Cycle Phase Property</option>
+                                                <option>Life Cycle Property</option>
                                             </Input>
                                         </Col>
                                     </FormGroup>
                                     <FormGroup row>
-                                        <Label htmlFor="industry" md={5}><h4>Industry</h4></Label>
-                                        <Col md={7}>
-                                            <Input type="select" name="industry"
-                                                    value={this.state.industry}
-                                                    placeholder="change the property"
-                                                    onChange={this.handleInputChange}>
-                                                <option>all</option>
-                                                <option>automotive</option>
-                                                <option>aircraft</option>
-                                                <option>furniture</option>
-                                                <option>household</option>
-                                                <option>metal production and processing</option>
-                                                <option>manufacture of metal products</option>
-                                                <option>production of data processing equipment</option>
-                                                <option>production of electrical equipment</option>
-                                                <option>electric motors</option>
-                                                <option>mechnanical engineering</option>
-                                                <option>vehicle construction</option>
-                                                <option>ship and boat building</option>
-                                                <option>rail vehicles</option>
-                                                <option>clothing</option>
-                                            </Input>
-                                        </Col>
+                                        
+                                            <Label htmlFor="effectSpecification" md={5} ><h4>Effect Specification</h4></Label>
+                                            {(this.state.effectCategory=== "Technical Property") ?
+                                            <Col md={7}>
+                                                <Input type="select" name="effectSpecification"
+                                                        onChange={this.handleInputChange}
+                                                        defaultValue={this.state.effectSpecification}>
+                                                    <option value="default" disabled hidden>
+                                                        Select Effect Category Specification
+                                                    </option>
+                                                    <option>All</option>
+                                                    <option>Efficiency</option>
+                                                    <option>Noise Level</option>
+                                                    <option>Complexity</option>
+                                                    <option>Internal Variety</option>
+                                                    <option>Robustness</option>
+                                                    <option>Temperature</option>
+                                                    <option>Friction</option>
+                                                    <option>Volume</option>
+                                                    <option>Weight</option>
+                                                    <option>Losses</option>
+                                                    <option>Others</option>
+                                                </Input>
+                                            </Col> :
+                                            <>
+                                                {(this.state.effectCategory=== 'Life Cycle Phase Property') ?
+                                                <Col md={7}>
+                                                    <Input type="select" name="effectSpecification"
+                                                            onChange={this.handleInputChange}
+                                                            defaultValue={this.state.effectSpecification}>
+                                                        <option value="default" disabled hidden>
+                                                            Select Effect Category Specification
+                                                        </option>
+                                                        <option>All</option>
+                                                        <option>Minimum risk</option>
+                                                        <option>Cost</option>
+                                                        <option>Standards</option>
+                                                        <option>Assembly</option>
+                                                        <option>Inspection</option>
+                                                        <option>Logistics</option>
+                                                        <option>Low quantity production</option>
+                                                        <option>Supply chain</option>
+                                                        <option>Modularity</option>
+                                                        <option>User friendliness</option>
+                                                        <option>Aesthetics</option>
+                                                        <option>Serviceability</option>
+                                                        <option>Maintainability</option>
+                                                        <option>Repair</option>
+                                                        <option>Reuse</option>
+                                                        <option>Recyclability</option>
+                                                        <option>Disassembly</option>
+                                                        <option>Remanufacturing</option>
+                                                        <option>Sustainability</option>
+                                                        <option>Manufacturability</option>
+                                                        <option>Ergonomics</option>
+                                                        <option>Ease of design changes</option>
+                                                        <option>Amount of produced goods</option>
+                                                        <option>Economies of scale</option>
+                                                        <option>Economies of scope</option>
+                                                        <option>Product usage intensity</option>
+                                                        <option>Product lifetime</option>
+                                                        <option>Wear</option>
+                                                        <option>Customer value</option>
+                                                        <option>Other</option>
+                                                    </Input>
+                                                    </Col> :
+                                                    <>
+                                                        {(this.state.effectCategory=== 'Life Cycle Property') ?
+                                                            <>
+                                                                <Col md={7}>
+
+                                                                    <Input type="select" name="effectSpecification"
+                                                                            onChange={this.handleInputChange}
+                                                                            defaultValue={this.state.effectSpecification}>
+                                                                        <option value="default" disabled hidden>
+                                                                            Select Effect Category Specification
+                                                                        </option>
+                                                                        <option>All</option>
+                                                                        <option>Mineral and fossil use</option>
+                                                                        <option>General material use</option>
+                                                                        <option>Energy use</option>
+                                                                        <option>Water use</option>
+                                                                        <option>Land use</option>
+                                                                        <option>Costs</option>
+                                                                        <option>Landfill/Waste</option>
+                                                                        <option>Impact on climate change through emissions</option>
+                                                                        <option>Impact on euthrophication</option>
+                                                                        <option>Impact on acidification</option>
+                                                                        <option>Impact on POCP</option>
+                                                                        <option>Impact on ozone depletion</option>
+                                                                        <option>Particulate matter</option>
+                                                                        <option>Impact on ecotoxicity</option>
+                                                                        <option>Impact on human toxicity</option>
+                                                                        <option>Other</option>
+                                                                    </Input>
+                                                                </Col>
+                                                                <Label htmlFor="adressedLifeCyclePhase" ></Label>
+                                                                <Col md={{offset:5, size:5}}>
+                                                                    <h5>During</h5>
+                                                                </Col>
+                                                                <Col md={{offset:5, size:7}}>
+                                                                    <Input type="select" name="adressedLifeCyclePhase"
+                                                                            defaultValue={this.state.adressedLifeCyclePhase}
+                                                                            onChange={this.handleInputChange}>
+                                                                        <option value="default" disabled hidden>
+                                                                            Select Adressed Life Cycle Phase
+                                                                        </option>
+                                                                        <option>All</option>
+                                                                        <option>Design</option>
+                                                                        <option>Raw material acquisition</option>
+                                                                        <option>Production</option>
+                                                                        <option>Assembly</option>
+                                                                        <option>Distribution</option>
+                                                                        <option>Usage</option>
+                                                                        <option>After use</option>
+                                                                    </Input>
+                                                                </Col>
+                                                            </>:
+                                                            null
+
+                                                        }
+                                                </>
+                                                }
+                                            </>
+                                            }
                                     </FormGroup>
                                     <FormGroup row>
-                                        <Label htmlFor="phase" md={5}><h4>Phase</h4></Label>
-                                        <Col md={7}>
-                                            <Input type="select" name="phase"
-                                                    value={this.state.phase}
-                                                    placeholder="change the property"
-                                                    onChange={this.handleInputChange}>
-                                                <option>all</option>
-                                                <option>design</option>
-                                                <option>production</option>
-                                                <option>use</option>
-                                                <option>end</option>
-                                            </Input>
-                                        </Col>
+                                            <Label md={5} htmlFor="adressedSystemLevel" ><h4>Adressed System Level</h4></Label>
+                                            <Col md={7}>
+                                                <Input type="select" name="adressedSystemLevel"
+                                                        onChange={this.handleInputChange}
+                                                        defaultValue={this.state.adressedSystemLevel}>
+                                                    <option value="default" disabled hidden>
+                                                        Select System Level
+                                                    </option>
+                                                    <option>All</option>
+                                                    <option>Product/ System</option>
+                                                    <option>(Sub-)Assembly</option>
+                                                    <option>Part</option>
+                                                </Input>
+                                            </Col>
                                     </FormGroup>
                                     <FormGroup row>
-                                        <Label htmlFor="productDimension" md={5}><h4>Product Dimension</h4></Label>
-                                        <Col md={7}>
-                                            <Input type="select" name="productDimension"
-                                                    value={this.state.productDimension}
-                                                    placeholder="change the property"
-                                                    onChange={this.handleInputChange}>
-                                                <option>all</option>
-                                                <option>material selection</option>
-                                                <option>construction</option>
-                                                <option>process selection</option>
-                                                <option>software-system</option>
-                                                <option>others</option>
-                                            </Input>
-                                        </Col>
+                                            <Label htmlFor="artefactCategorization" md={5} ><h4>Artefact Categorization</h4></Label>
+                                            {(this.state.adressedSystemLevel=== "Product/ System") ?
+                                            <Col md={7}>
+                                                <Input type="select" name="artefactCategorization"
+                                                        onChange={this.handleInputChange}
+                                                        defaultValue={this.state.artefactCategorization}>
+                                                    <option value="default" disabled hidden>
+                                                        Select Artefact Categorization
+                                                    </option>
+                                                    <option>All</option>
+                                                    <option>Product Identification and Classification</option>
+                                                    <option>Overall Product Architecture</option>
+                                                    <option>Software/Intelligence</option>
+                                                    <option>Technology</option>
+                                                    <option>Tolerances</option>
+                                                    <option>Packaging</option>
+                                                    <option>Interfaces</option>
+                                                    <option>Sense</option>
+                                                    <option>Control</option>
+                                                    <option>Functions</option>
+                                                    <option>Design Process</option>
+                                                    <option>Production Process</option>
+                                                    <option>Business Model</option>
+                                                    <option>Logistics</option>
+                                                    <option>Services</option>
+                                                    <option>Others</option>
+                                                </Input>
+                                            </Col> :
+                                            <>
+                                                {(this.state.adressedSystemLevel=== '(Sub-)Assembly') ?
+                                                <Col md={7}>
+                                                    <Input type="select" name="artefactCategorization"
+                                                            onChange={this.handleInputChange}
+                                                            defaultValue={this.state.artefactCategorization}>
+                                                        <option value="default" disabled hidden>
+                                                            Select Artefact Categorization
+                                                        </option>
+                                                        <option>All</option>
+                                                        <option>Assembly Identification and Classification</option>
+                                                        <option>Assembly Position and Orientation</option>
+                                                        <option>Fasteners</option>
+                                                        <option>Others</option>
+                                                    </Input>
+                                                    </Col> :
+                                                    <>
+                                                        {(this.state.adressedSystemLevel=== 'Part') ?
+                                                            <>
+                                                                <Col md={7}>
+
+                                                                    <Input type="select" name="artefactCategorization"
+                                                                            onChange={this.handleInputChange}
+                                                                            defaultValue={this.state.artefactCategorization}>
+                                                                        <option value="default" disabled hidden>
+                                                                            Select Artefact Categorization
+                                                                        </option>
+                                                                        <option>All</option>
+                                                                        <option>Part Identification and Classification</option>
+                                                                        <option>Part Position and Orientation</option>
+                                                                        <option>Surface Characteristics</option>
+                                                                        <option>Geometry</option>
+                                                                        <option>Material Characteristics</option>
+                                                                        <option>Others</option>
+                                                                    </Input>
+                                                                </Col>
+                                                            </>:
+                                                            null
+
+                                                        }
+                                                </>
+                                                }
+                                            </>
+                                            }
+                                    </FormGroup>
+                                    <FormGroup row>
+                                            <Label md={5} htmlFor="role" ><h4>Role</h4></Label>
+                                            <Col md={7}>
+                                                <Input type="select" name="role"
+                                                        onChange={this.handleInputChange}
+                                                        defaultValue={this.state.role}>
+                                                    <option value="default" disabled hidden>
+                                                        Select Your Role
+                                                    </option>
+                                                    <option>All</option>
+                                                    <option>Product Designer</option>
+                                                    <option>Project Manager</option>
+                                                </Input>
+                                            </Col>
                                     </FormGroup>
                                     <FormGroup row>
                                     <Col md={{size: 10, offset: 2}}>
@@ -194,6 +374,78 @@ class DHCollection extends Component{
                 {/** The Collection component needs the information which options the user selected.
                  * According to the selections, corresponding heuristics will be shown to the user
                  */}
+
+                 
+
+                <Collection isSearchClicked={this.state.isSearchClicked}
+                    isLoading= {this.props.heuristicsLoading}
+                    errMess= {this.props.heuristiscErrMess}
+                    item= {this.props.heuristics
+                        .filter ((item)=>{
+                            if (this.state.effectCategory==="Life Cycle Property"){
+                                if (this.state.adressedLifeCyclePhase==="All" || this.state.adressedLifeCyclePhase=== "default"){
+                                    if(this.state.effectSpecification=== "All" || this.state.effectSpecification=== "default"){
+                                        if(this.state.adressedSystemLevel==="All" ){
+                                            if (this.state.role==="All"){
+                                                return item.positiveEffects.some(
+                                                    ({effectCategory}) => effectCategory === this.state.effectCategory
+                                                )
+                                            }
+                                            else{
+                                                if (this.state.role==="Product Designer"){
+                                                    return (
+                                                        (item.orderCategory==="Life Cycle Property"|| "Life Cycle Phase Property" || "Technical Property") && item.positiveEffects.some((({effectCategory}) => effectCategory === this.state.effectCategory))
+                                                    )
+                                                }
+                                                else{
+                                                    return (
+                                                        (item.positiveEffects).some((({effectCategory}) => effectCategory === this.state.effectCategory))
+                                                        &&
+                                                        (item.orderCategory==="Product Characteristic")
+                                                    )
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                else{
+                                    return item.positiveEffects.some(
+                                        (({effectCategory}) => effectCategory === this.state.effectCategory) && (({step4AdressedLifeCyclePhase}) => step4AdressedLifeCyclePhase === this.state.adressedLifeCyclePhase)
+                                    )
+                                }
+                            }
+                            else {
+                                return item.positiveEffects.some(
+                                    ({effectCategory}) => effectCategory === this.state.effectCategory
+                                )
+                            }
+                        })
+                    }
+                    // item= {this.props.heuristics.filter(item => {
+                    //     if(this.state.effectSpecification=== "all"){
+                    //         if(this.state.adressedSystemLevel==="all"){
+                    //                 if (this.state.role==="all"){
+                    //                     var effectCategory=item.positiveEffects.map(( positiveEffect) =>{
+                    //                         return  positiveEffect.effectCategory})
+                    //                     return String(item.positiveEffects[0].effectCategory).includes(this.state.effectCategory)
+                    //                 }
+                                
+                    //             else{
+                    //                 return String(item.productDimension[0]).includes(this.state.productDimension) && String(item.designFor[0]).includes(this.state.designfor)
+                    //             }
+                    //         }
+                    //         else{
+                    //             if(this.state.productDimension==="all"){
+                    //                 return (String(item.phase[0]).includes(this.state.phase) || String(item.phase[0]).includes("all")) && String(item.designFor[0]).includes(this.state.designfor)
+ 
+                    //             }
+                    //             else{
+                    //                 return String(item.productDimension[0]).includes(this.state.productDimension) && (String(item.phase[0]).includes(this.state.phase) || String(item.phase[0]).includes("all")) && String(item.designFor[0]).includes(this.state.designfor)
+                    //             }
+                    //         }
+                    //     }
+                    // })}
+                    />
                 {/* <Collection isSearchClicked={this.state.isSearchClicked}
                     isLoading= {this.props.heuristicsLoading}
                     errMess= {this.props.heuristiscErrMess}

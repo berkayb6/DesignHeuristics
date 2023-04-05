@@ -147,7 +147,7 @@ const Step2 = props => {
 
                         <FormGroup row>
                             <Col md={6}>
-                                <Label htmlFor="adressedSystemLevel" ><h4>1. Adressed System level</h4></Label>
+                                <Label htmlFor="adressedSystemLevel" ><h4>1. Adressed System Level</h4></Label>
                                 <Col md={6}>
                                     <Input type="select" name="adressedSystemLevel"
                                             onChange={handleOnChange}

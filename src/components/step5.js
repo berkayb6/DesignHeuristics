@@ -81,7 +81,7 @@ const Step5 = props => {
             image, 
             sources
         )
-        push('/')
+        push('/you-rock')
     };
   
     let handleOnChange = (i,e) => {
