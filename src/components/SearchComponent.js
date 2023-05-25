@@ -5,6 +5,7 @@ import {Link} from 'react-router-dom';
 import { Form, FormGroup, Col, Container, Row, Label, Input,Button, Card, CardTitle, CardBody, CardText, Modal, ModalHeader, ModalBody } from 'reactstrap';
 import { MDBInputGroup, MDBInput, MDBIcon, MDBBtn, MDBSwitch } from 'mdb-react-ui-kit';
 import { Loading } from './LoadingComponent';
+import Collection from './Collection';
 
 class Search extends Component{
 
@@ -12,10 +13,12 @@ class Search extends Component{
         super(props);
 
         this.state = {
-            designfor: 'sustainability',
-            industry: 'all',
-            phase: 'all',
-            productDimension: 'all',
+            effectCategory: 'Technical Property',
+            effectSpecification: 'default',
+            adressedLifeCyclePhase:"default",
+            adressedSystemLevel: 'All',
+            artefactCategorization: 'default',
+            role: 'All',
             isSearchClicked: false,
             isSearchEnabled: false,
             search: []
@@ -70,10 +73,10 @@ class Search extends Component{
                 
             return element.description !== undefined;
         });
-        var category= this.props.heuristics.filter(function( element ) {
+        // var category= this.props.heuristics.filter(function( element ) {
             
-            return element.category[0] !== undefined;
-        });
+        //     return element.category[0] !== undefined;
+        // });
         const _ = require("lodash")
         if (this.state.search.length) {
             const searchPattern = new RegExp(this.state.search.map(term => `(?=.*${term})`).join(''), 'i');
@@ -89,36 +92,17 @@ class Search extends Component{
                     return (heuristic.description.toLowerCase().match(searchPattern))
                 }
             ))
-            searchCategory= (category.filter(
-                heuristic => {
+            // searchCategory= (category.filter(
+            //     heuristic => {
                     
-                    return (heuristic.category[0].toLowerCase().match(searchPattern))
-                }
-            ))
+            //         return (heuristic.category[0].toLowerCase().match(searchPattern))
+            //     }
+            // ))
 
-            result= _.unionBy(searchTitel, searchDescription, searchCategory, '_id')
+            result= _.unionBy(searchTitel, searchDescription,  '_id') //searchCategory,
         } else {
             result= this.props.heuristics
         }
-
-        let designForArray = [];       
-        this.props.heuristics.map((heuristic)=>{
-            heuristic.designFor.map((item)=>{
-                let splitted= item.split(/[ ,]+/)
-                splitted.map((arrayItem)=>{
-                    designForArray.push(arrayItem)
-                })
-            });
-        })
-        let uniqueDesignFor= [... new Set(designForArray)]
-        const designForOptions= uniqueDesignFor.map((item)=>{
-            return(
-                <option>
-                    {item}
-                </option>
-            )
-        })
-
         return(
             <>
                 <Header auth={this.props.auth}
@@ -146,72 +130,263 @@ class Search extends Component{
                             <div className="col-12 col-md-9">
                                 <Form onSubmit={this.handleSubmit}>
                                     <FormGroup row>
-                                        <Label htmlFor="designfor" md={5}><h4>Design for</h4></Label>
+                                        <Label htmlFor="effectCategory" md={5}><h4>Effect Category</h4></Label>
                                         <Col md={7}>
-                                            <Input type="select" name="designfor"
-                                                    value={this.state.designfor}
-                                                    placeholder="change the property"
+                                            <Input type="select" name="effectCategory"
+                                                    value={this.state.effectCategory}
                                                     onChange={this.handleInputChange}>
-                                                {designForOptions}
+                                                <option>Technical Property</option>
+                                                <option>Life Cycle Phase Property</option>
+                                                <option>Life Cycle Property</option>
                                             </Input>
                                         </Col>
                                     </FormGroup>
                                     <FormGroup row>
-                                        <Label htmlFor="industry" md={5}><h4>Industry</h4></Label>
-                                        <Col md={7}>
-                                            <Input type="select" name="industry"
-                                                    value={this.state.industry}
-                                                    placeholder="change the property"
-                                                    onChange={this.handleInputChange}>
-                                                <option>all</option>
-                                                <option>automotive</option>
-                                                <option>aircraft</option>
-                                                <option>furniture</option>
-                                                <option>household</option>
-                                                <option>metal production and processing</option>
-                                                <option>manufacture of metal products</option>
-                                                <option>production of data processing equipment</option>
-                                                <option>production of electrical equipment</option>
-                                                <option>electric motors</option>
-                                                <option>mechnanical engineering</option>
-                                                <option>vehicle construction</option>
-                                                <option>ship and boat building</option>
-                                                <option>rail vehicles</option>
-                                                <option>clothing</option>
-                                            </Input>
-                                        </Col>
+                                        
+                                            <Label htmlFor="effectSpecification" md={5} ><h4>Effect Specification</h4></Label>
+                                            {(this.state.effectCategory=== "Technical Property") ?
+                                            <Col md={7}>
+                                                <Input type="select" name="effectSpecification"
+                                                        onChange={this.handleInputChange}
+                                                        defaultValue={this.state.effectSpecification}>
+                                                    <option value="default" disabled hidden>
+                                                        Select Effect Category Specification
+                                                    </option>
+                                                    <option>All</option>
+                                                    <option>Efficiency</option>
+                                                    <option>Noise Level</option>
+                                                    <option>Complexity</option>
+                                                    <option>Internal Variety</option>
+                                                    <option>Robustness</option>
+                                                    <option>Temperature</option>
+                                                    <option>Friction</option>
+                                                    <option>Volume</option>
+                                                    <option>Weight</option>
+                                                    <option>Losses</option>
+                                                    <option>Others</option>
+                                                </Input>
+                                            </Col> :
+                                            <>
+                                                {(this.state.effectCategory=== 'Life Cycle Phase Property') ?
+                                                <Col md={7}>
+                                                    <Input type="select" name="effectSpecification"
+                                                            onChange={this.handleInputChange}
+                                                            defaultValue={this.state.effectSpecification}>
+                                                        <option value="default" disabled hidden>
+                                                            Select Effect Category Specification
+                                                        </option>
+                                                        <option>All</option>
+                                                        <option>Minimum risk</option>
+                                                        <option>Cost</option>
+                                                        <option>Standards</option>
+                                                        <option>Assembly</option>
+                                                        <option>Inspection</option>
+                                                        <option>Logistics</option>
+                                                        <option>Low quantity production</option>
+                                                        <option>Supply chain</option>
+                                                        <option>Modularity</option>
+                                                        <option>User friendliness</option>
+                                                        <option>Aesthetics</option>
+                                                        <option>Serviceability</option>
+                                                        <option>Maintainability</option>
+                                                        <option>Repair</option>
+                                                        <option>Reuse</option>
+                                                        <option>Recyclability</option>
+                                                        <option>Disassembly</option>
+                                                        <option>Remanufacturing</option>
+                                                        <option>Sustainability</option>
+                                                        <option>Manufacturability</option>
+                                                        <option>Ergonomics</option>
+                                                        <option>Ease of design changes</option>
+                                                        <option>Amount of produced goods</option>
+                                                        <option>Economies of scale</option>
+                                                        <option>Economies of scope</option>
+                                                        <option>Product usage intensity</option>
+                                                        <option>Product lifetime</option>
+                                                        <option>Wear</option>
+                                                        <option>Customer value</option>
+                                                        <option>Other</option>
+                                                    </Input>
+                                                    </Col> :
+                                                    <>
+                                                        {(this.state.effectCategory=== 'Life Cycle Property') ?
+                                                            <>
+                                                                <Col md={7}>
+
+                                                                    <Input type="select" name="effectSpecification"
+                                                                            onChange={this.handleInputChange}
+                                                                            defaultValue={this.state.effectSpecification}>
+                                                                        <option value="default" disabled hidden>
+                                                                            Select Effect Category Specification
+                                                                        </option>
+                                                                        <option>All</option>
+                                                                        <option>Mineral and fossil use</option>
+                                                                        <option>General material use</option>
+                                                                        <option>Energy use</option>
+                                                                        <option>Water use</option>
+                                                                        <option>Land use</option>
+                                                                        <option>Costs</option>
+                                                                        <option>Landfill/Waste</option>
+                                                                        <option>Impact on climate change through emissions</option>
+                                                                        <option>Impact on euthrophication</option>
+                                                                        <option>Impact on acidification</option>
+                                                                        <option>Impact on POCP</option>
+                                                                        <option>Impact on ozone depletion</option>
+                                                                        <option>Particulate matter</option>
+                                                                        <option>Impact on ecotoxicity</option>
+                                                                        <option>Impact on human toxicity</option>
+                                                                        <option>Other</option>
+                                                                    </Input>
+                                                                </Col>
+                                                                <Label htmlFor="adressedLifeCyclePhase" ></Label>
+                                                                <Col md={{offset:5, size:5}}>
+                                                                    <h5>During</h5>
+                                                                </Col>
+                                                                <Col md={{offset:5, size:7}}>
+                                                                    <Input type="select" name="adressedLifeCyclePhase"
+                                                                            defaultValue={this.state.adressedLifeCyclePhase}
+                                                                            onChange={this.handleInputChange}>
+                                                                        <option value="default" disabled hidden>
+                                                                            Select Adressed Life Cycle Phase
+                                                                        </option>
+                                                                        <option>All</option>
+                                                                        <option>Design</option>
+                                                                        <option>Raw material acquisition</option>
+                                                                        <option>Production</option>
+                                                                        <option>Assembly</option>
+                                                                        <option>Distribution</option>
+                                                                        <option>Usage</option>
+                                                                        <option>After use</option>
+                                                                    </Input>
+                                                                </Col>
+                                                            </>:
+                                                            null
+
+                                                        }
+                                                    </>
+                                                }
+                                            </>
+                                            }
                                     </FormGroup>
                                     <FormGroup row>
-                                        <Label htmlFor="phase" md={5}><h4>Phase</h4></Label>
-                                        <Col md={7}>
-                                            <Input type="select" name="phase"
-                                                    value={this.state.phase}
-                                                    placeholder="change the property"
-                                                    onChange={this.handleInputChange}>
-                                                <option>all</option>
-                                                <option>design</option>
-                                                <option>production</option>
-                                                <option>use</option>
-                                                <option>end</option>
-                                            </Input>
-                                        </Col>
+                                            <Label md={5} htmlFor="adressedSystemLevel" ><h4>Adressed System Level</h4></Label>
+                                            <Col md={7}>
+                                                <Input type="select" name="adressedSystemLevel"
+                                                        onChange={this.handleInputChange}
+                                                        defaultValue={this.state.adressedSystemLevel}>
+                                                    <option value="default" disabled hidden>
+                                                        Select System Level
+                                                    </option>
+                                                    <option>All</option>
+                                                    <option>Product/ System</option>
+                                                    <option>(Sub-)Assembly</option>
+                                                    <option>Part</option>
+                                                </Input>
+                                            </Col>
                                     </FormGroup>
                                     <FormGroup row>
-                                        <Label htmlFor="productDimension" md={5}><h4>Product Dimension</h4></Label>
-                                        <Col md={7}>
-                                            <Input type="select" name="productDimension"
-                                                    value={this.state.productDimension}
-                                                    placeholder="change the property"
-                                                    onChange={this.handleInputChange}>
-                                                <option>all</option>
-                                                <option>material selection</option>
-                                                <option>construction</option>
-                                                <option>process selection</option>
-                                                <option>software-system</option>
-                                                <option>others</option>
-                                            </Input>
-                                        </Col>
+                                            {(this.state.adressedSystemLevel=== "Product/ System") ?
+                                            <>
+                                                <Label htmlFor="artefactCategorization" md={5} ><h4>Artefact Categorization</h4></Label>
+                                                <Col md={7}>
+                                                    <Input type="select" name="artefactCategorization"
+                                                            onChange={this.handleInputChange}
+                                                            defaultValue={this.state.artefactCategorization}>
+                                                        <option value="default" disabled hidden>
+                                                            Select Artefact Categorization
+                                                        </option>
+                                                        <option>All</option>
+                                                        <option>Product Identification and Classification</option>
+                                                        <option>Overall Product Architecture</option>
+                                                        <option>Software/Intelligence</option>
+                                                        <option>Technology</option>
+                                                        <option>Tolerances</option>
+                                                        <option>Packaging</option>
+                                                        <option>Interfaces</option>
+                                                        <option>Sense</option>
+                                                        <option>Control</option>
+                                                        <option>Functions</option>
+                                                        <option>Design Process</option>
+                                                        <option>Production Process</option>
+                                                        <option>Business Model</option>
+                                                        <option>Logistics</option>
+                                                        <option>Services</option>
+                                                        <option>Others</option>
+                                                    </Input>
+                                                </Col>
+                                            </> :
+                                            <>
+                                                {(this.state.adressedSystemLevel=== '(Sub-)Assembly') ?
+                                                    <>
+                                                        <Label htmlFor="artefactCategorization" md={5} ><h4>Artefact Categorization</h4></Label>
+                                                        <Col md={7}>
+                                                            <Input type="select" name="artefactCategorization"
+                                                                    onChange={this.handleInputChange}
+                                                                    defaultValue={this.state.artefactCategorization}>
+                                                                <option value="default" disabled hidden>
+                                                                    Select Artefact Categorization
+                                                                </option>
+                                                                <option>All</option>
+                                                                <option>Assembly Identification and Classification</option>
+                                                                <option>Assembly Position and Orientation</option>
+                                                                <option>Fasteners</option>
+                                                                <option>Others</option>
+                                                            </Input>
+                                                        </Col>
+                                                    </> :
+                                                    <>
+                                                        {(this.state.adressedSystemLevel=== 'Part') ?
+                                                            <>
+                                                                <>
+                                                                    <Label htmlFor="artefactCategorization" md={5} ><h4>Artefact Categorization</h4></Label>
+                                                                    <Col md={7}>
+                                                                        <Input type="select" name="artefactCategorization"
+                                                                                onChange={this.handleInputChange}
+                                                                                defaultValue={this.state.artefactCategorization}>
+                                                                            <option value="default" disabled hidden>
+                                                                                Select Artefact Categorization
+                                                                            </option>
+                                                                            <option>All</option>
+                                                                            <option>Part Identification and Classification</option>
+                                                                            <option>Part Position and Orientation</option>
+                                                                            <option>Surface Characteristics</option>
+                                                                            <option>Geometry</option>
+                                                                            <option>Material Characteristics</option>
+                                                                            <option>Others</option>
+                                                                        </Input>
+                                                                    </Col>
+                                                                </>
+                                                            </>:
+                                                            null
+
+                                                        }
+                                                    </>
+                                                }
+                                            </>
+                                            }
                                     </FormGroup>
+                                    <FormGroup row>
+                                            <Label md={5} htmlFor="role" ><h4>Role</h4></Label>
+                                            <Col md={7}>
+                                                <Input type="select" name="role"
+                                                        onChange={this.handleInputChange}
+                                                        defaultValue={this.state.role}>
+                                                    <option value="default" disabled hidden>
+                                                        Select Your Role
+                                                    </option>
+                                                    <option>All</option>
+                                                    <option>Product Designer</option>
+                                                    <option>Project Manager</option>
+                                                </Input>
+                                            </Col>
+                                    </FormGroup>
+                                    <FormGroup row>
+                                    <Col md={{size: 10, offset: 2}}>
+                                        <Button onClick={this.searchClicked} color="primary">
+                                            Search
+                                        </Button>
+                                    </Col>
+                                </FormGroup>
                                 </Form>
                             </div>
                                
@@ -225,41 +400,450 @@ class Search extends Component{
                     errMess= {this.props.heuristiscErrMess}
                     
                     item= {this.state.isSearchEnabled ? result.filter(item => {
-                        if(this.state.industry=== "all"){
-                            if(this.state.phase==="all"){
-                                if(this.state.productDimension==="all"){
-                                    return String(item.designFor[0]).includes(this.state.designfor)
+                        if (this.state.adressedLifeCyclePhase==="All" || this.state.adressedLifeCyclePhase=== "default"){
+                            if(this.state.effectSpecification=== "All" || this.state.effectSpecification=== "default"){
+                                if(this.state.adressedSystemLevel==="All" ){
+                                    if(this.state.role==="All"){
+                                        return item.positiveEffects.some(
+                                            ({effectCategory}) => effectCategory === this.state.effectCategory
+                                        )
+                                    }
+                                    else{
+                                        if (this.state.role==="Product Designer"){
+                                            return (
+                                                (item.orderCategory==="Life Cycle Property"||item.orderCategory=== "Life Cycle Phase Property" || item.orderCategory=== "Technical Property") &&
+                                                item.positiveEffects.some((({effectCategory}) => effectCategory === this.state.effectCategory))
+                                            )
+                                        }
+                                        else{
+                                            return (
+                                                (item.orderCategory==="Product Characteristic") &&
+                                                item.positiveEffects.some((({effectCategory}) => effectCategory === this.state.effectCategory))
+                                            )
+                                        }
+                                    }
                                 }
-                                else{
-                                    return String(item.productDimension[0]).includes(this.state.productDimension) && String(item.designFor[0]).includes(this.state.designfor)
+                                else {
+                                    if(this.state.role==="All"){
+                                        if(this.state.artefactCategorization=== "All" || this.state.artefactCategorization=== "default"){
+                                            return item.positiveEffects.some(
+                                                ({effectCategory}) => effectCategory === this.state.effectCategory
+                                            ) && item.adressedSystemLevel.includes(
+                                                this.state.adressedSystemLevel
+                                            )
+                                        }
+                                        else{
+                                            return item.positiveEffects.some(
+                                                ({effectCategory}) => effectCategory === this.state.effectCategory
+                                            ) && item.adressedSystemLevel.includes(
+                                                this.state.adressedSystemLevel
+                                            ) && item.artefactCategorization.includes(
+                                                this.state.artefactCategorization
+                                            )
+                                        }
+                                    }
+                                    else{
+                                        if (this.state.role==="Product Designer"){
+                                            if(this.state.artefactCategorization=== "All" || this.state.artefactCategorization=== "default"){
+                                                return item.positiveEffects.some(
+                                                    ({effectCategory}) => effectCategory === this.state.effectCategory
+                                                ) && item.adressedSystemLevel.includes(
+                                                    this.state.adressedSystemLevel
+                                                ) && (item.orderCategory==="Life Cycle Property"||item.orderCategory=== "Life Cycle Phase Property" || item.orderCategory=== "Technical Property")
+                                            }
+                                            else{
+                                                return item.positiveEffects.some(
+                                                    ({effectCategory}) => effectCategory === this.state.effectCategory
+                                                ) && item.adressedSystemLevel.includes(
+                                                    this.state.adressedSystemLevel
+                                                ) && item.artefactCategorization.includes(
+                                                    this.state.artefactCategorization
+                                                ) && (item.orderCategory==="Life Cycle Property"||item.orderCategory=== "Life Cycle Phase Property" || item.orderCategory=== "Technical Property")
+                                            }
+                                        }
+                                        else{
+                                            if(this.state.artefactCategorization=== "All" || this.state.artefactCategorization=== "default"){
+                                                return item.positiveEffects.some(
+                                                    ({effectCategory}) => effectCategory === this.state.effectCategory
+                                                ) && item.adressedSystemLevel.includes(
+                                                    this.state.adressedSystemLevel
+                                                ) && (item.orderCategory==="Product Characteristic")
+                                            }
+                                            else{
+                                                return item.positiveEffects.some(
+                                                    ({effectCategory}) => effectCategory === this.state.effectCategory
+                                                ) && item.adressedSystemLevel.includes(
+                                                    this.state.adressedSystemLevel
+                                                ) && item.artefactCategorization.includes(
+                                                    this.state.artefactCategorization
+                                                ) && (item.orderCategory==="Product Characteristic")
+                                            }
+                                        }
+                                    }
+                                    
                                 }
                             }
                             else{
-                                if(this.state.productDimension==="all"){
-                                    return (String(item.phase[0]).includes(this.state.phase) || String(item.phase[0]).includes("all")) && String(item.designFor[0]).includes(this.state.designfor)
-
+                                if(this.state.adressedSystemLevel==="All" ){
+                                    if(this.state.role==="All"){
+                                        return item.positiveEffects.some(
+                                            ({effectCategory}) => effectCategory === this.state.effectCategory
+                                        ) && item.positiveEffects.some(
+                                            ({effectCategorySpecification}) => effectCategorySpecification.includes(this.state.effectSpecification) 
+                                        )
+                                    }
+                                    else{
+                                        if (this.state.role==="Product Designer"){
+                                            return (
+                                                item.positiveEffects.some((({effectCategory}) => effectCategory === this.state.effectCategory)) && 
+                                                (item.orderCategory==="Life Cycle Property"||item.orderCategory=== "Life Cycle Phase Property" || item.orderCategory=== "Technical Property") &&
+                                                item.positiveEffects.some(
+                                                    ({effectCategorySpecification}) => effectCategorySpecification.includes(this.state.effectSpecification) 
+                                                )
+                                            )
+                                        }
+                                        else{
+                                            return (
+                                                (item.orderCategory==="Product Characteristic") &&
+                                                item.positiveEffects.some((({effectCategory}) => effectCategory === this.state.effectCategory)) &&
+                                                item.positiveEffects.some(
+                                                    ({effectCategorySpecification}) => effectCategorySpecification.includes(this.state.effectSpecification) 
+                                                )
+                                            )
+                                        }
+                                    }
                                 }
                                 else{
-                                    return String(item.productDimension[0]).includes(this.state.productDimension) && (String(item.phase[0]).includes(this.state.phase) || String(item.phase[0]).includes("all")) && String(item.designFor[0]).includes(this.state.designfor)
+                                    if(this.state.artefactCategorization=== "All" || this.state.artefactCategorization=== "default"){
+                                        if(this.state.role==="All"){
+                                            return item.positiveEffects.some(
+                                                ({effectCategory}) => effectCategory === this.state.effectCategory
+                                            ) && item.positiveEffects.some(
+                                                ({effectCategorySpecification}) => effectCategorySpecification.includes(this.state.effectSpecification) 
+                                            ) && item.adressedSystemLevel.includes(
+                                                this.state.adressedSystemLevel
+                                            )
+                                        }
+                                        else{
+                                            if (this.state.role==="Product Designer"){
+                                                return (
+                                                    (item.orderCategory==="Life Cycle Property"||item.orderCategory=== "Life Cycle Phase Property" || item.orderCategory=== "Technical Property") &&
+                                                    item.positiveEffects.some(
+                                                        (({effectCategory}) => effectCategory === this.state.effectCategory)
+                                                    ) && item.positiveEffects.some(
+                                                        ({effectCategorySpecification}) => effectCategorySpecification.includes(this.state.effectSpecification) 
+                                                    ) && item.adressedSystemLevel.includes(
+                                                        this.state.adressedSystemLevel
+                                                    )
+                                                )
+                                            }
+                                            else{
+                                                return (
+                                                    (item.orderCategory==="Product Characteristic") &&
+                                                    item.positiveEffects.some(
+                                                        (({effectCategory}) => effectCategory === this.state.effectCategory)
+                                                    ) && item.positiveEffects.some(
+                                                        ({effectCategorySpecification}) => effectCategorySpecification.includes(this.state.effectSpecification) 
+                                                    ) && item.adressedSystemLevel.includes(
+                                                        this.state.adressedSystemLevel
+                                                    )
+                                                )
+                                            }
+                                        }
+                                    }
+                                    else{
+                                        if(this.state.role==="All"){
+                                            return item.positiveEffects.some(
+                                                ({effectCategory}) => effectCategory === this.state.effectCategory
+                                            ) && item.positiveEffects.some(
+                                                ({effectCategorySpecification}) => effectCategorySpecification.includes(this.state.effectSpecification) 
+                                            ) && item.adressedSystemLevel.includes(
+                                                this.state.adressedSystemLevel
+                                            ) && item.artefactCategorization.includes(
+                                                this.state.artefactCategorization
+                                            )
+                                        }
+                                        else{
+                                            if (this.state.role==="Product Designer"){
+                                                return (
+                                                    (item.orderCategory==="Life Cycle Property"||item.orderCategory=== "Life Cycle Phase Property" || item.orderCategory=== "Technical Property") &&
+                                                    item.positiveEffects.some(
+                                                        ({effectCategory}) => effectCategory === this.state.effectCategory
+                                                    ) && item.positiveEffects.some(
+                                                        ({effectCategorySpecification}) => effectCategorySpecification.includes(this.state.effectSpecification) 
+                                                    ) && item.adressedSystemLevel.includes(
+                                                        this.state.adressedSystemLevel
+                                                    ) && item.artefactCategorization.includes(
+                                                        this.state.artefactCategorization
+                                                    )
+                                                )
+                                            }
+                                            else{
+                                                return (
+                                                    (item.orderCategory==="Product Characteristic") &&
+                                                    item.positiveEffects.some(
+                                                        ({effectCategory}) => effectCategory === this.state.effectCategory
+                                                    ) && item.positiveEffects.some(
+                                                        ({effectCategorySpecification}) => effectCategorySpecification.includes(this.state.effectSpecification) 
+                                                    ) && item.adressedSystemLevel.includes(
+                                                        this.state.adressedSystemLevel
+                                                    ) && item.artefactCategorization.includes(
+                                                        this.state.artefactCategorization
+                                                    )
+                                                )
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
                         else{
-                            if(this.state.phase==="all"){
-                                if(this.state.productDimension==="all"){
-                                    return (String(item.industry[0]).includes(this.state.industry) || String(item.industry[0]).includes("all")) && String(item.designFor[0]).includes(this.state.designfor)
+                            if(this.state.effectSpecification=== "All" || this.state.effectSpecification=== "default"){
+                                if(this.state.adressedSystemLevel==="All" ){
+                                    if(this.state.role==="All"){
+                                        return item.positiveEffects.some(
+                                            ({effectCategory}) => effectCategory === this.state.effectCategory
+                                        ) && item.positiveEffects.some(
+                                            ({step4AdressedLifeCyclePhase}) => step4AdressedLifeCyclePhase === this.state.adressedLifeCyclePhase
+                                        )
+                                    }
+                                    else{
+                                        if (this.state.role==="Product Designer"){
+                                            return (
+                                                (item.orderCategory==="Life Cycle Property"||item.orderCategory=== "Life Cycle Phase Property" || item.orderCategory=== "Technical Property") 
+                                                && item.positiveEffects.some(
+                                                    ({effectCategory}) => effectCategory === this.state.effectCategory
+                                                ) && item.positiveEffects.some(
+                                                    ({step4AdressedLifeCyclePhase}) => step4AdressedLifeCyclePhase === this.state.adressedLifeCyclePhase
+                                                )
+                                            )
+                                        }
+                                        else{
+                                            return (
+                                                (item.orderCategory==="Product Characteristic")
+                                                && item.positiveEffects.some(
+                                                    ({effectCategory}) => effectCategory === this.state.effectCategory
+                                                ) && item.positiveEffects.some(
+                                                    ({step4AdressedLifeCyclePhase}) => step4AdressedLifeCyclePhase === this.state.adressedLifeCyclePhase
+                                                )
+                                            )
+                                        }
+                                    }
                                 }
                                 else{
-                                    return (String(item.industry[0]).includes(this.state.industry) || String(item.industry[0]).includes("all")) && String(item.productDimension[0]).includes(this.state.productDimension) && String(item.designFor[0]).includes(this.state.designfor)
+                                    if(this.state.artefactCategorization=== "All" || this.state.artefactCategorization=== "default"){
+                                        if(this.state.role==="All"){
+                                            return item.positiveEffects.some(
+                                                ({effectCategory}) => effectCategory === this.state.effectCategory
+                                            ) && item.positiveEffects.some(
+                                                ({step4AdressedLifeCyclePhase}) => step4AdressedLifeCyclePhase === this.state.adressedLifeCyclePhase
+                                            ) && item.adressedSystemLevel.includes(
+                                                this.state.adressedSystemLevel
+                                            )
+                                        }
+                                        else{
+                                            if (this.state.role==="Product Designer"){
+                                                return (
+                                                    (item.orderCategory==="Life Cycle Property"||item.orderCategory=== "Life Cycle Phase Property" || item.orderCategory=== "Technical Property") 
+                                                    && item.positiveEffects.some(
+                                                        ({effectCategory}) => effectCategory === this.state.effectCategory
+                                                    ) && item.positiveEffects.some(
+                                                        ({step4AdressedLifeCyclePhase}) => step4AdressedLifeCyclePhase === this.state.adressedLifeCyclePhase
+                                                    ) && item.adressedSystemLevel.includes(
+                                                        this.state.adressedSystemLevel
+                                                    )
+                                                )
+                                            }
+                                            else{
+                                                return (
+                                                    (item.orderCategory==="Product Characteristic")
+                                                    && item.positiveEffects.some(
+                                                        ({effectCategory}) => effectCategory === this.state.effectCategory
+                                                    ) && item.positiveEffects.some(
+                                                        ({step4AdressedLifeCyclePhase}) => step4AdressedLifeCyclePhase === this.state.adressedLifeCyclePhase
+                                                    ) && item.adressedSystemLevel.includes(
+                                                        this.state.adressedSystemLevel
+                                                    )
+                                                )
+                                            }
+                                        }
+                                    }
+                                    else{
+                                        if(this.state.role==="All"){
+                                            return item.positiveEffects.some(
+                                                ({effectCategory}) => effectCategory === this.state.effectCategory
+                                            ) && item.positiveEffects.some(
+                                                ({step4AdressedLifeCyclePhase}) => step4AdressedLifeCyclePhase === this.state.adressedLifeCyclePhase
+                                            ) && item.adressedSystemLevel.includes(
+                                                this.state.adressedSystemLevel
+                                            ) && item.artefactCategorization.includes(
+                                                this.state.artefactCategorization
+                                            )
+                                        }
+                                        else{
+                                            if (this.state.role==="Product Designer"){
+                                                return (
+                                                    (item.orderCategory==="Life Cycle Property"||item.orderCategory=== "Life Cycle Phase Property" || item.orderCategory=== "Technical Property") 
+                                                    && item.positiveEffects.some(
+                                                        ({effectCategory}) => effectCategory === this.state.effectCategory
+                                                    ) && item.positiveEffects.some(
+                                                        ({step4AdressedLifeCyclePhase}) => step4AdressedLifeCyclePhase === this.state.adressedLifeCyclePhase
+                                                    ) && item.adressedSystemLevel.includes(
+                                                        this.state.adressedSystemLevel
+                                                    ) && item.artefactCategorization.includes(
+                                                        this.state.artefactCategorization
+                                                    )
+                                                )
+                                            }
+                                            else{
+                                                return (
+                                                    (item.orderCategory==="Product Characteristic")
+                                                    && item.positiveEffects.some(
+                                                        ({effectCategory}) => effectCategory === this.state.effectCategory
+                                                    ) && item.positiveEffects.some(
+                                                        ({step4AdressedLifeCyclePhase}) => step4AdressedLifeCyclePhase === this.state.adressedLifeCyclePhase
+                                                    ) && item.adressedSystemLevel.includes(
+                                                        this.state.adressedSystemLevel
+                                                    ) && item.artefactCategorization.includes(
+                                                        this.state.artefactCategorization
+                                                    )
+                                                )
+                                            }
+                                        }
+                                    }
                                 }
                             }
-                            else{
-                                if(this.state.productDimension==="all"){
-                                    return (String(item.industry[0]).includes(this.state.industry) || String(item.industry[0]).includes("all")) && String(item.designFor[0]).includes(this.state.designfor) && (String(item.phase[0]).includes(this.state.phase) || String(item.phase[0]).includes("all"))
-
+                            else {
+                                if(this.state.adressedSystemLevel==="All" ){
+                                    if(this.state.role==="All"){
+                                        return item.positiveEffects.some(
+                                            ({effectCategory}) => effectCategory === this.state.effectCategory
+                                        ) && item.positiveEffects.some(
+                                            ({step4AdressedLifeCyclePhase}) => step4AdressedLifeCyclePhase === this.state.adressedLifeCyclePhase
+                                        ) && item.positiveEffects.some(
+                                            ({effectCategorySpecification}) => effectCategorySpecification === this.state.effectSpecification
+                                        )
+                                    }
+                                    else{
+                                        if (this.state.role==="Product Designer"){
+                                            return (
+                                                (item.orderCategory==="Life Cycle Property"||item.orderCategory=== "Life Cycle Phase Property" || item.orderCategory=== "Technical Property") 
+                                                && item.positiveEffects.some(
+                                                    ({effectCategory}) => effectCategory === this.state.effectCategory
+                                                ) && item.positiveEffects.some(
+                                                    ({step4AdressedLifeCyclePhase}) => step4AdressedLifeCyclePhase === this.state.adressedLifeCyclePhase
+                                                ) && item.positiveEffects.some(
+                                                    ({effectCategorySpecification}) => effectCategorySpecification === this.state.effectSpecification
+                                                )
+                                            )
+                                        }
+                                        else{
+                                            return (
+                                                (item.orderCategory==="Product Characteristic")
+                                                && item.positiveEffects.some(
+                                                    ({effectCategory}) => effectCategory === this.state.effectCategory
+                                                ) && item.positiveEffects.some(
+                                                    ({step4AdressedLifeCyclePhase}) => step4AdressedLifeCyclePhase === this.state.adressedLifeCyclePhase
+                                                ) && item.positiveEffects.some(
+                                                    ({effectCategorySpecification}) => effectCategorySpecification === this.state.effectSpecification
+                                                )
+                                            )
+                                        }
+                                    }
                                 }
                                 else{
-                                    return String(item.productDimension[0]).includes(this.state.productDimension) && (String(item.industry[0]).includes(this.state.industry) || String(item.industry[0]).includes("all")) && String(item.designFor[0]).includes(this.state.designfor) && (String(item.phase[0]).includes(this.state.phase) || String(item.phase[0]).includes("all"))
+                                    if(this.state.artefactCategorization=== "All" || this.state.artefactCategorization=== "default"){
+                                        if(this.state.role==="All"){
+                                            return item.positiveEffects.some(
+                                                ({effectCategory}) => effectCategory === this.state.effectCategory
+                                            ) && item.positiveEffects.some(
+                                                ({step4AdressedLifeCyclePhase}) => step4AdressedLifeCyclePhase === this.state.adressedLifeCyclePhase
+                                            ) && item.positiveEffects.some(
+                                                ({effectCategorySpecification}) => effectCategorySpecification === this.state.effectSpecification
+                                            ) && item.adressedSystemLevel.includes(
+                                                this.state.adressedSystemLevel
+                                            )
+                                        }
+                                        else{
+                                            if (this.state.role==="Product Designer"){
+                                                return (
+                                                    (item.orderCategory==="Life Cycle Property"||item.orderCategory=== "Life Cycle Phase Property" || item.orderCategory=== "Technical Property") 
+                                                    && item.positiveEffects.some(
+                                                        ({effectCategory}) => effectCategory === this.state.effectCategory
+                                                    ) && item.positiveEffects.some(
+                                                        ({step4AdressedLifeCyclePhase}) => step4AdressedLifeCyclePhase === this.state.adressedLifeCyclePhase
+                                                    ) && item.positiveEffects.some(
+                                                        ({effectCategorySpecification}) => effectCategorySpecification === this.state.effectSpecification
+                                                    ) && item.adressedSystemLevel.includes(
+                                                        this.state.adressedSystemLevel
+                                                    )
+                                                )
+                                            }
+                                            else{
+                                                return (
+                                                    (item.orderCategory==="Product Characteristic")
+                                                    && item.positiveEffects.some(
+                                                        ({effectCategory}) => effectCategory === this.state.effectCategory
+                                                    ) && item.positiveEffects.some(
+                                                        ({step4AdressedLifeCyclePhase}) => step4AdressedLifeCyclePhase === this.state.adressedLifeCyclePhase
+                                                    ) && item.positiveEffects.some(
+                                                        ({effectCategorySpecification}) => effectCategorySpecification === this.state.effectSpecification
+                                                    ) && item.adressedSystemLevel.includes(
+                                                        this.state.adressedSystemLevel
+                                                    )
+                                                )
+                                            }
+                                        }
+                                    }
+                                    else{
+                                        if(this.state.role==="All"){
+                                            return item.positiveEffects.some(
+                                                ({effectCategory}) => effectCategory === this.state.effectCategory
+                                            ) && item.positiveEffects.some(
+                                                ({step4AdressedLifeCyclePhase}) => step4AdressedLifeCyclePhase === this.state.adressedLifeCyclePhase
+                                            ) && item.positiveEffects.some(
+                                                ({effectCategorySpecification}) => effectCategorySpecification === this.state.effectSpecification
+                                            ) && item.adressedSystemLevel.includes(
+                                                this.state.adressedSystemLevel
+                                            ) && item.artefactCategorization.includes(
+                                                this.state.artefactCategorization
+                                            )
+                                        }
+                                        else{
+                                            if (this.state.role==="Product Designer"){
+                                                return (
+                                                    (item.orderCategory==="Life Cycle Property"||item.orderCategory=== "Life Cycle Phase Property" || item.orderCategory=== "Technical Property") 
+                                                    && item.positiveEffects.some(
+                                                        ({effectCategory}) => effectCategory === this.state.effectCategory
+                                                    ) && item.positiveEffects.some(
+                                                        ({step4AdressedLifeCyclePhase}) => step4AdressedLifeCyclePhase === this.state.adressedLifeCyclePhase
+                                                    ) && item.positiveEffects.some(
+                                                        ({effectCategorySpecification}) => effectCategorySpecification === this.state.effectSpecification
+                                                    ) && item.adressedSystemLevel.includes(
+                                                        this.state.adressedSystemLevel
+                                                    ) && item.artefactCategorization.includes(
+                                                        this.state.artefactCategorization
+                                                    )
+                                                )
+                                            }
+                                            else{
+                                                return (
+                                                    (item.orderCategory==="Product Characteristic")
+                                                    && item.positiveEffects.some(
+                                                        ({effectCategory}) => effectCategory === this.state.effectCategory
+                                                    ) && item.positiveEffects.some(
+                                                        ({step4AdressedLifeCyclePhase}) => step4AdressedLifeCyclePhase === this.state.adressedLifeCyclePhase
+                                                    ) && item.positiveEffects.some(
+                                                        ({effectCategorySpecification}) => effectCategorySpecification === this.state.effectSpecification
+                                                    ) && item.adressedSystemLevel.includes(
+                                                        this.state.adressedSystemLevel
+                                                    ) && item.artefactCategorization.includes(
+                                                        this.state.artefactCategorization
+                                                    )
+                                                )
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -273,147 +857,3 @@ class Search extends Component{
     }
 }
 export default Search;
-
-function Collection (props){
-
-    /** Collection Component has also an property which is showing the details of a specific heuristic
-     * that the user clicked on. To show that as a pop-up (modal), it contains the HeuristicDetailsComponent inside of it.
-     */
-
-    const [isModalOpen, setIsModalOpen] = useState(false)
-    const [selectedHeuristic, setSelectedHeuristic] = useState('')
-    const [sampleData, setSampleData] = useState(props.item)
-
-    useEffect(()=>{
-        setSampleData(props.item)
-    }, [props.item])
-
-    function handleSort(){
-        const sortedData = [...sampleData].sort((a,b) =>{
-            return a.title > b.title ? 1: -1
-        })
-        setSampleData(sortedData)
-    
-    }
-
-    function toggleModal(selectedOne){
-        setIsModalOpen(!isModalOpen)
-        setSelectedHeuristic(selectedOne)
-    }
-
-    function closeModal(){
-        setIsModalOpen(!isModalOpen)
-
-    }
-
-    const heuristic= sampleData.map((heuristic)=>{
-        return(
-            <Row className='d-flex align-items-center'>
-                <Col md={2} >
-                    {heuristic.designFor.join(", ")}
-                </Col>
-                <Col md={1} >
-                    {heuristic.industry.join(", ")}
-                </Col>
-                <Col md={2} >
-                    {heuristic.phase.join(", ")}
-                </Col>
-                <Col md={2} >
-                    {heuristic.productDimension.join(", ")}
-                </Col>
-                <Col md={1} >
-                    {heuristic.rating}
-                </Col>
-                <Col md={4} >
-                    <Card key={heuristic.id}>
-                        <CardBody >
-                            <CardText onClick={()=>toggleModal(heuristic)}> {heuristic.title}</CardText>
-                        </CardBody>
-                    </Card>
-                </Col>
-            </Row>
-        )
-    })
-
-    
-        
-        /** The heuristic defined just below contains all the informations of heuristics that the user wants to see: designfor, level etc.
-         * A short explanation about the heuristic stands as the last column. If the user wants to have more information
-         * about this specific heuristic, s/he should click on the explanation to toggle the pop-up.
-         */
-        
-
-    if (props.isSearchClicked){
-
-        if (props.isLoading) {
-            return(
-                <div className='container'>
-                    <div className='row'>
-                        <Loading/>
-                    </div>
-                </div>
-            )
-        }
-        else if (props.errMess){
-            return(
-                <div className='container'>
-                    <div className='row'>
-                        <h4>{props.errMess}</h4>
-                    </div>
-                </div>
-            )
-        }
-        else
-            return(
-                <Container fluid style={{ paddingLeft: 30, paddingRight: 0 }}>
-                    
-                    <Row className='d-flex align-items-center'>
-                        <Col md={2}>
-                            <h3>Design for</h3>
-                        </Col>
-                        <Col md={1}>
-                            <h3>Industry</h3>
-                        </Col>
-                        <Col md={2}>
-                            <h3>Phase</h3>
-                        </Col>
-                        <Col md={2}>
-                            <h3>Product Dimension</h3>
-                        </Col>
-                        <Col md={1}>
-                            <h3>Rating</h3>
-                        </Col>
-                        <Col md={3} className='d-flex align-items-center'>
-                            <h3>Applicable heuristic</h3>
-                            <i onClick={()=>handleSort()} className="fa fa-arrow-down"></i>
-                        </Col>
-                    </Row>
-                    <Row className='d-flex'>
-                            {heuristic}
-                    </Row>
-
-                    {/**If the user has clicked on the explanation, then the modal will be shown. 
-                     * For this to be rendered properly, the information which heuristic has been clicked,
-                     * will be sent to the component HeuristicDetails along with all data of that heuristic.
-                     */}
-
-                    <Modal className='modal-lg'  isOpen={isModalOpen} toggle={()=>closeModal()} >
-                        <ModalHeader className='startpage' toggle={()=>closeModal()}></ModalHeader>
-                        <ModalBody className='startpage'>
-                            <HeuristicDetails selectedOne= {selectedHeuristic} 
-                                postComment= {props.postComment} />
-                        </ModalBody>
-                    </Modal>
-                    
-                </Container>
-            )
-
-        }
-    else
-        return(
-            <div>
-
-            </div>
-        )
-    
-}

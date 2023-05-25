@@ -38,7 +38,7 @@ function Collection (props){
         setIsModalOpen(!isModalOpen)
 
     }
-    console.log("item: ", props.item)
+    //console.log("item: ", props.item)
     function closeModal(){
         setIsModalOpen(!isModalOpen)
     }
@@ -48,8 +48,6 @@ function Collection (props){
 
         var effectCategorySpecification=heuristic.positiveEffects.map(( positiveEffect) =>{
             return  positiveEffect.effectCategorySpecification})
-
-            {console.log("heuristics: ", heuristic)}
         return(
             <Row className='d-flex align-items-center'>
                 <Col md={2} >
@@ -108,35 +106,35 @@ function Collection (props){
             )
         }
         else
-                return(
-                    <Container fluid style={{ paddingLeft: 30, paddingRight: 0 }}>
-                        
-                        <Row className='d-flex align-items-center'>
-                            <Col md={2}>
-                                <h3>Effect Category</h3>
-                            </Col>
-                            <Col md={1}>
-                                <h3>Effect Specification</h3>
-                            </Col>
-                            <Col md={2}>
-                                <h3>Adressed System Level</h3>
-                            </Col>
-                            <Col md={2}>
-                                <h3>Artefact Categorization</h3>
-                            </Col>
-                            <Col md={1}>
-                                <h3>Rating</h3>
-                            </Col>
-                            <Col md={3} className='d-flex align-items-center'>
-                                <h3>Applicable heuristic</h3>
-                                <i onClick={()=>handleSort()} className="fa fa-arrow-down"></i>
-                            </Col>
-                        </Row>
-                        <Row className='d-flex'>
-                                {heuristic}
-                        </Row>
-                    </Container>
-                )
+            return(
+                <Container fluid style={{ paddingLeft: 30, paddingRight: 0 }}>
+                    {console.log("heur: ", sampleData)}
+                    <Row className='d-flex align-items-center'>
+                        <Col md={2}>
+                            <h3>Effect Category</h3>
+                        </Col>
+                        <Col md={1}>
+                            <h3>Effect Specification</h3>
+                        </Col>
+                        <Col md={2}>
+                            <h3>Adressed System Level</h3>
+                        </Col>
+                        <Col md={2}>
+                            <h3>Artefact Categorization</h3>
+                        </Col>
+                        <Col md={1}>
+                            <h3>Rating</h3>
+                        </Col>
+                        <Col md={3} className='d-flex align-items-center'>
+                            <h3>Applicable heuristic</h3>
+                            <i onClick={()=>handleSort()} className="fa fa-arrow-down"></i>
+                        </Col>
+                    </Row>
+                    <Row className='d-flex'>
+                            {heuristic}
+                    </Row>
+                </Container>
+            )
 
     }
     else

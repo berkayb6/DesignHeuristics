@@ -128,35 +128,36 @@ class HeuristicDetails extends Component{
              * Each item or property will be rendered via the function defined above (RenderDetailItem)
              * The functions seeks for two property: item that should be rendered, and the type of that */
             
-            var dimensions = selectedHeuristic.productDimension[0].split(/[,]+/);
+            // var dimensions = selectedHeuristic.productDimension[0].split(/[,]+/);
         
 
             
-            const productDimension= dimensions.map((dimension)=>{
-                let type= 'dimension';
-                return(
-                    <Col md={6} className="text-center">
-                        <RenderDetailItem item={dimension} type={type}/>
-                    </Col>
-                )
-            })
-            
-            const positiveInfluence= selectedHeuristic.positiveInfluence.map((influence)=>{
+            // const productDimension= dimensions.map((dimension)=>{
+            //     let type= 'dimension';
+            //     return(
+            //         <Col md={6} className="text-center">
+            //             <RenderDetailItem item={dimension} type={type}/>
+            //         </Col>
+            //     )
+            // })
+            console.log("select: ", selectedHeuristic)
+            const positiveInfluence= selectedHeuristic.positiveEffects.map((effect)=>{
+                
                 let type= 'positive';
                 return(
                     <Col md={4} className="text-center">
-                        <RenderDetailItem item={influence} type={type}/>
+                        <RenderDetailItem item={effect.effectCategorySpecification} type={type}/>
                     </Col>
                 )
             })
 
             const rating = selectedHeuristic.rating
-
-            const negativeInfluence= selectedHeuristic.negativeInfluence.map((influence)=>{
+            const negativeInfluence= selectedHeuristic.negativeEffects.map((effect)=>{
+                
                 let type= 'negative';
                 return(
-                    <Col md={4} className='text-center' >
-                        <RenderDetailItem item={influence} type={type}/>
+                    <Col md={4} className="text-center">
+                        <RenderDetailItem item={effect.effectCategorySpecification} type={type}/>
                     </Col>
                 )
             })
@@ -166,15 +167,6 @@ class HeuristicDetails extends Component{
                 return(
                     <Col md={4} className='text-center ' >
                         <RenderDetailItem item={industry} type={type}/>
-                    </Col>
-                )
-            })
-
-            const phase = selectedHeuristic.phase.map((phase)=> {
-                let type= "phase";
-                return(
-                    <Col md={4} className="text-center">
-                        <RenderDetailItem item={phase} type={type}/>
                     </Col>
                 )
             })
@@ -270,10 +262,27 @@ class HeuristicDetails extends Component{
                                 {/** After defining how to render each property of the corresponding heuristic,
                                  * there will be rendered below.
                                  */}
+               
                                 
                                 <Row>
-                                    <h4><b>Addressed Product Dimension </b></h4> 
-                                    {productDimension}
+                                    <h4><b>Affected System Level </b></h4> 
+                                    <Col md= {6}>
+                                        <Card>
+                                            <CardBody>
+                                                {selectedHeuristic.adressedSystemLevel}
+                                            </CardBody>
+                                        </Card>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <h4><b>Affected Artefact Categorization</b></h4> 
+                                    <Col md= {6}>
+                                        <Card>
+                                            <CardBody>
+                                                {selectedHeuristic.artefactCategorization}
+                                            </CardBody>
+                                        </Card>
+                                    </Col>
                                 </Row>
                                 <Row>
                                     <h4><b>Possible positive influence </b></h4> 
@@ -290,10 +299,6 @@ class HeuristicDetails extends Component{
                                 <Row>
                                     <h4><b>Applicable industry</b></h4> 
                                     {applicableIndustry}
-                                </Row>
-                                <Row>
-                                    <h4><b> Adressed Phase</b></h4>
-                                    {phase}
                                 </Row>
                                 <Row>
                                     <h4><b>Description</b></h4> 
