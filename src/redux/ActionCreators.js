@@ -128,10 +128,13 @@ export const addHeuristic = (heuristic) => ({
     payload: heuristic
 });
 
-export const postHeuristic = (title, adressedSystemLevel, artefactCategorization, positiveEffects, negativeEffects, orderCategory, orderCategorySpecification, industry, rating, description, image, sources) => (dispatch) =>{
-    console.log("new1: ", )
+export const postHeuristic = (title, orderArtefact, embodimentArtefact, embodimentAtrribute, orderAttribute, adressedSystemLevel, artefactCategorization, positiveEffects, negativeEffects, orderCategory, orderCategorySpecification, industry, rating, description, image, sources) => (dispatch) =>{
     const newHeuristic= {
         title: title,
+        orderArtefact: orderArtefact, 
+        embodimentArtefact: embodimentArtefact,
+        embodimentAtrribute: embodimentAtrribute,
+        orderAttribute: orderAttribute,
         adressedSystemLevel: adressedSystemLevel, 
         artefactCategorization: artefactCategorization, 
         orderCategory: orderCategory, 

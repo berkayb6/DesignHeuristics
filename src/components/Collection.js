@@ -42,16 +42,26 @@ function Collection (props){
     function closeModal(){
         setIsModalOpen(!isModalOpen)
     }
+    function onlyUnique(value, index, array) {
+        return array.indexOf(value) === index;
+    }
+
     const heuristic= sampleData.map((heuristic)=>{
-        var effectCategory=heuristic.positiveEffects.map(( positiveEffect) =>{
-            return  positiveEffect.effectCategory})
+        var uniqueEffectCategory= [];
+        var effectCategoryArray= [];
+        for (let i=0; i<heuristic.positiveEffects.length; i++){
+            effectCategoryArray.push(heuristic.positiveEffects[i].effectCategory)
+
+        }
+        uniqueEffectCategory= effectCategoryArray.filter(onlyUnique)
+        var effectCategory=uniqueEffectCategory.map(( category) =>{
+            return  category})
 
         var effectCategorySpecification=heuristic.positiveEffects.map(( positiveEffect) =>{
             return  positiveEffect.effectCategorySpecification})
         return(
             <Row className='d-flex align-items-center'>
                 <Col md={2} >
-                    
                     {effectCategory.join(", ")}
                 </Col>
                 <Col md={1} >
@@ -108,7 +118,6 @@ function Collection (props){
         else
             return(
                 <Container fluid style={{ paddingLeft: 30, paddingRight: 0 }}>
-                    {console.log("heur: ", sampleData)}
                     <Row className='d-flex align-items-center'>
                         <Col md={2}>
                             <h3>Effect Category</h3>

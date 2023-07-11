@@ -26,6 +26,8 @@ import Step3 from './Step3';
 import Step4 from './Step4';
 import Step5 from './step5';
 import YouRock from './YouRock';
+import ExcelTest from './excelTest';
+import LandingPage from './LandingPage';
 
 /** Data will come from the server. Users will be deleted afterwards, when the backend is deployed.*/
 const mapStateToProps = state => {
@@ -42,7 +44,7 @@ const mapStateToProps = state => {
  */
 const mapDispatchToProps = (dispatch) => ({
     postComment: (heuristicId, author, comment) => dispatch(postComment(heuristicId, author, comment)),
-    postHeuristic: (title, adressedSystemLevel, artefactCategorization, positiveEffects, negativeEffects, orderCategory, orderCategorySpecification, industry, rating, description, image, sources) => dispatch(postHeuristic(title, adressedSystemLevel, artefactCategorization, positiveEffects, negativeEffects, orderCategory, orderCategorySpecification, industry, rating, description, image, sources)),
+    postHeuristic: (title, orderArtefact, embodimentArtefact, embodimentAtrribute, orderAttribute, adressedSystemLevel, artefactCategorization, positiveEffects, negativeEffects, orderCategory, orderCategorySpecification, industry, rating, description, image, sources) => dispatch(postHeuristic(title, orderArtefact, embodimentArtefact, embodimentAtrribute, orderAttribute, adressedSystemLevel, artefactCategorization, positiveEffects, negativeEffects, orderCategory, orderCategorySpecification, industry, rating, description, image, sources)),
     uploadImage: (data) => dispatch(uploadImage(data)),
     register: (email, password, subscription, library, yourHeuristics, projects) => dispatch(register(email, password, subscription, library, yourHeuristics, projects)),
     loginUser: (creds) => dispatch(loginUser(creds)),
@@ -257,6 +259,22 @@ class Main extends Component {
                 </div>
             )
         }
+
+        const ExcelTestFile = () =>{
+            return(
+                <div className='startpage' style = {{minHeight:"100vh"}}>
+                    <ExcelTest postHeuristic={this.props.postHeuristic}/>
+                </div>
+            )
+        }
+
+        const Landing = () => {
+            return(
+                <div className='landingPage' style = {{minHeight:"100vh"}}>
+                    <LandingPage />
+                </div>
+            )
+        }
                 
         const routeComponents = this.heuristics.map((heuristic) => <Route exact path={heuristic.path} component={
             
@@ -264,6 +282,7 @@ class Main extends Component {
                 return(
                     <div className='startpage' style = {{minHeight:"100vh"}}>
                         <HeuristicDetails selectedHeuristic={heuristic.heuristic}
+                            heuristics= {this.props.heuristics}
                             heuristicsLoading= {this.props.heuristics.isLoading}
                             heuristiscErrMess= {this.props.heuristics.errMess}
                             postComment={this.props.postComment}
@@ -311,12 +330,14 @@ class Main extends Component {
                         <Route path='/search' component={SearchPage}/>
                         <Route path='/forgot-your-password' component={ForgotYourPassword}/>
                         {routeComponents}
+                        <Route path='/test' component={ExcelTestFile}/>
                         <Route path="/add-your-own-heuristic" component={AddYourOwnHeuristic} />
                         <Route path="/step2" component={AddYourOwnHeuristicStep2} />
                         <Route path="/step3" component={AddYourOwnHeuristicStep3} />
                         <Route path="/step4" component={AddYourOwnHeuristicStep4} />
                         <Route path="/step5" component={AddYourOwnHeuristicStep5} />
                         <Route path="/you-rock" component={YouRockPage}/>
+                        <Route exact path='/' component={Landing}/>
                         <Redirect to="/start" />
                     </Switch>
                 </StateMachineProvider>

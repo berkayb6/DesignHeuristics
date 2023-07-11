@@ -63,7 +63,6 @@ class DHCollection extends Component{
         amplitude.getInstance().logEvent('addYourOwnHeuristicClicked')
     }
     
-    
     render(){
         var identify= new amplitude.Identify(); 
         amplitude.getInstance().identify(identify);

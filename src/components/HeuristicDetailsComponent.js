@@ -28,7 +28,7 @@ function RenderDetailItem({item, type, id}){
     }
     if (type==='positive'){
         return(
-            <Card className='justify-content-center' style={{backgroundColor:'#BAEDAD', height: "50px", width: "auto"}}>
+            <Card className='justify-content-center' style={{backgroundColor:'#BAEDAD', height: "50px", width: "auto", borderRadius: "10px", border: 0}}>
                 <CardBody >
                     {item}
                 </CardBody>
@@ -37,7 +37,7 @@ function RenderDetailItem({item, type, id}){
     }
     if (type==='negative'){
         return(
-            <Card className='justify-content-center' style={{backgroundColor:'#F7BCB0', height: "50px", width: "auto"}}>
+            <Card className='justify-content-center' style={{backgroundColor:'#F7BCB0', height: "50px", width: "auto", borderRadius: "10px", border: 0}}>
                 <CardBody >
                     {item}
                 </CardBody>
@@ -51,19 +51,9 @@ function RenderDetailItem({item, type, id}){
             </CardImg>
         )  
     }
-    if (type=== 'phase'){
-        return (
-            <Card className='justify-content-center' style={{ height: "50px", width: "auto"}}>
-                <CardBody >
-                    {item}
-                </CardBody>
-            </Card>
-        )
-    }
     if (type==='source'){
         return(
             <div>
-
                 {item}
             </div>
         )  
@@ -82,7 +72,7 @@ function RenderDetailItem({item, type, id}){
     } 
     else
         return(
-            <Card className='justify-content-center' style={{ height: "50px", width: "auto"}}>
+            <Card className='justify-content-center' style={{ height: "50px", width: "auto", borderRadius: "10px", border: 0}}>
                 <CardBody >
                     {item}
                 </CardBody>
@@ -140,19 +130,38 @@ class HeuristicDetails extends Component{
             //         </Col>
             //     )
             // })
-            console.log("select: ", selectedHeuristic)
+
+            // const affectedSystemLevel = selectedHeuristic.adressedSystemLevel.map((systemLevel)=>{
+            //     let type= "systemLevel";
+            //     return (
+            //         <Col md={4} className="text-center">
+            //             <RenderDetailItem item={systemLevel} type={type}/>
+            //             <br/>
+            //         </Col>
+            //     )
+            // })
             const positiveInfluence= selectedHeuristic.positiveEffects.map((effect)=>{
                 
                 let type= 'positive';
                 return(
                     <Col md={4} className="text-center">
                         <RenderDetailItem item={effect.effectCategorySpecification} type={type}/>
+                        <br/>
                     </Col>
                 )
             })
 
-            const rating = selectedHeuristic.rating
-            const negativeInfluence= selectedHeuristic.negativeEffects.map((effect)=>{
+            const rating = {
+                size: 30,
+                count: 5,
+                activeColor: "yellow",
+                value: selectedHeuristic.rating,
+                isHalf: false,
+                emptyIcon: <i className="fa fa-star" />,
+                halfIcon: <i className="fa fa-star-half-alt" />,
+                filledIcon: <i className="fa fa-star" />
+            };
+            const negativeInfluence= (selectedHeuristic.negativeEffects.length>0 ? selectedHeuristic.negativeEffects.map((effect)=>{
                 
                 let type= 'negative';
                 return(
@@ -160,8 +169,14 @@ class HeuristicDetails extends Component{
                         <RenderDetailItem item={effect.effectCategorySpecification} type={type}/>
                     </Col>
                 )
-            })
-
+            }) :<Col md={5} className="text-center">
+                    <Card className='justify-content-center' style={{ height: "auto", width: "auto", borderRadius: "10px", width: "auto",paddingInline: '20px'}}>
+                        <CardBody >
+                        <strong>Currently, no known negative influence property</strong>
+                        </CardBody>
+                    </Card>
+                </Col>
+            )
             const applicableIndustry = selectedHeuristic.industry.map((industry)=>{
                 let type= 'industry';
                 return(
@@ -171,14 +186,21 @@ class HeuristicDetails extends Component{
                 )
             })
 
-            const images= selectedHeuristic.image.map((image)=>{
+            const images= (selectedHeuristic.image.length>0 ? selectedHeuristic.image.map((image)=>{
                 let type= 'image';
                 return(
                     <Col md={5} className='text-center ' >
                         <RenderDetailItem item={image} type={type} id={id}/>
                     </Col>
                 )
-            })
+            }) :<Col md={5} className="text-center">
+                    <Card className='justify-content-center' style={{ height: "auto", width: "auto", borderRadius: "10px", width: "auto",paddingInline: '20px'}}>
+                        <CardBody >
+                            <strong>Currently, no known graphic property</strong>
+                        </CardBody>
+                    </Card>
+                </Col>
+            )
 
             const sources= selectedHeuristic.sources.map((source)=>{
                 let type= 'source';
@@ -188,14 +210,21 @@ class HeuristicDetails extends Component{
                     </Col>
                 )
             })
-            const comments= selectedHeuristic.comments.map((comment)=>{
+            const comments= (selectedHeuristic.comments.length>0 ? selectedHeuristic.comments.map((comment)=>{
                 let type= 'comment';
                 return(
                     <Col key={comment._id}>
                         <RenderDetailItem item={comment} type={type}/>
                     </Col> 
                 )
-            })
+            }) :<Col md={5} className="text-center">
+                    <Card className='justify-content-center' style={{ height: "auto", width: "auto", borderRadius: "10px", width: "auto",paddingInline: '20px'}}>
+                        <CardBody >
+                            <strong>Currently, no comment has been posted yet!</strong>
+                        </CardBody>
+                    </Card>
+                </Col>
+            )
 
             const secondExample = {
                 size: 30,
@@ -233,30 +262,30 @@ class HeuristicDetails extends Component{
                     <>
                         <Header auth={this.props.auth}
                             logoutUser={this.props.logoutUser}/>
-                        <div className='container'>
+                        <div className='container' style={{fontFamily: 'sans-serif'}}>
                             <div className='row row-header align-items-center'>
                                 <Row>
                                     <Col md={4}>
                                         <h3>Design Advice</h3>
                                     </Col>
-                                    <Col md= {6}>
-                                        <Card >
-                                            <CardBody>
+                                    <Col md= {6} >
+                                        <Card style={{ height: "50px", width: "auto", borderRadius: "10px"}}>
+                                            <CardBody style={{border: 0, paddingInline: "20px"}}>
                                                 {selectedHeuristic.title}
-                                                
                                             </CardBody>
                                         </Card>
                                     </Col>
                                 </Row>
-                                <Row>
-                                    <Col>
-                                        <Card className='col-12 col-md-4 offset-md-4'>
-                                            <CardBody>
-                                                Add to library
+                                <Row style={{marginTop: '20px'}}>
+                                    <Col md={{offset:4, size:2}} style={{ height: "auto", width: 'auto', borderRadius: "10px"}}>
+                                        <Card style={{ height: "auto", width: 'auto', borderRadius: "10px"}}>
+                                            <CardBody style={{border: 0, paddingInline: "20px"}}>
+                                                <strong>Add to library</strong>
                                             </CardBody>
                                         </Card>
                                     </Col>
                                 </Row>
+                                
                             </div>
                             <div className='row row-content' style={{rowGap: "60px"}}>
                                 {/** After defining how to render each property of the corresponding heuristic,
@@ -266,9 +295,9 @@ class HeuristicDetails extends Component{
                                 
                                 <Row>
                                     <h4><b>Affected System Level </b></h4> 
-                                    <Col md= {6}>
-                                        <Card>
-                                            <CardBody>
+                                    <Col md= {6} style={{ height: "50px", width: "auto", borderRadius: "10px"}}>
+                                        <Card style={{ height: "50px", width: "auto", borderRadius: "10px"}}>
+                                            <CardBody style={{border: 0, paddingInline: "20px"}}>
                                                 {selectedHeuristic.adressedSystemLevel}
                                             </CardBody>
                                         </Card>
@@ -276,9 +305,9 @@ class HeuristicDetails extends Component{
                                 </Row>
                                 <Row>
                                     <h4><b>Affected Artefact Categorization</b></h4> 
-                                    <Col md= {6}>
-                                        <Card>
-                                            <CardBody>
+                                    <Col md= {6} style={{ height: "50px", width: "auto", borderRadius: "10px"}}>
+                                        <Card style={{ height: "50px", width: "auto", borderRadius: "10px"}}>
+                                            <CardBody style={{border: 0, paddingInline: "20px"}}>
                                                 {selectedHeuristic.artefactCategorization}
                                             </CardBody>
                                         </Card>
@@ -294,21 +323,33 @@ class HeuristicDetails extends Component{
                                 </Row>
                                 <Row>
                                     <h4><b>Rating</b></h4> 
-                                    {rating}
+                                    <ReactStars {...rating} />
                                 </Row>
                                 <Row>
                                     <h4><b>Applicable industry</b></h4> 
                                     {applicableIndustry}
                                 </Row>
                                 <Row>
-                                    <h4><b>Description</b></h4> 
-                                    <Card>
-                                        <CardBody className='m-1 align-items-center' >
-                                            <CardText>
-                                                {selectedHeuristic.description}
-                                            </CardText>
-                                        </CardBody>
-                                    </Card>
+                                    <h4><b>Description</b></h4>
+                                    {selectedHeuristic.description?
+                                    <Col md= {6} style={{ height: "auto", width: "auto", borderRadius: "10px"}}>
+                                        <Card style={{ height: "auto", width: "auto", borderRadius: "10px"}}>
+                                            <CardBody style={{border: 0, paddingInline: "20px"}} className='m-1 align-items-center' >
+                                                <CardText>
+                                                    {selectedHeuristic.description}
+                                                </CardText>
+                                            </CardBody>
+                                        </Card>
+                                    </Col>
+                                    :
+                                    <Col md={5} className="text-center">
+                                        <Card className='justify-content-center' style={{ height: "auto", width: "auto", borderRadius: "10px", width: "auto",paddingInline: '20px'}}>
+                                            <CardBody >
+                                                <strong>Currently, no description is available</strong>
+                                            </CardBody>
+                                        </Card>
+                                    </Col>
+                                    }
                                 </Row>
                                 <Row>
                                     <h4><b>Graphics</b></h4> 
