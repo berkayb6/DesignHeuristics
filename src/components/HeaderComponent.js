@@ -68,12 +68,7 @@ class Header extends Component{
                                 </NavLink>
                             </NavItem>
                             <NavItem>
-                                <NavLink className="nav-link" to="/menu" style={{color:"black"}}>
-                                    <span className='fa-lg'><strong>Assistant</strong></span>
-                                </NavLink>
-                            </NavItem>
-                            <NavItem>
-                                <NavLink className="nav-link" to="/contactus" style={{color:"black"}}>
+                                <NavLink className="nav-link" to="/yourlibrary" style={{color:"black"}}>
                                     <span className='fa-lg'><strong>Your library</strong></span>
                                 </NavLink>
                             </NavItem>

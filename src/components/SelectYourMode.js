@@ -47,12 +47,6 @@ class YourMode extends Component{
                                     </Link>
                                     <Card style={{marginTop:"20px", borderRadius:"10px"}}>
                                         <div className='col-12 col-md-10 m-2' style={{padding:"10px 20px 10px"}} >
-                                            <h3> <strong> Development Assistant</strong></h3>
-                                            <p>Define your personal requirements and have them documented for your project</p>
-                                        </div>
-                                    </Card>
-                                    <Card style={{marginTop:"20px", borderRadius:"10px"}}>
-                                        <div className='col-12 col-md-10 m-2' style={{padding:"10px 20px 10px"}} >
                                         <h3> <strong>Your personal library</strong></h3>
                                             <p>Find your favorite design heuristics in one place</p>
                                         </div>

@@ -44,6 +44,10 @@ const Step5 = props => {
             setProperty(newPropertyValues);
         }
         var rating= 4;
+        var orderArtefact= state.heuristicDetails.orderVerb;
+        var embodimentArtefact= state.heuristicDetails.artifact;
+        var embodimentAtrribute= state.heuristicDetails.artifactRestriction;
+        var orderAttribute= state.heuristicDetails.orderAdverb;
         var title= state.heuristicDetails.orderVerb + " " + state.heuristicDetails.artifact + " " + state.heuristicDetails.artifactRestriction + " " + state.heuristicDetails.orderAdverb;
         var adressedSystemLevel= state.heuristicDetails.adressedSystemLevel;
         var artefactCategorization= state.heuristicDetails.artefactCategorization;
@@ -68,7 +72,11 @@ const Step5 = props => {
         }
 
         props.postHeuristic(
-            title, 
+            title,
+            orderArtefact,
+            embodimentArtefact,
+            embodimentAtrribute,
+            orderAttribute,
             adressedSystemLevel, 
             artefactCategorization, 
             positiveEffects, 
@@ -154,39 +162,6 @@ const Step5 = props => {
     uploadFile.selectedFile3= event.target.files[0];
     setFile({uploadFile});
     }
-
-    let onFileUpload = () => {
-        const url = `${baseUrl}imageUpload`;
-
-        const config = {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        };
-        var requestArray= []
-        console.log("files: ", file)
-        for ( const[key, value] of Object.entries(file)){
-
-            if (key!== null){
-                var formData = new FormData();
-                formData.append(
-                    "imageFile",
-                    value,
-                    value.name
-                //this.state.flexRadioDefault + ".jpg"
-                );
-                const request = axios.post(url, formData, config);
-                requestArray.push(request)
-            }
-        }
-        axios.all(requestArray).then((...responses) => {
-            console.log(responses[0])
-            console.log(responses[1]) 
-        }).catch(errors => {
-        })
-    };
-
-
 
     return (
         <div>
@@ -485,12 +460,6 @@ const Step5 = props => {
                                         <Control.text model='.copyright' id="copyright1" style={{marginTop:'45px'}} name="copyright"  
                                             className= "form-control"/>
                                     </Col>
-                                    <Col md={2} style={{marginTop:'70px'}}>
-                                        
-                                        <Button onClick={onFileUpload}> 
-                                            Upload! 
-                                        </Button>
-                                    </Col>
                                 </Row>
                                 <Row style={{marginBottom:"20px"}}>
                                     <Col md={2} >
@@ -515,12 +484,6 @@ const Step5 = props => {
                                         <Control.text model='.copyright' id="copyright2" name="copyright"  
                                             className= "form-control"/>
                                     </Col>
-                                    <Col md={2} >
-                                        
-                                        <Button onClick={onFileUpload}> 
-                                            Upload! 
-                                        </Button>
-                                    </Col>
                                 </Row>
                                 <Row style={{marginBottom:"20px"}}>
                                     <Col md={2} >
@@ -544,12 +507,6 @@ const Step5 = props => {
                                     <Col md={4} > 
                                         <Control.text model='.copyright' id="copyright3" name="copyright"  
                                             className= "form-control"/>
-                                    </Col>
-                                    <Col md={2} >
-                                        
-                                        <Button onClick={onFileUpload}> 
-                                            Upload! 
-                                        </Button>
                                     </Col>
                                 </Row>
                             </Row>

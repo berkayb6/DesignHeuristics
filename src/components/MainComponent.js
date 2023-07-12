@@ -28,6 +28,8 @@ import Step5 from './step5';
 import YouRock from './YouRock';
 import ExcelTest from './excelTest';
 import LandingPage from './LandingPage';
+import Impress from './Impressum';
+import Datenschutz from './Datenschutz';
 
 /** Data will come from the server. Users will be deleted afterwards, when the backend is deployed.*/
 const mapStateToProps = state => {
@@ -275,6 +277,21 @@ class Main extends Component {
                 </div>
             )
         }
+
+        const Impressum = () => {
+            return(
+                <div className='landingPage' style = {{minHeight:"100vh"}}>
+                    <Impress />
+                </div>
+            )
+        }
+        const DatenschutzPage = () => {
+            return(
+                <div className='landingPage' style = {{minHeight:"100vh"}}>
+                    <Datenschutz />
+                </div>
+            )
+        }
                 
         const routeComponents = this.heuristics.map((heuristic) => <Route exact path={heuristic.path} component={
             
@@ -317,6 +334,7 @@ class Main extends Component {
                      * Redirect: If any given path does not exist, then it will redirect to start page.
                      */}
                     <Switch>
+                        <Route exact path='/' component={Landing}/>
                         <Route path='/start' component={StartPage}/>
                         <Route exact path='/moreinfo' component={MoreInfos}/>
                         <Route path='/selectyourway' component={SelectYourWay}/>
@@ -337,7 +355,8 @@ class Main extends Component {
                         <Route path="/step4" component={AddYourOwnHeuristicStep4} />
                         <Route path="/step5" component={AddYourOwnHeuristicStep5} />
                         <Route path="/you-rock" component={YouRockPage}/>
-                        <Route exact path='/' component={Landing}/>
+                        <Route path="/impressum" component={Impressum}/>
+                        <Route path="/datenschutz" component={DatenschutzPage}/>
                         <Redirect to="/start" />
                     </Switch>
                 </StateMachineProvider>
