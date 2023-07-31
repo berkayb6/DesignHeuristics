@@ -58,15 +58,6 @@ function RenderDetailItem({item, type, id}){
             </CardImg>
         )  
     }
-    if (type=== 'phase'){
-        return (
-            <Card className='justify-content-center' style={{ height: "50px", width: "auto"}}>
-                <CardBody >
-                    {item}
-                </CardBody>
-            </Card>
-        )
-    }
     if (type==='source'){
         return(
             <div>
@@ -928,34 +919,30 @@ slider.width = 700;
              * 
              * Each item or property will be rendered via the function defined above (RenderDetailItem)
              * The functions seeks for two property: item that should be rendered, and the type of that */
-            
-            // var dimensions = selectedHeuristic.productDimension[0].split(/[,]+/);
-        
 
-            
-            // const productDimension= dimensions.map((dimension)=>{
-            //     let type= 'dimension';
-            //     return(
-            //         <Col md={6} className="text-center">
-            //             <RenderDetailItem item={dimension} type={type}/>
-            //         </Col>
-            //     )
-            // })
-            console.log("select: ", selectedHeuristic)
             const positiveInfluence= selectedHeuristic.positiveEffects.map((effect)=>{
                 
                 let type= 'positive';
                 return(
                     <Col md={4} className="text-center">
                         <RenderDetailItem item={effect.effectCategorySpecification} type={type}/>
+                        <br/>
                     </Col>
                 )
             })
 
-            const rating = selectedHeuristic.rating
-
+            var rating = {
+                size: 30,
+                count: 5,
+                activeColor: "yellow",
+                value: selectedHeuristic.rating,
+                isHalf: false,
+                emptyIcon: <i className="fa fa-star" />,
+                halfIcon: <i className="fa fa-star-half-alt" />,
+                filledIcon: <i className="fa fa-star" />
+            };
             
-            const negativeInfluence= selectedHeuristic.negativeEffects.map((effect)=>{
+            const negativeInfluence= (selectedHeuristic.negativeEffects.length>0 ? selectedHeuristic.negativeEffects.map((effect)=>{
                 
                 let type= 'negative';
                 return(
@@ -963,7 +950,14 @@ slider.width = 700;
                         <RenderDetailItem item={effect.effectCategorySpecification} type={type}/>
                     </Col>
                 )
-            })
+            }) :<Col md={5} className="text-center">
+                    <Card className='justify-content-center' style={{ height: "auto", width: "auto", borderRadius: "10px", width: "auto",paddingInline: '20px'}}>
+                        <CardBody >
+                        <strong>Currently, no known negative influence property</strong>
+                        </CardBody>
+                    </Card>
+                </Col>
+            )
 
             const applicableIndustry = selectedHeuristic.industry.map((industry)=>{
                 let type= 'industry';
@@ -974,14 +968,21 @@ slider.width = 700;
                 )
             })
 
-            const images= selectedHeuristic.image.map((image)=>{
-                let type= 'image';
-                return(
-                    <Col md={5} className='text-center ' >
-                        <RenderDetailItem item={image} type={type} id={id}/>
-                    </Col>
-                )
-            })
+            const images= (selectedHeuristic.image.length>0 ? selectedHeuristic.image.map((image)=>{
+              let type= 'image';
+              return(
+                  <Col md={5} className='text-center ' >
+                      <RenderDetailItem item={image} type={type} id={id}/>
+                  </Col>
+              )
+            }) :<Col md={5} className="text-center">
+                    <Card className='justify-content-center' style={{ height: "auto", width: "auto", borderRadius: "10px", width: "auto",paddingInline: '20px'}}>
+                        <CardBody >
+                            <strong>Currently, no known graphic property</strong>
+                        </CardBody>
+                    </Card>
+                </Col>
+            )
 
             const sources= selectedHeuristic.sources.map((source)=>{
                 let type= 'source';
@@ -991,18 +992,21 @@ slider.width = 700;
                     </Col>
                 )
             })
-            const comments= selectedHeuristic.comments.map((comment)=>{
-                let type= 'comment';
-                return(
-                    <Col key={comment._id}>
-                        <RenderDetailItem item={comment} type={type}/>
-                    </Col> 
-                )
-            })
-
-
-           
-
+            const comments= (selectedHeuristic.comments.length>0 ? selectedHeuristic.comments.map((comment)=>{
+              let type= 'comment';
+              return(
+                  <Col key={comment._id}>
+                      <RenderDetailItem item={comment} type={type}/>
+                  </Col> 
+              )
+            }) :<Col md={5} className="text-center">
+                    <Card className='justify-content-center' style={{ height: "auto", width: "auto", borderRadius: "10px", width: "auto",paddingInline: '20px'}}>
+                        <CardBody >
+                            <strong>Currently, no comment has been posted yet!</strong>
+                        </CardBody>
+                    </Card>
+                </Col>
+            )
 
             const secondExample = {
                 size: 30,
@@ -1042,169 +1046,149 @@ slider.width = 700;
                             logoutUser={this.props.logoutUser}/>
                         <div className='container'>
                             <div className='row row-header align-items-center'>
-                                <Row>
-                                    <Col md={4}>
-                                        <h3>Design Advice</h3>
-                                    </Col>
-                                    <Col md= {6}>
-                                        <Card >
-                                            <CardBody>
-                                                {selectedHeuristic.title}
-                                                
-                                            </CardBody>
-                                        </Card>
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col>
-                                        <Card className='col-12 col-md-4 offset-md-4'>
-                                            <CardBody>
-                                                Add to library
-                                            </CardBody>
-                                        </Card>
-                                    </Col>
-                                </Row>
+                              <Row>
+                                <Col md={4}>
+                                    <h3>Design Advice</h3>
+                                </Col>
+                                <Col md= {6} >
+                                    <Card style={{ height: "50px", width: "auto", borderRadius: "10px"}}>
+                                        <CardBody style={{border: 0, paddingInline: "20px"}}>
+                                            {selectedHeuristic.title}
+                                        </CardBody>
+                                    </Card>
+                                </Col>
+                              </Row>
+                              <Row style={{marginTop: '20px'}}>
+                                <Col md={{offset:4, size:2}} style={{ height: "auto", width: 'auto', borderRadius: "10px"}}>
+                                    <Card style={{ height: "auto", width: 'auto', borderRadius: "10px"}}>
+                                        <CardBody style={{border: 0, paddingInline: "20px"}}>
+                                            <strong>Add to library</strong>
+                                        </CardBody>
+                                    </Card>
+                                </Col>
+                              </Row>
                             </div>
                             <div className='row row-content' style={{rowGap: "60px"}}>
-                                {/** After defining how to render each property of the corresponding heuristic,
-                                 * there will be rendered below.
-                                 */}
-               
-                                
-                                <Row>
-                                    <h4><b>Affected System Level </b></h4> 
-                                    <Col md= {6}>
-                                        <Card>
-                                            <CardBody>
-                                                {selectedHeuristic.adressedSystemLevel}
-                                            </CardBody>
-                                        </Card>
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <h4><b>Affected Artefact Categorization</b></h4> 
-                                    <Col md= {6}>
-                                        <Card>
-                                            <CardBody>
-                                                {selectedHeuristic.artefactCategorization}
-                                            </CardBody>
-                                        </Card>
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <h4><b>Possible positive influence </b></h4> 
-                                    {positiveInfluence}
-                                </Row>
-                                <Row>
-                                    <h4><b>Possible negative influence </b></h4> 
-                                    {negativeInfluence}
-                                </Row>
-                                <Row>
-                                    <h4><b>Rating</b></h4> 
-                                    {rating}
-                                </Row>
-
-
-
-
-
-
-
-{
-                                <Row>
-                                
-                                    <h4><b>Design heuristic for</b></h4> 
-                                   
-                              
-                                  
+                              {/** After defining how to render each property of the corresponding heuristic,
+                               * there will be rendered below.
+                               */}
+                              <Row>
+                                  <h4><b>Affected System Level </b></h4> 
+                                  <Col md= {6} style={{ height: "50px", width: "auto", borderRadius: "10px"}}>
+                                      <Card style={{ height: "50px", width: "auto", borderRadius: "10px"}}>
+                                          <CardBody style={{border: 0, paddingInline: "20px"}}>
+                                              {selectedHeuristic.adressedSystemLevel}
+                                          </CardBody>
+                                      </Card>
+                                  </Col>
+                              </Row>
+                              <Row>
+                                  <h4><b>Affected Artefact Categorization</b></h4> 
+                                  <Col md= {6} style={{ height: "50px", width: "auto", borderRadius: "10px"}}>
+                                      <Card style={{ height: "50px", width: "auto", borderRadius: "10px"}}>
+                                          <CardBody style={{border: 0, paddingInline: "20px"}}>
+                                              {selectedHeuristic.artefactCategorization}
+                                          </CardBody>
+                                      </Card>
+                                  </Col>
+                              </Row>
+                              <Row>
+                                  <h4><b>Possible positive influence </b></h4> 
+                                  {positiveInfluence}
+                              </Row>
+                              <Row>
+                                  <h4><b>Possible negative influence </b></h4> 
+                                  {negativeInfluence}
+                              </Row>
+                              <Row>
+                                  <h4><b>Rating</b></h4> 
+                                  <ReactStars {...rating} />
+                              </Row>
+                              <Row>
+                                <h4><b>Design heuristic for</b></h4> 
                                   <Col md= {4}>
-                                        <Card style={{ height: '50px', textAlign: 'center' , paddingTop: '15px' }}>
+                                    <Card style={{ height: '50px', textAlign: 'center' , paddingTop: '15px' }}>
+                                    
+                                            {selectedHeuristic.embodimentArtefact}  
                                         
-                                                {selectedHeuristic.embodimentArtefact}  
-                                            
-                                        </Card>
-                                    </Col>
-                                
+                                    </Card>
+                                  </Col>
                                   <Col md= {4}>
-                                        <Card >
-                                      
-                                               
-                                        <select id="filterDropdown" style={{ height: '50px', textAlign: 'center' ,paddingTop: '5px'  }}>
-<option  value="">{selectedHeuristic.embodimentAtrribute}  </option>
-</select>
-                                         
-                                        </Card>
-                                      
-                                     
-
-                                    </Col>
-                              
-
-                              
+                                    <Card >
+                                      <select id="filterDropdown" style={{ height: '50px', textAlign: 'center' ,paddingTop: '5px'  }}>
+                                        <option  value="">{selectedHeuristic.embodimentAtrribute}  </option>
+                                      </select>
+                                    </Card>
+                                  </Col>
                                     <div>  
-                <div id="chartdiv" style={{ width: "100%", height: "600px" }}></div>  
-             
-                
-            </div> 
-                    
-                                </Row>
-
- }
-
-                                <Row>
-                                    <h4><b>Applicable industry</b></h4> 
-                                    {applicableIndustry}
-                             
-                                </Row>
-                                <Row>
-                                    <h4><b>Description</b></h4> 
-                                    <Card>
-                                        <CardBody className='m-1 align-items-center' >
+                                      <div id="chartdiv" style={{ width: "100%", height: "600px" }}></div>  
+                                    </div> 
+                              </Row>
+                              <Row>
+                                <h4><b>Applicable industry</b></h4> 
+                                {applicableIndustry}
+                              </Row>
+                              <Row>
+                                <h4><b>Description</b></h4>
+                                {selectedHeuristic.description?
+                                <Col md= {6} style={{ height: "auto", width: "auto", borderRadius: "10px"}}>
+                                    <Card style={{ height: "auto", width: "auto", borderRadius: "10px"}}>
+                                        <CardBody style={{border: 0, paddingInline: "20px"}} className='m-1 align-items-center' >
                                             <CardText>
                                                 {selectedHeuristic.description}
                                             </CardText>
                                         </CardBody>
                                     </Card>
-                                </Row>
-                                <Row>
-                                    <h4><b>Graphics</b></h4> 
-                                    {images}
-                                </Row>
-                                <Row>
-                                    <h4><b>Sources</b></h4> 
-                                    {sources}
-                                </Row>
-                                <Row>
-                                    <h4><b>Comments</b></h4> 
-                                    {comments}
-                                </Row>
-                                <Row style={{fontFamily: "sans-serif"}}>
-                                    <h4><b>Rate the heuristic</b></h4>
-                                    <ReactStars {...secondExample} />
-                                </Row>
-                                <LocalForm onSubmit={(values)=>{this.sendComment(values)}}>
-                                    <Row className='form-group'>
-                                        <Col>
-                                            <Label htmlFor="author"></Label>
-                                            <Control.text model=".author" id="author" name="author" 
-                                                className= "form-control" placeholder="Your Name" 
-                                                style={{width:"400px"}}  />
-                                        </Col>
-                                    </Row>
-                                    <Row className='form-group'>
-                                        <Col>
-                                            <Label htmlFor="comment"></Label>
-                                            <Control.text model=".comment" id="comment" name="comment"
-                                                className= "form-control" placeholder="Your Feedback"
-                                                style={{width:"400px", marginBottom:"20px"}}  />
-                                        </Col>
-                                    </Row>
-                                    <Row className='form-group'>
-                                        <Col>
-                                            <Button type="submit"  value="submit" color="light"> Send comment</Button>
-                                        </Col>
-                                    </Row>
-                                </LocalForm>
+                                </Col>
+                                :
+                                <Col md={5} className="text-center">
+                                    <Card className='justify-content-center' style={{ height: "auto", width: "auto", borderRadius: "10px", width: "auto",paddingInline: '20px'}}>
+                                        <CardBody >
+                                            <strong>Currently, no description is available</strong>
+                                        </CardBody>
+                                    </Card>
+                                </Col>
+                                }
+                              </Row>
+                              <Row>
+                                  <h4><b>Graphics</b></h4> 
+                                  {images}
+                              </Row>
+                              <Row>
+                                  <h4><b>Sources</b></h4> 
+                                  {sources}
+                              </Row>
+                              <Row>
+                                  <h4><b>Comments</b></h4> 
+                                  {comments}
+                              </Row>
+                              <Row style={{fontFamily: "sans-serif"}}>
+                                  <h4><b>Rate the heuristic</b></h4>
+                                  <ReactStars {...secondExample} />
+                              </Row>
+                              <LocalForm onSubmit={(values)=>{this.sendComment(values)}}>
+                                  <Row className='form-group'>
+                                      <Col>
+                                          <Label htmlFor="author"></Label>
+                                          <Control.text model=".author" id="author" name="author" 
+                                              className= "form-control" placeholder="Your Name" 
+                                              style={{width:"400px"}}  />
+                                      </Col>
+                                  </Row>
+                                  <Row className='form-group'>
+                                      <Col>
+                                          <Label htmlFor="comment"></Label>
+                                          <Control.text model=".comment" id="comment" name="comment"
+                                              className= "form-control" placeholder="Your Feedback"
+                                              style={{width:"400px", marginBottom:"20px"}}  />
+                                      </Col>
+                                  </Row>
+                                  <Row className='form-group'>
+                                      <Col>
+                                          <Button type="submit"  value="submit" color="light"> Send comment</Button>
+                                      </Col>
+                                  </Row>
+                              </LocalForm>
                             </div>
                         </div>
                     </>
