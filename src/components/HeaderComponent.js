@@ -68,11 +68,6 @@ class Header extends Component{
                                 </NavLink>
                             </NavItem>
                             <NavItem>
-                                <NavLink className="nav-link" to="/yourlibrary" style={{color:"black"}}>
-                                    <span className='fa-lg'><strong>Your library</strong></span>
-                                </NavLink>
-                            </NavItem>
-                            <NavItem>
                                 <NavLink className="nav-link" onClick={this.logClick("searchClicked")} to="/search" style={{color:"black"}}>
                                     <span className='fa-lg'><strong>Search</strong></span>
                                 </NavLink>

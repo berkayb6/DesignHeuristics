@@ -30,28 +30,8 @@ class Profile extends Component {
                             <h3><strong>Password</strong></h3>
                             <p> ******</p>
                         </div>
-                        <div className='col-12'>
-                            <h3><strong>Your Groups</strong></h3>
-                            <p> Group1 </p>
-                        </div>
                     </div>
                 </div>
-                {/* <div className='row row-content ' style={{justifyContent: "space-around"}}>
-    
-                    <div id="test2" class="square">
-                        <p style={{margin:"auto"}}>Circle text</p>
-                    </div>
-                    <div id="test1" class="square">
-                        <p style={{margin:"auto"}}>Circle text</p>
-                    </div>
-                    <div id="test3" class="square">
-                        <p style={{margin:"auto"}}>Circasdle text</p>
-                    </div>
-                    <div id="test4" class="square">
-                        <p style={{margin:"auto"}}>Circasdle text</p>
-                    </div>
-                </div>
-                    <SimpleExample start="test1" end="test2" end2="test3"/> */}
             </div>
     
         )

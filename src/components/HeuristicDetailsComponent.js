@@ -162,7 +162,7 @@ categoryAxisLabel.location = 0.5;
 categoryAxisLabel.relativeRotation = 90;
 categoryAxisLabel.truncate = true; // Ensure that labels are not truncated
 categoryAxisLabel.wrap = true; // Enable wrapping of long labels
-categoryAxisLabel.tooltipText = "{positivelcpeffectCategorySpecification} {children}"
+categoryAxisLabel.tooltipText = "{positivelcpeffectCategorySpecification2} {children}"
 categoryAxisLabel.maxWidth=150;
 categoryAxisRenderer.grid.template.location=0;
 categoryAxisRenderer.minGridDistance = 10;
@@ -176,7 +176,7 @@ categoryAxisLabel2.location = 0.5;
 categoryAxisLabel2.relativeRotation = 90;
 categoryAxisLabel2.truncate = true;
 categoryAxisLabel2.wrap = true; // Enable wrapping of long labels
-categoryAxisLabel2.tooltipText = "{positivelcppeffectCategorySpecification} {children}"
+categoryAxisLabel2.tooltipText = "{positivelcppeffectCategorySpecification2} {children}"
 categoryAxisRenderer2.grid.template.location=0;
 categoryAxisRenderer2.minGridDistance = 10;
 categoryAxisRenderer2.grid.template.radius = -25;
@@ -192,7 +192,7 @@ categoryAxisLabel3.relativeRotation = 90;
 categoryAxisLabel3.truncate = true; 
 categoryAxisLabel3.wrap = true;
 categoryAxisLabel3.maxWidth=50;
-categoryAxisLabel3.tooltipText = "{positivetecheffectCategorySpecification} {children}"
+categoryAxisLabel3.tooltipText = "{positivetecheffectCategorySpecification2} {children}"
 categoryAxisRenderer3.grid.template.location=0;
 categoryAxisRenderer3.minGridDistance = 10;
 categoryAxisRenderer3.grid.template.radius = -25;
@@ -220,6 +220,181 @@ heuristic.embodimentArtefact === this.props.selectedHeuristic.embodimentArtefact
 var LifeCyclePhaseProperties = "Life Cycle Phase Property"; 
 var LifeCycleProperties = "Life Cycle Property"
 var TechnicalProperties = "Technical Property"
+var neu = this.props.heuristics.heuristics
+
+var flattenedArray2 = neu.flatMap(function(item) {
+  var effects2 = [];
+
+
+  // Flattening positiveEffects with filtering
+  effects2.push(
+    ...item.positiveEffects
+      .filter(function(effect) {
+        return effect.effectCategory === LifeCyclePhaseProperties;
+      })
+      .map(function(effect) {
+        var indexOfDuring = effect.effectCategorySpecification.indexOf("during");
+        var firstPart, extra;
+
+        if (indexOfDuring >= 0) {
+          firstPart = effect.effectCategorySpecification.slice(0, indexOfDuring).trim();
+          extra = effect.effectCategorySpecification.slice(indexOfDuring ).trim();
+        } else {
+          firstPart = effect.effectCategorySpecification;
+          extra = "";
+        }
+   
+
+        return {
+          title2: item.title,
+          positivelcppeffectCategory2: effect.effectCategory,
+          positivelcppeffectCategorySpecification2: firstPart,
+          value: 1,
+          children: [extra],
+          
+        };
+      })
+  );
+  effects2.push(
+    ...item.positiveEffects
+      .filter(function(effect) {
+        return effect.effectCategory === TechnicalProperties;
+      })
+      .map(function(effect) {
+        var indexOfDuring = effect.effectCategorySpecification.indexOf("during");
+        var firstPart, extra;
+
+        if (indexOfDuring >= 0) {
+          firstPart = effect.effectCategorySpecification.slice(0, indexOfDuring).trim();
+          extra = effect.effectCategorySpecification.slice(indexOfDuring).trim();
+        } else {
+          firstPart = effect.effectCategorySpecification;
+          extra = "";
+        }
+
+        return {
+          title2: item.title,
+          positivetecheffectCategory2: effect.effectCategory,
+          positivetecheffectCategorySpecification2: firstPart,
+          value: 1,
+          children: [extra]
+        };
+      })
+  );
+
+  effects2.push(
+    ...item.positiveEffects
+      .filter(function(effect) {
+        return effect.effectCategory === LifeCycleProperties;
+      })
+      .map(function(effect) {
+        var indexOfDuring = effect.effectCategorySpecification.indexOf("during");
+        var firstPart, extra;
+
+        if (indexOfDuring >= 0) {
+          firstPart = effect.effectCategorySpecification.slice(0, indexOfDuring).trim();
+          extra = effect.effectCategorySpecification.slice(indexOfDuring).trim();
+        } else {
+          firstPart = effect.effectCategorySpecification;
+          extra = "";
+        }
+
+        return {
+          title2: item.title,
+          positivelcpeffectCategory2: effect.effectCategory,
+          positivelcpeffectCategorySpecification2: firstPart,
+          value: 1,
+          children: [extra]
+        };
+      })
+  );
+
+// Flattening negativeEffects with filtering
+effects2.push(
+  ...item.negativeEffects
+    .filter(function(effect) {
+      return effect.effectCategory === LifeCyclePhaseProperties;
+    })
+    .map(function(effect) {
+      var indexOfDuring = effect.effectCategorySpecification.indexOf("during");
+      var firstPart, extra;
+
+      if (indexOfDuring >= 0) {
+        firstPart = effect.effectCategorySpecification.slice(0, indexOfDuring).trim();
+        extra = effect.effectCategorySpecification.slice(indexOfDuring).trim();
+      } else {
+        firstPart = effect.effectCategorySpecification;
+        extra = "";
+      }
+
+      return {
+        title2: item.title,
+        negeffectCategory2: effect.effectCategory,
+        positivelcppeffectCategorySpecification2: firstPart,
+        value: 2,
+        children: [extra]
+      };
+    })
+);
+
+
+effects2.push(
+    ...item.negativeEffects
+      .filter(function(effect) {
+        return effect.effectCategory === LifeCycleProperties;
+      })
+      .map(function(effect) {
+        var indexOfDuring = effect.effectCategorySpecification.indexOf("during");
+        var firstPart, extra;
+
+        if (indexOfDuring >= 0) {
+          firstPart = effect.effectCategorySpecification.slice(0, indexOfDuring).trim();
+          extra = effect.effectCategorySpecification.slice(indexOfDuring ).trim();
+        } else {
+          firstPart = effect.effectCategorySpecification;
+          extra = "";
+        }
+
+        return {
+          title2: item.title,
+          negeffectCategory2: effect.effectCategory,
+          positivelcppeffectCategorySpecification2: firstPart,
+          value: 2,
+          children: [extra]
+      
+        };
+      })
+  );
+
+  effects2.push(
+    ...item.negativeEffects
+      .filter(function(effect) {
+        return effect.effectCategory === TechnicalProperties;
+      })
+      .map(function(effect) {
+        var indexOfDuring = effect.effectCategorySpecification.indexOf("during");
+        var firstPart, extra;
+
+        if (indexOfDuring >= 0) {
+          firstPart = effect.effectCategorySpecification.slice(0, indexOfDuring).trim();
+          extra = effect.effectCategorySpecification.slice(indexOfDuring ).trim();
+        } else {
+          firstPart = effect.effectCategorySpecification;
+          extra = "";
+        }
+
+        return {
+          title2: item.title,
+          negeffectCategory2: effect.effectCategory,
+          positivetecheffectCategorySpecification2: firstPart,
+          value: 2,
+          children: [extra]
+          
+        };
+      })
+  );
+  return effects2;
+});
 
 var flattenedArray = similarHeuristics.flatMap(function(item) {
   var effects = [];
@@ -393,10 +568,10 @@ var flattenedArray = similarHeuristics.flatMap(function(item) {
     return effects;
   });
 
-
+  var mergedArray = flattenedArray.concat(flattenedArray2);
 
 //Assign the chart the data
-chart.data = flattenedArray
+chart.data = mergedArray
 
 
 
@@ -547,18 +722,18 @@ function handleSeriesChange(series) {
   
     // Update the xAxis.dataFields.category based on the selected series
     if (selectedSeries === "series1") {
-      xAxis.dataFields.category = "positivelcpeffectCategorySpecification";
+      xAxis.dataFields.category = "positivelcpeffectCategorySpecification2";
       yAxis.dataFields.category = "title";
   
   
 
     } else if (selectedSeries === "series2") {
-      xAxis2.dataFields.category = "positivelcppeffectCategorySpecification";
+      xAxis2.dataFields.category = "positivelcppeffectCategorySpecification2";
       yAxis.dataFields.category = "title";
     
 
     } else if (selectedSeries === "series3") {
-      xAxis3.dataFields.category = "positivetecheffectCategorySpecification";
+      xAxis3.dataFields.category = "positivetecheffectCategorySpecification2";
     }
 
     chart.invalidateData();
@@ -641,7 +816,7 @@ document.getElementById("chartdiv").appendChild(noDataMessage); // Append the me
   
     if (selectedFilter === "Flattened Array") {
       // If "Flattened Array" is selected, set the chart data to the flattenedArray
-      chart.data = flattenedArray;
+      chart.data = mergedArray;
       noDataMessage.style.display = "none"; 
     } else {
   var similarHeuristics1 = this.props.heuristics.heuristics.filter(heuristic =>heuristic.embodimentAtrribute === selectedFilter &&
@@ -824,13 +999,192 @@ document.getElementById("chartdiv").appendChild(noDataMessage); // Append the me
       return effects;
     });
 
-    chart.data = filteredHeuristics;
+var neu = this.props.heuristics.heuristics
+
+var flattenedArray2 = neu.flatMap(function(item) {
+  var effects2 = [];
+
+
+  // Flattening positiveEffects with filtering
+  effects2.push(
+    ...item.positiveEffects
+      .filter(function(effect) {
+        return effect.effectCategory === LifeCyclePhaseProperties;
+      })
+      .map(function(effect) {
+        var indexOfDuring = effect.effectCategorySpecification.indexOf("during");
+        var firstPart, extra;
+
+        if (indexOfDuring >= 0) {
+          firstPart = effect.effectCategorySpecification.slice(0, indexOfDuring).trim();
+          extra = effect.effectCategorySpecification.slice(indexOfDuring ).trim();
+        } else {
+          firstPart = effect.effectCategorySpecification;
+          extra = "";
+        }
+   
+
+        return {
+          title2: item.title,
+          positivelcppeffectCategory2: effect.effectCategory,
+          positivelcppeffectCategorySpecification2: firstPart,
+          value: 1,
+          children: [extra],
+          
+        };
+      })
+  );
+  effects2.push(
+    ...item.positiveEffects
+      .filter(function(effect) {
+        return effect.effectCategory === TechnicalProperties;
+      })
+      .map(function(effect) {
+        var indexOfDuring = effect.effectCategorySpecification.indexOf("during");
+        var firstPart, extra;
+
+        if (indexOfDuring >= 0) {
+          firstPart = effect.effectCategorySpecification.slice(0, indexOfDuring).trim();
+          extra = effect.effectCategorySpecification.slice(indexOfDuring).trim();
+        } else {
+          firstPart = effect.effectCategorySpecification;
+          extra = "";
+        }
+
+        return {
+          title2: item.title,
+          positivetecheffectCategory2: effect.effectCategory,
+          positivetecheffectCategorySpecification2: firstPart,
+          value: 1,
+          children: [extra]
+        };
+      })
+  );
+
+  effects2.push(
+    ...item.positiveEffects
+      .filter(function(effect) {
+        return effect.effectCategory === LifeCycleProperties;
+      })
+      .map(function(effect) {
+        var indexOfDuring = effect.effectCategorySpecification.indexOf("during");
+        var firstPart, extra;
+
+        if (indexOfDuring >= 0) {
+          firstPart = effect.effectCategorySpecification.slice(0, indexOfDuring).trim();
+          extra = effect.effectCategorySpecification.slice(indexOfDuring).trim();
+        } else {
+          firstPart = effect.effectCategorySpecification;
+          extra = "";
+        }
+
+        return {
+          title2: item.title,
+          positivelcpeffectCategory2: effect.effectCategory,
+          positivelcpeffectCategorySpecification2: firstPart,
+          value: 1,
+          children: [extra]
+        };
+      })
+  );
+
+// Flattening negativeEffects with filtering
+effects2.push(
+  ...item.negativeEffects
+    .filter(function(effect) {
+      return effect.effectCategory === LifeCyclePhaseProperties;
+    })
+    .map(function(effect) {
+      var indexOfDuring = effect.effectCategorySpecification.indexOf("during");
+      var firstPart, extra;
+
+      if (indexOfDuring >= 0) {
+        firstPart = effect.effectCategorySpecification.slice(0, indexOfDuring).trim();
+        extra = effect.effectCategorySpecification.slice(indexOfDuring).trim();
+      } else {
+        firstPart = effect.effectCategorySpecification;
+        extra = "";
+      }
+
+      return {
+        title2: item.title,
+        negeffectCategory2: effect.effectCategory,
+        positivelcppeffectCategorySpecification2: firstPart,
+        value: 2,
+        children: [extra]
+      };
+    })
+);
+
+
+effects2.push(
+    ...item.negativeEffects
+      .filter(function(effect) {
+        return effect.effectCategory === LifeCycleProperties;
+      })
+      .map(function(effect) {
+        var indexOfDuring = effect.effectCategorySpecification.indexOf("during");
+        var firstPart, extra;
+
+        if (indexOfDuring >= 0) {
+          firstPart = effect.effectCategorySpecification.slice(0, indexOfDuring).trim();
+          extra = effect.effectCategorySpecification.slice(indexOfDuring ).trim();
+        } else {
+          firstPart = effect.effectCategorySpecification;
+          extra = "";
+        }
+
+        return {
+          title2: item.title,
+          negeffectCategory2: effect.effectCategory,
+          positivelcppeffectCategorySpecification2: firstPart,
+          value: 2,
+          children: [extra]
+      
+        };
+      })
+  );
+
+  effects2.push(
+    ...item.negativeEffects
+      .filter(function(effect) {
+        return effect.effectCategory === TechnicalProperties;
+      })
+      .map(function(effect) {
+        var indexOfDuring = effect.effectCategorySpecification.indexOf("during");
+        var firstPart, extra;
+
+        if (indexOfDuring >= 0) {
+          firstPart = effect.effectCategorySpecification.slice(0, indexOfDuring).trim();
+          extra = effect.effectCategorySpecification.slice(indexOfDuring ).trim();
+        } else {
+          firstPart = effect.effectCategorySpecification;
+          extra = "";
+        }
+
+        return {
+          title2: item.title,
+          negeffectCategory2: effect.effectCategory,
+          positivetecheffectCategorySpecification2: firstPart,
+          value: 2,
+          children: [extra]
+          
+        };
+      })
+  );
+  return effects2;
+});
+
+
+
+  var mergedArray2 = filteredHeuristics.concat(flattenedArray2);
+  chart.data = mergedArray2;
 
 
   
     // Do something with the filtered heuristics data
    // Check if the 'positivelcppeffectCategorySpecification' is empty in the filtered data
-   var hasData = filteredHeuristics.some(
+   var hasData = mergedArray2.some(
     item => item.positivelcppeffectCategorySpecification !== ""
   );
 
@@ -840,7 +1194,7 @@ document.getElementById("chartdiv").appendChild(noDataMessage); // Append the me
     noDataMessage.style.display = "block"; // Show the no data message
   } else {
     // Set the chart's data and hide the no data message
-    chart.data = filteredHeuristics;
+    chart.data = mergedArray2;
     noDataMessage.style.display = "none";
   }
 
@@ -962,7 +1316,7 @@ slider.width = 700;
             const applicableIndustry = selectedHeuristic.industry.map((industry)=>{
                 let type= 'industry';
                 return(
-                    <Col md={4} className='text-center ' >
+                    <Col >
                         <RenderDetailItem item={industry} type={type}/>
                     </Col>
                 )
@@ -1058,7 +1412,7 @@ slider.width = 700;
                                     </Card>
                                 </Col>
                               </Row>
-                              <Row style={{marginTop: '20px'}}>
+                              {/* <Row style={{marginTop: '20px'}}>
                                 <Col md={{offset:4, size:2}} style={{ height: "auto", width: 'auto', borderRadius: "10px"}}>
                                     <Card style={{ height: "auto", width: 'auto', borderRadius: "10px"}}>
                                         <CardBody style={{border: 0, paddingInline: "20px"}}>
@@ -1066,14 +1420,14 @@ slider.width = 700;
                                         </CardBody>
                                     </Card>
                                 </Col>
-                              </Row>
+                              </Row> */}
                             </div>
                             <div className='row row-content' style={{rowGap: "60px"}}>
                               {/** After defining how to render each property of the corresponding heuristic,
                                * there will be rendered below.
                                */}
                               <Row>
-                                  <h4><b>Affected System Level </b></h4> 
+                                  <h4><b>Affected System Level </b></h4>
                                   <Col md= {6} style={{ height: "50px", width: "auto", borderRadius: "10px"}}>
                                       <Card style={{ height: "50px", width: "auto", borderRadius: "10px"}}>
                                           <CardBody style={{border: 0, paddingInline: "20px"}}>
@@ -1108,9 +1462,7 @@ slider.width = 700;
                                 <h4><b>Design heuristic for</b></h4> 
                                   <Col md= {4}>
                                     <Card style={{ height: '50px', textAlign: 'center' , paddingTop: '15px' }}>
-                                    
-                                            {selectedHeuristic.embodimentArtefact}  
-                                        
+                                      {selectedHeuristic.embodimentArtefact}
                                     </Card>
                                   </Col>
                                   <Col md= {4}>
@@ -1125,8 +1477,11 @@ slider.width = 700;
                                     </div> 
                               </Row>
                               <Row>
-                                <h4><b>Applicable industry</b></h4> 
-                                {applicableIndustry}
+                                <h4><b>Applicable industry</b></h4>
+                                
+                                <Col md= {6} style={{ height: "auto", width: "auto", borderRadius: "10px"}}>
+                                  {applicableIndustry}
+                                </Col>
                               </Row>
                               <Row>
                                 <h4><b>Description</b></h4>

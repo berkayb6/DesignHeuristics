@@ -209,10 +209,40 @@ function Landing (props){
                 <Row  style={{display:"block", marginTop:'2vw'}}>
                     <p style={{display:"block"}}>
                         <h1 style={{fontSize:'20px', lineHeight:'25pt',textAlign:'justify', marginLeft:'10%', marginRight:'10%'}}>
-                        As you can see sustainability needs to be looked at hollistically. There are certain impact categories (like emissions, ressource ussage, toxicity) which need to be further classified by the time they are produced/emitted during the life cycle. More than that there are other dimensions of a product which can have a positive impact on the sustainability of a product like the products design for recyclablity, disassemblability, reusability or remanufacturing, which can also be found in DfX (Design for X) guidelines in scientific literature. 
-                                <br/>With our application we want to give product designers the possibilty to directly name the effects a guideline has that they use and want to share. For that we developed a effect categorzation scheme that can be seen in the screenshot above. This can also help future product designers to improve their existing products if a life cycle assessment showed that a product has big improvement needs in certain impact categories and life cycle phases. 
+                            As you can see sustainability needs to be looked at hollistically. There are certain impact categories (like emissions, ressource ussage, toxicity) which need to be further classified by the time they are produced/emitted during the life cycle. More than that there are other dimensions of a product which can have a positive impact on the sustainability of a product like the products design for recyclablity, disassemblability, reusability or remanufacturing, which can also be found in DfX (Design for X) guidelines in scientific literature. 
+                            <br/>With our application we want to give product designers the possibilty to directly name the effects a guideline has that they use and want to share. For that we developed a effect categorzation scheme that can be seen in the screenshot above. This can also help future product designers to improve their existing products if a life cycle assessment showed that a product has big improvement needs in certain impact categories and life cycle phases. 
                         </h1>
                     </p>
+                </Row>
+                <Row style={{marginTop:'7vw', display:'table'}} className='d-flex align-items-center'>
+                    <Col style={{display:'table-cell', textAlign:'center'}}>
+                        <p >
+                            <h1 style={{fontSize:'2.5vw', letterSpacing:'.5vw'}}>As a professor or teacher you want to know more about <br/><h1 style={{fontSize:'5vw'}}>didactics?</h1></h1>
+                        </p>
+                    </Col>
+                </Row>
+                <Row style={{marginTop:'5vw'}}>
+                    <Col md={5} style={{alignItems:'center', marginLeft:'10vw'}}>
+                        <Row style={{textAlign:'justify', width:'90%'}}>
+                            <p>
+                                <h5 style={{lineHeight:'25pt'}}>
+                                We as the Institute for Industrial Information Technologies do not stop at research alone.
+                                <br/><br/>
+                                We also take pride in our commitment to education. As educators, we strive to equip students with the necessary tools to excel in the realm of product development. You can discover more about our didactic concept for product development and how to utilize design heuristics on our website.
+                                <br/><br/>
+                                If you're interested in delving deeper into our work, we have a wealth of resources available. Learn from our lessons learned, access PowerPoint slides that can be customized for your specific needs, and explore our video tutorials that guide you through the effective use of the app we've developed.
+                                </h5>
+                            </p>
+                        </Row>
+                        <Row style={{justifyContent:'center'}}>
+                            <Button style={{backgroundColor:"#001F4C", borderRadius: "10px",width:'8vw'}} onClick={getInContact}>
+                                Find out more!
+                            </Button>
+                        </Row>
+                    </Col>
+                    <Col md={5}>
+                        <img style={{height:'auto', width:'70%'}} src= {`${baseUrl}assets/PTZ.png`}/>
+                    </Col>
                 </Row>
                 <Row style={{marginTop:'7vw', display:'table'}} className='d-flex align-items-center'>
                     <Col style={{display:'table-cell', textAlign:'center'}}>
@@ -236,7 +266,7 @@ function Landing (props){
                                 </h5>
                             </p>
                         </Row>
-                        <Row>
+                        <Row style={{justifyContent:'center'}}>
                             <Button style={{backgroundColor:"#001F4C", borderRadius: "10px",width:'8vw'}} onClick={getInContact}>
                                 get in contact!
                             </Button>

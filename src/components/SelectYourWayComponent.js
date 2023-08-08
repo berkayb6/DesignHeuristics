@@ -64,7 +64,7 @@ class YourWay extends Component{
             */}
 
                         <div className='col-12 col-md offset-md-1' >
-                            <Link  className='text-decoration-none card-block' style={{color:"black"}} to="/selectyourmode">
+                            <Link  className='text-decoration-none card-block' style={{color:"black"}} to="/design-heuristic-collection">
                                 <Card className='selectYourWayCard' onClick={this.directDfXAssist}>
                                     <CardImg src= {`${baseUrl}assets/SelectYourWay_right.jpg`} className='selectYourWayImage' alt= "Tutorials"/>
                                     <CardBody>

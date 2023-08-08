@@ -28,6 +28,7 @@ function Collection (props){
         setSampleData(sortedData)
     
     }
+    console.log("props: ", props.item)
 
     function forwardHeuristicPage(selectedOne){
         amplitude.getInstance().logEvent(`${selectedOne.title}`)
@@ -60,24 +61,24 @@ function Collection (props){
         var effectCategorySpecification=heuristic.positiveEffects.map(( positiveEffect) =>{
             return  positiveEffect.effectCategorySpecification})
         return(
-            <Row className='d-flex align-items-center'>
-                <Col md={2} >
+            <Row className='d-flex align-items-center' style={{marginBottom:'25px', borderStyle:'groove'}}>
+                <Col md={2} style={{fontSize:'15px', marginRight:'1vw', textAlign:'center'}}>
                     {effectCategory.join(", ")}
                 </Col>
-                <Col md={1} >
+                <Col md={3} style={{fontSize:'15px', marginRight:'1vw'}}>
                     {effectCategorySpecification.join(", ")}
                 </Col>
-                <Col md={2} >
+                <Col md={1} style={{fontSize:'15px', marginRight:'1vw', textAlign:'center'}}>
                     {heuristic.adressedSystemLevel}
                 </Col>
-                <Col md={2} >
+                <Col md={1} style={{fontSize:'15px', marginRight:'1vw', textAlign:'center'}}>
                     {heuristic.artefactCategorization}
                 </Col>
-                <Col md={1} >
+                <Col md={1} style={{fontSize:'15px', marginRight:'1vw', textAlign:'center'}}>
                     {heuristic.rating}
                 </Col>
-                <Col md={4} >
-                    <Card key={heuristic.id}>
+                <Col md={3} >
+                    <Card key={heuristic.id} >
                         <CardBody >
                             <CardText onClick={()=>forwardHeuristicPage(heuristic)}> {heuristic.title}</CardText>
                         </CardBody>
@@ -119,28 +120,28 @@ function Collection (props){
             return(
                 <Container fluid style={{ paddingLeft: 30, paddingRight: 0 }}>
                     <Row className='d-flex align-items-center'>
-                        <Col md={2}>
-                            <h3>Effect Category</h3>
+                        <Col md={2} style={{marginRight:'1vw', textAlign:'center'}}>
+                            <h3 style={{fontSize:"1.3vw"}}>Effect Category</h3>
                         </Col>
-                        <Col md={1}>
-                            <h3>Effect Specification</h3>
+                        <Col md={3} style={{marginRight:'1vw', textAlign:'center'}}>
+                            <h3 style={{fontSize:"1.3vw"}}>Effect Specification</h3>
                         </Col>
-                        <Col md={2}>
-                            <h3>Adressed System Level</h3>
+                        <Col md={1} style={{marginRight:'1vw', textAlign:'center'}}>
+                            <h3 style={{fontSize:"1.3vw"}}>Adressed System Level</h3>
                         </Col>
-                        <Col md={2}>
-                            <h3>Artefact Categorization</h3>
+                        <Col md={1} style={{marginRight:'1vw', textAlign:'center'}}>
+                            <h3 style={{fontSize:"1.3vw"}}>Artefact Categorization</h3>
                         </Col>
-                        <Col md={1}>
-                            <h3>Rating</h3>
+                        <Col md={1} style={{marginRight:'1vw', textAlign:'center'}}>
+                            <h3 style={{fontSize:"1.3vw"}}>Rating</h3>
                         </Col>
-                        <Col md={3} className='d-flex align-items-center'>
-                            <h3>Applicable heuristic</h3>
+                        <Col md={3} className='d-flex align-items-center' style={{textAlign:'center'}}>
+                            <h3 style={{fontSize:"1.3vw"}}>Applicable heuristic</h3>
                             <i onClick={()=>handleSort()} className="fa fa-arrow-down"></i>
                         </Col>
                     </Row>
-                    <Row className='d-flex'>
-                            {heuristic}
+                    <Row >
+                        {heuristic}
                     </Row>
                 </Container>
             )

@@ -1,12 +1,20 @@
 import React, { Component, useEffect, useState } from 'react';
 import {Link, withRouter } from 'react-router-dom';
 import Collection from './Collection';
-import { Form, FormGroup, Col, Container, Row, Label, Input,Button, Card, CardTitle, CardBody, CardText, Modal, ModalHeader, ModalBody } from 'reactstrap';
+import { Form, FormGroup, Col, Container, Row, Label, Input,Button, Card, CardTitle, CardBody, CardText, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import Header from './HeaderComponent';
 import { Loading } from './LoadingComponent';
 import { amplitude } from '../utilities/amplitude';
 import { identify } from 'amplitude-js';
 
+
+const initialState= {
+    effectSpecification: 'default',
+    adressedLifeCyclePhase:"default",
+    adressedSystemLevel: 'All',
+    artefactCategorization: 'default',
+    role: 'All'
+}
 class DHCollection extends Component{
     constructor(props) {
         super(props);
@@ -18,24 +26,33 @@ class DHCollection extends Component{
             adressedSystemLevel: 'All',
             artefactCategorization: 'default',
             role: 'All',
-            isSearchClicked: false
+            isSearchClicked: false,
+            modal: false
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.searchClicked = this.searchClicked.bind(this);
         this.logClick = this.logClick.bind(this);
+        this.toggleModal=this.toggleModal.bind(this)
     }
+    
 
     handleInputChange(event) {
         const target = event.target;
         const value = target.type === 'checkbox' ? target.checked : target.value;
         const name = target.name;
-        
-    
-        this.setState({
-          [name]: value
-        });
+        console.log("name: ", name)
+        if (name=== "effectCategory"){
+            this.setState(initialState)
+            this.setState({
+                [name]: value
+            });
+        }else{
+            this.setState({
+                [name]: value
+            });
+        }
     }
 
     handleSubmit(event) {
@@ -58,12 +75,17 @@ class DHCollection extends Component{
             })
         }
     }
+
+    toggleModal(){
+        this.setState({modal: !this.state.modal});
+    }
     
     logClick = () => {
         amplitude.getInstance().logEvent('addYourOwnHeuristicClicked')
     }
     
     render(){
+        console.log("state: ", this.state)
         var identify= new amplitude.Identify(); 
         amplitude.getInstance().identify(identify);
         var deviceId = amplitude.getInstance().options.deviceId;
@@ -76,7 +98,7 @@ class DHCollection extends Component{
                     <div className='row row-content align-items-start'>
                         
                         <div className='col-12 col-md-6 offset-md-1' >
-                            <h2><strong>Collection</strong></h2>
+                            <h2><strong style={{marginRight: '20px'}}>Collection</strong><i className='fa fa-info-circle' onClick={this.toggleModal}></i></h2>
                             with all design heuristics available
                             <div className='row col-12 col-md-8' style={{marginTop:"100px"}}>
                                 <Link className='text-decoration-none card-block' onClick={this.logClick} style={{color:"black"}} to="/add-your-own-heuristic">
@@ -86,6 +108,104 @@ class DHCollection extends Component{
                                 </Link>
                             </div>
                         </div>
+                        <Modal isOpen={this.state.modal} toggle={this.toggleModal} size='lg' style={{backgroundColor:"#C9E2FF"}}>
+                            <ModalBody style={{backgroundColor:"#C9E2FF"}}>
+                                <Container style={{fontFamily:'sans-serif', marginTop:'20px'}}>
+                                    <Row>
+                                        <h3 style={{textAlign:'center'}}>
+                                            Explanation
+                                        </h3>
+                                    </Row>
+                                    <Row>
+                                        Target oriented heuristics help you reach your goals in the product development process. On our collection page we help you to find the best fitting ones.
+                                        <br/><br/>
+                                        Our goal was to create an extensive database with design heuristics for sustainable product design. But sustainability can be influenced in many ways and is highly dependent on your product’s quality or as we call them: “properties”. 
+                                        <br/><br/>
+                                        These properties can be differentiated in:
+                                    </Row>
+                                    <Row style={{marginTop: '20px'}}>
+                                        <Col md={4} style={{textAlign:'center'}}>
+                                            <Card>
+                                                Technical Properties
+                                            </Card>
+                                        </Col>
+                                        <Col md={4} style={{textAlign:'center'}}>
+                                            <Card>
+                                                Life Cycle Phase Properties
+                                            </Card>
+                                        </Col>
+                                        <Col md={4} style={{textAlign:'center'}}>
+                                            <Card>
+                                                Life Cycle Properties
+                                            </Card>
+                                        </Col>
+                                    </Row>
+                                    <Row style={{marginTop: '10px'}}>
+                                        <Col md={4}>
+                                            <Card>
+                                                <CardBody>
+                                                    directly linked to product characteristics via physical dependencies. E.g. stiffness is defined by material and geometry. 
+                                                </CardBody>
+                                            </Card>
+                                        </Col>
+                                        <Col md={4}>
+                                            <Card>
+                                                <CardBody>
+                                                    properties adressing suitability to a certain life cycle phase. Most of classical DfX targets are those properties.
+                                                </CardBody>
+                                            </Card>
+                                        </Col>
+                                        <Col md={4}>
+                                            <Card>
+                                                <CardBody>
+                                                    properties that reflect a product’s interrelation with surrounding dur-ing the entire life cycle and can the-refore be further classified regarding phase.
+                                                </CardBody>
+                                            </Card>
+                                        </Col>
+                                    </Row>
+                                    <Row style={{marginTop: '10px'}}>
+                                        <Col md={4}>
+                                            <Card>
+                                                <CardBody>
+                                                    Examples: 
+                                                    <br/>Speed, Temperature, Volume, Weight, Stiffness, Structural Robust-ness, Density, Internal Variety
+                                                </CardBody>
+                                            </Card>
+                                        </Col>
+                                        <Col md={4}>
+                                            <Card>
+                                                <CardBody>
+                                                    Examples: 
+                                                    <br/>Maintainability, Logistics, Repair, Reuse, Remanufacturability, Supply chain, Assembly, Upgradeability
+                                                </CardBody>
+                                            </Card>
+                                        </Col>
+                                        <Col md={4}>
+                                            <Card>
+                                                <CardBody>
+                                                    Examples: 
+                                                    <br/>energy use, emissions to air, emis-sions to water, costs, impact on acidification, impact on POCP
+                                                </CardBody>
+                                            </Card>
+                                        </Col>
+                                    </Row>
+                                    <Row style={{marginTop: '20px'}}>
+                                        All these properties can influence the overall sustainability of the product but they also influence one another. Technical properties can directly influence life cycle properties and so do life cycle phase properties. 
+                                        <br/><br/>
+                                        Since life cycle properties reflect the product’s interrelation with the entire life cycle our filter mechanism give you the possibility to classify the property closer by its influence in different phases.
+                                        <br/><br/>
+                                        More than that you can filter between heuristics for project managers (more high level heuristics) and for designers (which go more into detail).
+                                    </Row>
+                                    <Row style={{marginTop: '50px', justifyContent:'center'}}>
+                                        <Col md={4} style={{justifyContent:'center'}}>
+                                            <Button style={{backgroundColor:'white', borderRadius:'30px', border:'none', width:'221px', height:'63px'}} onClick={this.toggleModal}>
+                                                <h5 style={{color: 'black', fontFamily:'sans-serif'}}>Got it!</h5>
+                                            </Button>
+                                        </Col>
+                                    </Row>
+                                </Container>
+                            </ModalBody>
+                        </Modal>
 
                         <div className='col-12 col-md-5  '>
                             <div className='col-12'>
@@ -117,17 +237,17 @@ class DHCollection extends Component{
                                                         Select Effect Category Specification
                                                     </option>
                                                     <option>All</option>
-                                                    <option>Efficiency</option>
-                                                    <option>Noise Level</option>
-                                                    <option>Complexity</option>
-                                                    <option>Internal Variety</option>
-                                                    <option>Robustness</option>
-                                                    <option>Temperature</option>
-                                                    <option>Friction</option>
-                                                    <option>Volume</option>
-                                                    <option>Weight</option>
-                                                    <option>Losses</option>
-                                                    <option>Others</option>
+                                                    <option>efficiency</option>
+                                                    <option>noise level</option>
+                                                    <option>complexity</option>
+                                                    <option>internal variety</option>
+                                                    <option>robustness</option>
+                                                    <option>temperature</option>
+                                                    <option>friction</option>
+                                                    <option>volume</option>
+                                                    <option>weight</option>
+                                                    <option>losses</option>
+                                                    <option>others</option>
                                                 </Input>
                                             </Col> :
                                             <>
@@ -140,36 +260,36 @@ class DHCollection extends Component{
                                                             Select Effect Category Specification
                                                         </option>
                                                         <option>All</option>
-                                                        <option>Minimum risk</option>
-                                                        <option>Cost</option>
-                                                        <option>Standards</option>
-                                                        <option>Assembly</option>
-                                                        <option>Inspection</option>
-                                                        <option>Logistics</option>
-                                                        <option>Low quantity production</option>
-                                                        <option>Supply chain</option>
-                                                        <option>Modularity</option>
-                                                        <option>User friendliness</option>
-                                                        <option>Aesthetics</option>
-                                                        <option>Serviceability</option>
-                                                        <option>Maintainability</option>
-                                                        <option>Repair</option>
-                                                        <option>Reuse</option>
-                                                        <option>Recyclability</option>
-                                                        <option>Disassembly</option>
-                                                        <option>Remanufacturing</option>
-                                                        <option>Sustainability</option>
-                                                        <option>Manufacturability</option>
-                                                        <option>Ergonomics</option>
-                                                        <option>Ease of design changes</option>
-                                                        <option>Amount of produced goods</option>
-                                                        <option>Economies of scale</option>
-                                                        <option>Economies of scope</option>
-                                                        <option>Product usage intensity</option>
-                                                        <option>Product lifetime</option>
-                                                        <option>Wear</option>
-                                                        <option>Customer value</option>
-                                                        <option>Other</option>
+                                                        <option>minimum risk</option>
+                                                        <option>cost</option>
+                                                        <option>standards</option>
+                                                        <option>assembly</option>
+                                                        <option>inspection</option>
+                                                        <option>logistics</option>
+                                                        <option>low quantity production</option>
+                                                        <option>supply chain</option>
+                                                        <option>modularity</option>
+                                                        <option>user friendliness</option>
+                                                        <option>aesthetics</option>
+                                                        <option>serviceability</option>
+                                                        <option>maintainability</option>
+                                                        <option>repair</option>
+                                                        <option>reuse</option>
+                                                        <option>recyclability</option>
+                                                        <option>disassembly</option>
+                                                        <option>remanufacturing</option>
+                                                        <option>sustainability</option>
+                                                        <option>manufacturability</option>
+                                                        <option>ergonomics</option>
+                                                        <option>ease of design changes</option>
+                                                        <option>amount of produced goods</option>
+                                                        <option>economies of scale</option>
+                                                        <option>economies of scope</option>
+                                                        <option>product usage intensity</option>
+                                                        <option>product lifetime</option>
+                                                        <option>wear</option>
+                                                        <option>customer value</option>
+                                                        <option>other</option>
                                                     </Input>
                                                     </Col> :
                                                     <>
@@ -184,22 +304,22 @@ class DHCollection extends Component{
                                                                             Select Effect Category Specification
                                                                         </option>
                                                                         <option>All</option>
-                                                                        <option>Mineral and fossil use</option>
-                                                                        <option>General material use</option>
-                                                                        <option>Energy use</option>
-                                                                        <option>Water use</option>
-                                                                        <option>Land use</option>
-                                                                        <option>Costs</option>
-                                                                        <option>Landfill/Waste</option>
-                                                                        <option>Impact on climate change through emissions</option>
-                                                                        <option>Impact on euthrophication</option>
-                                                                        <option>Impact on acidification</option>
-                                                                        <option>Impact on POCP</option>
-                                                                        <option>Impact on ozone depletion</option>
-                                                                        <option>Particulate matter</option>
-                                                                        <option>Impact on ecotoxicity</option>
-                                                                        <option>Impact on human toxicity</option>
-                                                                        <option>Other</option>
+                                                                        <option>mineral and fossil use</option>
+                                                                        <option>general material use</option>
+                                                                        <option>energy use</option>
+                                                                        <option>water use</option>
+                                                                        <option>land use</option>
+                                                                        <option>costs</option>
+                                                                        <option>landfill/Waste</option>
+                                                                        <option>impact on climate change through emissions</option>
+                                                                        <option>impact on euthrophication</option>
+                                                                        <option>impact on acidification</option>
+                                                                        <option>impact on POCP</option>
+                                                                        <option>impact on ozone depletion</option>
+                                                                        <option>particulate matter</option>
+                                                                        <option>impact on ecotoxicity</option>
+                                                                        <option>impact on human toxicity</option>
+                                                                        <option>other</option>
                                                                     </Input>
                                                                 </Col>
                                                                 <Label htmlFor="adressedLifeCyclePhase" ></Label>
@@ -214,13 +334,13 @@ class DHCollection extends Component{
                                                                             Select Adressed Life Cycle Phase
                                                                         </option>
                                                                         <option>All</option>
-                                                                        <option>Design</option>
-                                                                        <option>Raw material acquisition</option>
-                                                                        <option>Production</option>
-                                                                        <option>Assembly</option>
-                                                                        <option>Distribution</option>
-                                                                        <option>Usage</option>
-                                                                        <option>After use</option>
+                                                                        <option>design</option>
+                                                                        <option>raw material acquisition</option>
+                                                                        <option>production</option>
+                                                                        <option>assembly</option>
+                                                                        <option>distribution</option>
+                                                                        <option>usage</option>
+                                                                        <option>after use</option>
                                                                     </Input>
                                                                 </Col>
                                                             </>:
@@ -242,9 +362,9 @@ class DHCollection extends Component{
                                                         Select System Level
                                                     </option>
                                                     <option>All</option>
-                                                    <option>Product/ System</option>
-                                                    <option>(Sub-)Assembly</option>
-                                                    <option>Part</option>
+                                                    <option>product</option>
+                                                    <option>assembly</option>
+                                                    <option>part</option>
                                                 </Input>
                                             </Col>
                                     </FormGroup>
@@ -260,22 +380,22 @@ class DHCollection extends Component{
                                                             Select Artefact Categorization
                                                         </option>
                                                         <option>All</option>
-                                                        <option>Product Identification and Classification</option>
-                                                        <option>Overall Product Architecture</option>
-                                                        <option>Software/Intelligence</option>
-                                                        <option>Technology</option>
-                                                        <option>Tolerances</option>
-                                                        <option>Packaging</option>
-                                                        <option>Interfaces</option>
-                                                        <option>Sense</option>
-                                                        <option>Control</option>
-                                                        <option>Functions</option>
-                                                        <option>Design Process</option>
-                                                        <option>Production Process</option>
-                                                        <option>Business Model</option>
-                                                        <option>Logistics</option>
-                                                        <option>Services</option>
-                                                        <option>Others</option>
+                                                        <option>product identification and classification</option>
+                                                        <option>overall product architecture</option>
+                                                        <option>software/intelligence</option>
+                                                        <option>technology</option>
+                                                        <option>tolerances</option>
+                                                        <option>packaging</option>
+                                                        <option>interfaces</option>
+                                                        <option>sense</option>
+                                                        <option>control</option>
+                                                        <option>functions</option>
+                                                        <option>design process</option>
+                                                        <option>production process</option>
+                                                        <option>business model</option>
+                                                        <option>logistics</option>
+                                                        <option>services</option>
+                                                        <option>others</option>
                                                     </Input>
                                                 </Col>
                                             </> :
@@ -291,10 +411,10 @@ class DHCollection extends Component{
                                                                     Select Artefact Categorization
                                                                 </option>
                                                                 <option>All</option>
-                                                                <option>Assembly Identification and Classification</option>
-                                                                <option>Assembly Position and Orientation</option>
-                                                                <option>Fasteners</option>
-                                                                <option>Others</option>
+                                                                <option>assembly identification and classification</option>
+                                                                <option>assembly position and orientation</option>
+                                                                <option>fasteners</option>
+                                                                <option>others</option>
                                                             </Input>
                                                         </Col>
                                                     </> :
@@ -311,12 +431,12 @@ class DHCollection extends Component{
                                                                                 Select Artefact Categorization
                                                                             </option>
                                                                             <option>All</option>
-                                                                            <option>Part Identification and Classification</option>
-                                                                            <option>Part Position and Orientation</option>
-                                                                            <option>Surface Characteristics</option>
-                                                                            <option>Geometry</option>
-                                                                            <option>Material Characteristics</option>
-                                                                            <option>Others</option>
+                                                                            <option>part identification and classification</option>
+                                                                            <option>part position and orientation</option>
+                                                                            <option>surface characteristics</option>
+                                                                            <option>geometry</option>
+                                                                            <option>material characteristics</option>
+                                                                            <option>others</option>
                                                                         </Input>
                                                                     </Col>
                                                                 </>
@@ -378,15 +498,14 @@ class DHCollection extends Component{
                                             )
                                         }
                                         else{
-                                            if (this.state.role==="Product Designer"){
+                                            if (this.state.role==="Project Manager"){
                                                 return (
-                                                    (item.orderCategory==="Life Cycle Property"||item.orderCategory=== "Life Cycle Phase Property" || item.orderCategory=== "Technical Property") &&
+                                                    (item.orderCategory.includes("Property")||item.orderCategory.includes("properties"))&&
                                                     item.positiveEffects.some((({effectCategory}) => effectCategory === this.state.effectCategory))
                                                 )
                                             }
                                             else{
                                                 return (
-                                                    (item.orderCategory==="Product Characteristic") &&
                                                     item.positiveEffects.some((({effectCategory}) => effectCategory === this.state.effectCategory))
                                                 )
                                             }
@@ -412,13 +531,13 @@ class DHCollection extends Component{
                                             }
                                         }
                                         else{
-                                            if (this.state.role==="Product Designer"){
+                                            if (this.state.role==="Project Manager"){
                                                 if(this.state.artefactCategorization=== "All" || this.state.artefactCategorization=== "default"){
                                                     return item.positiveEffects.some(
                                                         ({effectCategory}) => effectCategory === this.state.effectCategory
                                                     ) && item.adressedSystemLevel.includes(
                                                         this.state.adressedSystemLevel
-                                                    ) && (item.orderCategory==="Life Cycle Property"||item.orderCategory=== "Life Cycle Phase Property" || item.orderCategory=== "Technical Property")
+                                                    ) && (item.orderCategory.includes("Property")||item.orderCategory.includes("properties"))
                                                 }
                                                 else{
                                                     return item.positiveEffects.some(
@@ -427,7 +546,7 @@ class DHCollection extends Component{
                                                         this.state.adressedSystemLevel
                                                     ) && item.artefactCategorization.includes(
                                                         this.state.artefactCategorization
-                                                    ) && (item.orderCategory==="Life Cycle Property"||item.orderCategory=== "Life Cycle Phase Property" || item.orderCategory=== "Technical Property")
+                                                    ) && (item.orderCategory.includes("Property")||item.orderCategory.includes("properties"))
                                                 }
                                             }
                                             else{
@@ -436,7 +555,7 @@ class DHCollection extends Component{
                                                         ({effectCategory}) => effectCategory === this.state.effectCategory
                                                     ) && item.adressedSystemLevel.includes(
                                                         this.state.adressedSystemLevel
-                                                    ) && (item.orderCategory==="Product Characteristic")
+                                                    )
                                                 }
                                                 else{
                                                     return item.positiveEffects.some(
@@ -445,7 +564,7 @@ class DHCollection extends Component{
                                                         this.state.adressedSystemLevel
                                                     ) && item.artefactCategorization.includes(
                                                         this.state.artefactCategorization
-                                                    ) && (item.orderCategory==="Product Characteristic")
+                                                    )
                                                 }
                                             }
                                         }
@@ -462,10 +581,10 @@ class DHCollection extends Component{
                                             )
                                         }
                                         else{
-                                            if (this.state.role==="Product Designer"){
+                                            if (this.state.role==="Project Manager"){
                                                 return (
                                                     item.positiveEffects.some((({effectCategory}) => effectCategory === this.state.effectCategory)) && 
-                                                    (item.orderCategory==="Life Cycle Property"||item.orderCategory=== "Life Cycle Phase Property" || item.orderCategory=== "Technical Property") &&
+                                                    (item.orderCategory.includes("Property")||item.orderCategory.includes("properties"))&&
                                                     item.positiveEffects.some(
                                                         ({effectCategorySpecification}) => effectCategorySpecification.includes(this.state.effectSpecification) 
                                                     )
@@ -473,7 +592,6 @@ class DHCollection extends Component{
                                             }
                                             else{
                                                 return (
-                                                    (item.orderCategory==="Product Characteristic") &&
                                                     item.positiveEffects.some((({effectCategory}) => effectCategory === this.state.effectCategory)) &&
                                                     item.positiveEffects.some(
                                                         ({effectCategorySpecification}) => effectCategorySpecification.includes(this.state.effectSpecification) 
@@ -494,9 +612,9 @@ class DHCollection extends Component{
                                                 )
                                             }
                                             else{
-                                                if (this.state.role==="Product Designer"){
+                                                if (this.state.role==="Project Manager"){
                                                     return (
-                                                        (item.orderCategory==="Life Cycle Property"||item.orderCategory=== "Life Cycle Phase Property" || item.orderCategory=== "Technical Property") &&
+                                                        (item.orderCategory.includes("Property")||item.orderCategory.includes("properties"))&&
                                                         item.positiveEffects.some(
                                                             (({effectCategory}) => effectCategory === this.state.effectCategory)
                                                         ) && item.positiveEffects.some(
@@ -508,7 +626,6 @@ class DHCollection extends Component{
                                                 }
                                                 else{
                                                     return (
-                                                        (item.orderCategory==="Product Characteristic") &&
                                                         item.positiveEffects.some(
                                                             (({effectCategory}) => effectCategory === this.state.effectCategory)
                                                         ) && item.positiveEffects.some(
@@ -533,9 +650,9 @@ class DHCollection extends Component{
                                                 )
                                             }
                                             else{
-                                                if (this.state.role==="Product Designer"){
+                                                if (this.state.role==="Project Manager"){
                                                     return (
-                                                        (item.orderCategory==="Life Cycle Property"||item.orderCategory=== "Life Cycle Phase Property" || item.orderCategory=== "Technical Property") &&
+                                                        (item.orderCategory.includes("Property")||item.orderCategory.includes("properties")) &&
                                                         item.positiveEffects.some(
                                                             ({effectCategory}) => effectCategory === this.state.effectCategory
                                                         ) && item.positiveEffects.some(
@@ -549,7 +666,6 @@ class DHCollection extends Component{
                                                 }
                                                 else{
                                                     return (
-                                                        (item.orderCategory==="Product Characteristic") &&
                                                         item.positiveEffects.some(
                                                             ({effectCategory}) => effectCategory === this.state.effectCategory
                                                         ) && item.positiveEffects.some(
@@ -577,9 +693,9 @@ class DHCollection extends Component{
                                             )
                                         }
                                         else{
-                                            if (this.state.role==="Product Designer"){
+                                            if (this.state.role==="Project Manager"){
                                                 return (
-                                                    (item.orderCategory==="Life Cycle Property"||item.orderCategory=== "Life Cycle Phase Property" || item.orderCategory=== "Technical Property") 
+                                                    (item.orderCategory.includes("Property")||item.orderCategory.includes("properties")) 
                                                     && item.positiveEffects.some(
                                                         ({effectCategory}) => effectCategory === this.state.effectCategory
                                                     ) && item.positiveEffects.some(
@@ -588,9 +704,7 @@ class DHCollection extends Component{
                                                 )
                                             }
                                             else{
-                                                return (
-                                                    (item.orderCategory==="Product Characteristic")
-                                                    && item.positiveEffects.some(
+                                                return (item.positiveEffects.some(
                                                         ({effectCategory}) => effectCategory === this.state.effectCategory
                                                     ) && item.positiveEffects.some(
                                                         ({step4AdressedLifeCyclePhase}) => step4AdressedLifeCyclePhase === this.state.adressedLifeCyclePhase
@@ -611,9 +725,9 @@ class DHCollection extends Component{
                                                 )
                                             }
                                             else{
-                                                if (this.state.role==="Product Designer"){
+                                                if (this.state.role==="Project Manager"){
                                                     return (
-                                                        (item.orderCategory==="Life Cycle Property"||item.orderCategory=== "Life Cycle Phase Property" || item.orderCategory=== "Technical Property") 
+                                                        (item.orderCategory.includes("Property")||item.orderCategory.includes("properties")) 
                                                         && item.positiveEffects.some(
                                                             ({effectCategory}) => effectCategory === this.state.effectCategory
                                                         ) && item.positiveEffects.some(
@@ -624,9 +738,7 @@ class DHCollection extends Component{
                                                     )
                                                 }
                                                 else{
-                                                    return (
-                                                        (item.orderCategory==="Product Characteristic")
-                                                        && item.positiveEffects.some(
+                                                    return (item.positiveEffects.some(
                                                             ({effectCategory}) => effectCategory === this.state.effectCategory
                                                         ) && item.positiveEffects.some(
                                                             ({step4AdressedLifeCyclePhase}) => step4AdressedLifeCyclePhase === this.state.adressedLifeCyclePhase
@@ -650,9 +762,9 @@ class DHCollection extends Component{
                                                 )
                                             }
                                             else{
-                                                if (this.state.role==="Product Designer"){
+                                                if (this.state.role==="Project Manager"){
                                                     return (
-                                                        (item.orderCategory==="Life Cycle Property"||item.orderCategory=== "Life Cycle Phase Property" || item.orderCategory=== "Technical Property") 
+                                                        (item.orderCategory.includes("Property")||item.orderCategory.includes("properties")) 
                                                         && item.positiveEffects.some(
                                                             ({effectCategory}) => effectCategory === this.state.effectCategory
                                                         ) && item.positiveEffects.some(
@@ -665,9 +777,7 @@ class DHCollection extends Component{
                                                     )
                                                 }
                                                 else{
-                                                    return (
-                                                        (item.orderCategory==="Product Characteristic")
-                                                        && item.positiveEffects.some(
+                                                    return (item.positiveEffects.some(
                                                             ({effectCategory}) => effectCategory === this.state.effectCategory
                                                         ) && item.positiveEffects.some(
                                                             ({step4AdressedLifeCyclePhase}) => step4AdressedLifeCyclePhase === this.state.adressedLifeCyclePhase
@@ -694,9 +804,9 @@ class DHCollection extends Component{
                                             )
                                         }
                                         else{
-                                            if (this.state.role==="Product Designer"){
+                                            if (this.state.role==="Project Manager"){
                                                 return (
-                                                    (item.orderCategory==="Life Cycle Property"||item.orderCategory=== "Life Cycle Phase Property" || item.orderCategory=== "Technical Property") 
+                                                    (item.orderCategory.includes("Property")||item.orderCategory.includes("properties")) 
                                                     && item.positiveEffects.some(
                                                         ({effectCategory}) => effectCategory === this.state.effectCategory
                                                     ) && item.positiveEffects.some(
@@ -707,9 +817,7 @@ class DHCollection extends Component{
                                                 )
                                             }
                                             else{
-                                                return (
-                                                    (item.orderCategory==="Product Characteristic")
-                                                    && item.positiveEffects.some(
+                                                return (item.positiveEffects.some(
                                                         ({effectCategory}) => effectCategory === this.state.effectCategory
                                                     ) && item.positiveEffects.some(
                                                         ({step4AdressedLifeCyclePhase}) => step4AdressedLifeCyclePhase === this.state.adressedLifeCyclePhase
@@ -734,9 +842,9 @@ class DHCollection extends Component{
                                                 )
                                             }
                                             else{
-                                                if (this.state.role==="Product Designer"){
+                                                if (this.state.role==="Project Manager"){
                                                     return (
-                                                        (item.orderCategory==="Life Cycle Property"||item.orderCategory=== "Life Cycle Phase Property" || item.orderCategory=== "Technical Property") 
+                                                        (item.orderCategory.includes("Property")||item.orderCategory.includes("properties")) 
                                                         && item.positiveEffects.some(
                                                             ({effectCategory}) => effectCategory === this.state.effectCategory
                                                         ) && item.positiveEffects.some(
@@ -749,9 +857,7 @@ class DHCollection extends Component{
                                                     )
                                                 }
                                                 else{
-                                                    return (
-                                                        (item.orderCategory==="Product Characteristic")
-                                                        && item.positiveEffects.some(
+                                                    return (item.positiveEffects.some(
                                                             ({effectCategory}) => effectCategory === this.state.effectCategory
                                                         ) && item.positiveEffects.some(
                                                             ({step4AdressedLifeCyclePhase}) => step4AdressedLifeCyclePhase === this.state.adressedLifeCyclePhase
@@ -779,9 +885,9 @@ class DHCollection extends Component{
                                                 )
                                             }
                                             else{
-                                                if (this.state.role==="Product Designer"){
+                                                if (this.state.role==="Project Manager"){
                                                     return (
-                                                        (item.orderCategory==="Life Cycle Property"||item.orderCategory=== "Life Cycle Phase Property" || item.orderCategory=== "Technical Property") 
+                                                        (item.orderCategory.includes("Property")||item.orderCategory.includes("properties")) 
                                                         && item.positiveEffects.some(
                                                             ({effectCategory}) => effectCategory === this.state.effectCategory
                                                         ) && item.positiveEffects.some(
@@ -796,9 +902,7 @@ class DHCollection extends Component{
                                                     )
                                                 }
                                                 else{
-                                                    return (
-                                                        (item.orderCategory==="Product Characteristic")
-                                                        && item.positiveEffects.some(
+                                                    return ( item.positiveEffects.some(
                                                             ({effectCategory}) => effectCategory === this.state.effectCategory
                                                         ) && item.positiveEffects.some(
                                                             ({step4AdressedLifeCyclePhase}) => step4AdressedLifeCyclePhase === this.state.adressedLifeCyclePhase
