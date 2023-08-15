@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link, withRouter  } from 'react-router-dom';
-import {Navbar, Nav, NavbarToggler, Collapse, NavItem, Form, FormGroup, Row, Label, Button, Col} from 'reactstrap'
+import {Navbar, Nav, NavbarToggler, Collapse, NavItem, Row, Label, Button, Col} from 'reactstrap'
 import { Control, LocalForm, Errors} from 'react-redux-form';
 
 {/**To check if the password has at least 8 characters and 1 special character,

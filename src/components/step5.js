@@ -1,9 +1,9 @@
 import React, { useState }  from "react";
-import { useForm, ErrorMessage } from "react-hook-form";
-import { useHistory, Link, useLocation } from "react-router-dom";
+import { useForm} from "react-hook-form";
+import { useHistory, Link} from "react-router-dom";
 import { useStateMachine } from "little-state-machine";
-import { Control, LocalForm, Errors, actions} from 'react-redux-form';
-import { Row, Col, Card, FormGroup, Label, Input, CardBody, CardText, Button, CardImg } from "reactstrap";
+import { Control} from 'react-redux-form';
+import { Row, Col, Card, FormGroup, Label, Input, CardBody, Button, CardImg } from "reactstrap";
 import updateAction from "./updateAction";
 import Header from "./HeaderComponent";
 import {baseUrl} from '../shared/baseUrl';
@@ -27,6 +27,8 @@ const Step5 = props => {
         selectedFile3: null
     })
 
+    const [imageTypes, setImageTypes] = useState([]);
+
     const [industries, setIndustries] = useState([]);
 
     const [extraInfo, setExtraInfo] = useState('');
@@ -37,6 +39,7 @@ const Step5 = props => {
         defaultValues: state.heuristicDetails
     });
     const { push } = useHistory();
+    console.log("radio: ", imageTypes)
     const onSubmit = data => {
         if (property[property.length-1].effectCategory==='Life Cycle Property'){
             var newPropertyValues = [...property];
@@ -66,6 +69,7 @@ const Step5 = props => {
         var image= [];
 
         for ( const[key, value] of Object.entries(file)){
+            console.log("value: ", value)
             if (value!== null){
                 image.push(value.name)
             }
@@ -89,8 +93,42 @@ const Step5 = props => {
             image, 
             sources
         )
+
+        onFileUpload();
         push('/you-rock')
     };
+
+    const onFileUpload = () => {
+        const url = `${baseUrl}imageUpload`;
+
+        const config = {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        };
+        var requestArray= []
+        console.log("files: ", file)
+        for ( const[key, value] of Object.entries(file)){
+
+            if (key!== null){
+                var formData = new FormData();
+                formData.append(
+                    "imageFile",
+                    value,
+                    value.name
+                //this.state.flexRadioDefault + ".jpg"
+                );
+                const request = axios.post(url, formData, config);
+                requestArray.push(request)
+            }
+        }
+        axios.all(requestArray).then((...responses) => {
+            console.log(responses[0])
+            console.log(responses[1]) 
+        }).catch(errors => {
+        })
+    };
+
   
     let handleOnChange = (i,e) => {
         let newPropertyValues = [...property];
@@ -139,7 +177,7 @@ const Step5 = props => {
     let handleFileUpload = e => {
         const { name, value } = e.target;
     
-        setFile({
+        setImageTypes({
           [name]: value
         });
     };
@@ -193,7 +231,7 @@ const Step5 = props => {
                             <h7> You nearly made it! In our research we found out that majority of professional designers as well as students are
                                 more likely to understand and use a design advice, when some additional information is given.
                                 {<br/>}{<br/>}
-                                We hope you find the time to add some of the following information aspects. You can also just add the single ones and upload them.
+                                We hope you find the time to add some of the following information aspects.
                                 {<br/>}{<br/>}
                                 Nonetheless, please make sure to click on <strong>hand in</strong> at the end of the page.
                                 {<br/>}{<br/>}
@@ -365,10 +403,9 @@ const Step5 = props => {
                             </Col>
                         </Row>
                         <Row className='form-group' style={{marginBottom:"60px", marginTop: '60px'}}>
-                            <Col md={3}>
+                            <Col>
                                 <h4>In which industry can your heuristic be used?</h4>
-                            </Col>
-                            <Col md={9}>
+                                <br/>
                                 <h7>Please define the industry! You can choose more than one. If you do not chose the industry, we assume that it works in every industry.</h7>
                             </Col>
                             <Row className="col-12 d-flex justify-content-between" onChange={e=> handleCheckChange(e)} md={3} style={{marginTop:"20px"}}>
@@ -538,13 +575,13 @@ const Step5 = props => {
                         <Row className='col-md' style={{alignItems:'center', marginTop:'50px'}}>
                             <Col md={4} className='col-md offset-2'>
                                 <Link className='text-decoration-none card-block' style={{color:"black"}} to="/step4">
-                                    <Card style={{width:"160px", float: "left", borderRadius:"10px"}}>
-                                        <h3 style={{padding:"2px 20px 2px"}}><strong>Previous</strong></h3>
+                                    <Card style={{width:"auto", float: "left", borderRadius:"10px"}}>
+                                        <h5 style={{padding:"2px 20px 2px"}}><strong>Previous</strong></h5>
                                     </Card>
                                 </Link>
                             </Col>
                             <Col md={4}>
-                                <Button type='submit' className="btn-md" color='light'>Hand in!</Button>
+                                <Button type='submit' style={{width:"auto", float: "left", borderRadius:"10px"}} className="btn-md" color='light'><h3 style={{padding:"2px 20px 2px"}}><strong>Hand in</strong></h3></Button>
                             </Col>
                         </Row>
                         <Row className='col-md offset-4' style={{marginBottom:"40px", marginTop:"20px"}}>

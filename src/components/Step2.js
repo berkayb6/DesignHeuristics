@@ -1,8 +1,7 @@
 import React, { useState }  from "react";
-import { useForm, ErrorMessage } from "react-hook-form";
+import { useForm} from "react-hook-form";
 import { useHistory, Link, useLocation } from "react-router-dom";
 import { useStateMachine } from "little-state-machine";
-import { Control, LocalForm, Errors, actions} from 'react-redux-form';
 import { Row, Col, Card, FormGroup, Label, Input, Button, CardBody, CardImg } from "reactstrap";
 import updateAction from "./updateAction";
 import Header from "./HeaderComponent";
@@ -11,7 +10,7 @@ import { baseUrl } from "../shared/baseUrl";
 const Step2 = props => {
     const { actions, state } = useStateMachine({ updateAction });
     const [property, setProperty] = useState({
-        adressedSystemLevel: 'Product/ System',
+        adressedSystemLevel: 'product',
         artefactCategorization: 'default'
     });
     const { handleSubmit, register, errors } = useForm({
@@ -44,7 +43,7 @@ const Step2 = props => {
     const location= useLocation();
     let secondDropdown;
 
-    if (property.adressedSystemLevel=== 'Product/ System'){
+    if (property.adressedSystemLevel=== 'product'){
         secondDropdown= 
         <Col md={6}>
             <Label htmlFor="artefactCategorization" ><h4>2. Categorization of the Artefact</h4></Label>
@@ -75,7 +74,7 @@ const Step2 = props => {
             </Col>
             <Label className='align-items-center'> <h6 className="requiredStyle" ref={artefactCategorizationCheck} style={{display:"none"}}> You may have missed some information to share! </h6></Label>
         </Col>
-    } else if (property.adressedSystemLevel=== '(Sub-)Assembly'){
+    } else if (property.adressedSystemLevel=== 'assembly'){
         secondDropdown= 
         <Col md={6}>
             <Label htmlFor="artefactCategorization" ><h4>2. Categorization of the Artefact</h4></Label>
@@ -94,7 +93,7 @@ const Step2 = props => {
             </Col>
             <Label className='align-items-center'> <h6 className="requiredStyle" ref={artefactCategorizationCheck} style={{display:"none"}}> You may have missed some information to share! </h6></Label>
         </Col>
-    } else if (property.adressedSystemLevel=== 'Part'){
+    } else if (property.adressedSystemLevel=== 'part'){
         secondDropdown=
         <Col md={6}>
             <Label htmlFor="artefactCategorization" ><h4>2. Categorization of the Artefact</h4></Label>
@@ -155,9 +154,9 @@ const Step2 = props => {
                                         <option value="default" disabled hidden>
                                             Select System Level
                                         </option>
-                                        <option>Product/ System</option>
-                                        <option>(Sub-)Assembly</option>
-                                        <option>Part</option>
+                                        <option>product</option>
+                                        <option>assembly</option>
+                                        <option>part</option>
                                     </Input>
                                 </Col>
                             </Col>
@@ -169,13 +168,13 @@ const Step2 = props => {
                         <Row className='col-md' style={{alignItems:'center', marginTop:'50px'}}>
                             <Col md={4} className='col-md offset-2'>
                                 <Link className='text-decoration-none card-block' style={{color:"black"}} to="/add-your-own-heuristic">
-                                    <Card style={{width:"160px", float: "left", borderRadius:"10px"}}>
-                                        <h3 style={{padding:"2px 20px 2px"}}><strong>Previous</strong></h3>
+                                    <Card style={{width:"auto", float: "left", borderRadius:"10px"}}>
+                                        <h5 style={{padding:"2px 20px 2px"}}><strong>Previous</strong></h5>
                                     </Card>
                                 </Link>
                             </Col>
                             <Col md={4}>
-                                <Button type='submit' className="btn-md" color='light'>Next Step!</Button>
+                                <Button type='submit' style={{width:"auto", float: "left", borderRadius:"10px"}} className="btn-md" color='light'><h3 style={{padding:"2px 20px 2px"}}><strong>Next Step</strong></h3></Button>
                             </Col>
                             <Row className='col-md offset-4' style={{marginBottom:"40px", marginTop:"20px"}}>
                                 <Col>

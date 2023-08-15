@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import {Navbar, NavbarBrand, Nav, NavbarToggler, Collapse, NavItem,
-Button, Card, CardImg} from 'reactstrap';
+import {Navbar, Nav, NavbarToggler, Collapse, NavItem, Button, Card, CardImg} from 'reactstrap';
 import {NavLink} from 'react-router-dom';
 import { baseUrl } from '../shared/baseUrl';
 import { amplitude } from '../utilities/amplitude';
@@ -52,22 +51,22 @@ class Header extends Component{
               
                         <Collapse isOpen={this.state.isNavOpen} navbar>
                             <Nav navbar >
-                            <Nav className='col-12 col-md-3' navbar>
+                            <Nav className='col-12 col-md-5' navbar>
                                 <Card className='logo'>
-                                    <CardImg src= {`${baseUrl}assets/BD-logo.png`} width={20} height={50}/>
+                                    <CardImg src= {`${baseUrl}assets/BD-logolanding.png`} width={20} height={50}/>
                                 </Card>
                             </Nav>
-                            <NavItem >
+                            <NavItem className='col-12 col-md-2' style={{alignItems:'center', justifyContent:'center', display:'flex'}}>
                                 <NavLink className="nav-link" to="/selectyourway" style={{color:"black"}}>
                                     <span className='fa-lg' ><strong>Home</strong></span> 
                                 </NavLink>
                             </NavItem>
-                            <NavItem>
+                            <NavItem className='col-12 col-md-5' style={{alignItems:'center', justifyContent:'center', display:'flex'}}>
                                 <NavLink className="nav-link" onClick={this.logClick("dfxCollectionClicked")} to="/design-heuristic-collection" style={{color:"black"}}>
-                                    <span className='fa-lg'><strong>DfX-Collection</strong></span>
+                                    <span className='fa-lg' ><strong>Knowledge Base</strong></span>
                                 </NavLink>
                             </NavItem>
-                            <NavItem>
+                            <NavItem className='col-12 col-md-2' style={{alignItems:'center', justifyContent:'center', display:'flex'}}>
                                 <NavLink className="nav-link" onClick={this.logClick("searchClicked")} to="/search" style={{color:"black"}}>
                                     <span className='fa-lg'><strong>Search</strong></span>
                                 </NavLink>

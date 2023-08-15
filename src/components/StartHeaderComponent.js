@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-import {Navbar, Nav, NavbarToggler, Collapse, NavItem,
-Button, Modal, ModalHeader, ModalBody, Form, Input, FormGroup, Label, Image, Card, CardImg} from 'reactstrap';
+import {Navbar, Nav, NavbarToggler, Collapse, NavItem, Button, Card, CardImg} from 'reactstrap';
 import {NavLink} from 'react-router-dom';
 import { baseUrl } from '../shared/baseUrl';
-import Start from './StartComponent';
 
 class StartHeader extends Component{
     constructor(props){
@@ -59,17 +57,17 @@ class StartHeader extends Component{
                         
                         <Collapse isOpen={this.state.isNavOpen} navbar>
                             <Nav className='col-12 col-md-2' navbar>
-                                <Card className='logo'>
-                                    <CardImg src= {`${baseUrl}assets/BD-logo.png`} width={20} height={50}/>
+                                <Card className='logo' >
+                                    <CardImg src= {`${baseUrl}assets/BD-logolanding.png`} width={20} height={50}/>
                                 </Card>
                             </Nav>
                             <Nav navbar>
-                                <NavItem>
+                                <NavItem style={{alignItems:'center', justifyContent:'center', display:'flex'}}>
                                     {/**Since there are two pages that have similar heading being "Select Your Way" and "Select Your Mode",
                                      * the corresponding ending is sent to this component. Depending on the received selectyour-prop, heading
                                      * will be edited. 
                                      */}
-                                    <h1><strong>Select Your {this.props.selectyour}</strong></h1>
+                                    <h1 style={{alignItems:'center', justifyContent:'center', display:'flex', fontSize:'40px'}}><strong>Select Your {this.props.selectyour}</strong></h1>
                                 </NavItem>
                             </Nav>
                             <Nav className='ms-auto' navbar>

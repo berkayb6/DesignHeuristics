@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Loading } from './LoadingComponent';
 import {withRouter } from 'react-router-dom';
-import { Form, FormGroup, Col, Container, Row, Label, Input,Button, Card, CardTitle, CardBody, CardText, Modal, ModalHeader, ModalBody } from 'reactstrap';
+import { Col, Container, Row, Card, CardBody, CardText} from 'reactstrap';
 import { amplitude } from '../utilities/amplitude';
-import HeuristicDetails from './HeuristicDetailsComponent';
-import Lib from 'react-xarrows';
 
 function Collection (props){
 
@@ -119,6 +117,9 @@ function Collection (props){
         else
             return(
                 <Container fluid style={{ paddingLeft: 30, paddingRight: 0 }}>
+                    <Row style={{fontFamily:'sans-serif'}}>
+                        {`${props.item.length}`} Heuristics have been found with selected filters:
+                    </Row>
                     <Row className='d-flex align-items-center'>
                         <Col md={2} style={{marginRight:'1vw', textAlign:'center'}}>
                             <h3 style={{fontSize:"1.3vw"}}>Effect Category</h3>

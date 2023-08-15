@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import {Card, CardImg,Button, CardText, CardBody, CardTitle, CardSubtitle, Fade} from 'reactstrap'
+import {Card, CardImg} from 'reactstrap'
 import { baseUrl } from '../shared/baseUrl';
 
 
@@ -14,9 +14,9 @@ function Start (props) {
             
             {/**Header part includes the TU-logo and the name of the department */}
             <div className='row row-header home-page-header'>
-                <div className='col-12 col-md-2'>
+                <div className='col-12 col-md-2'style={{marginLeft:'-10px'}}>
                     <Card className='logo'>
-                        <CardImg src= {`${baseUrl}assets/BD-logo.png`} width={20} height={50}/>
+                        <CardImg src= {`${baseUrl}assets/BD-logolanding.png`} width={20} height={50}/>
                     </Card>
                 </div>
                 <div className='col-12 col-sm-12'>

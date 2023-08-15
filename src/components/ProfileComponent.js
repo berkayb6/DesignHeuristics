@@ -1,9 +1,5 @@
 import React, { Component, useRef } from 'react';
 import Header from './HeaderComponent';
-import {Navbar, Nav, NavbarToggler, Collapse, NavItem, Form, FormGroup, Row, Label, Button, Col} from 'reactstrap'
-import {Xarrow} from 'react-xarrows';
-import SimpleExample from './ArrowExample';
-const boxStyle = {border: "grey solid 2px", borderRadius: "10px", padding: "5px"};
 
 class Profile extends Component {
     

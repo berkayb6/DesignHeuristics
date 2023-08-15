@@ -1,11 +1,6 @@
-import React, { useState }  from "react";
-import { useForm, ErrorMessage } from "react-hook-form";
-import { useHistory, Link, useLocation } from "react-router-dom";
-import { useStateMachine } from "little-state-machine";
-import { Control, LocalForm, Errors, actions} from 'react-redux-form';
-import { Row, Col, Card, FormGroup, Label, Input, CardBody, CardText, Button, CardImg } from "reactstrap";
-import updateAction from "./updateAction";
-import Header from "./HeaderComponent";
+import React from "react";
+import { Link } from "react-router-dom";
+import { Row, Col, Card, CardImg } from "reactstrap";
 import { baseUrl } from "../shared/baseUrl";
 
 const YouRock = props => {
@@ -13,11 +8,19 @@ const YouRock = props => {
     return (
         <>
             <div className='container'>
-                
-                <div className='row row-header home-page-header'>
-                    <div className='col-12 col-md-6 col-sm-7'>
-                        <h5><strong>Department of Industrial Information Technology</strong></h5>
-                    </div>
+                <div className="row row-header">
+                    <Row >
+                        <Col md={5}>
+                            <h5><strong>Department of Industrial Information Technology</strong></h5>
+                        </Col>
+                    </Row>
+                    <Row style={{marginLeft:'50px'}}>
+                        <Col md={3} >
+                            <Card className='logo'>
+                                <CardImg src= {`${baseUrl}assets/landingPageLogo.png`} width={20} height={50}/>
+                            </Card>
+                        </Col>
+                    </Row>
                 </div>
                 <div className='row row-content align-items-center'>
                     <div className='col-12 col-md-6' >

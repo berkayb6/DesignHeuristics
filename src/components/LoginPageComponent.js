@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { Route, Link, withRouter, NavLink, Redirect } from 'react-router-dom';
+import { Link, withRouter, NavLink} from 'react-router-dom';
 import {Navbar, Nav, NavbarToggler,  Collapse, NavItem, Form, Row , Input, Label, Button, FormGroup, Col} from 'reactstrap';
-import { Control, LocalForm, Errors} from 'react-redux-form';
 
 
 class Login extends Component{

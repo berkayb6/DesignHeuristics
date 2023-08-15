@@ -1,10 +1,9 @@
-import React, { Component, useState, useLayoutEffect  } from 'react';
-import { Form, FormGroup, Col, Label, Input,Button, Card, CardTitle, CardBody, CardText, CardImg, Row} from 'reactstrap';
+import React, { Component} from 'react';
+import { Col, Label, Button, Card, CardTitle, CardBody, CardText, CardImg, Row} from 'reactstrap';
 import { LocalForm, Control} from 'react-redux-form';
 import {baseUrl} from '../shared/baseUrl';
 import ReactStars from "react-rating-stars-component";
 import Header from './HeaderComponent';
-import { toHaveDescription } from '@testing-library/jest-dom/dist/matchers';
 import { Loading } from './LoadingComponent';
 import * as am4core from "@amcharts/amcharts4/core";    
 import * as am4charts from "@amcharts/amcharts4/charts";    
@@ -1258,7 +1257,8 @@ slider.width = 700;
         * being the heuristic which the user sends a feedback for, user's name and comment to the server.
         */
        // this.setState({ comments: [...this.state.comments, this.props.postComment(this.props.selectedOne._id, values.author, values.comment)]})
-       this.props.postComment(this.props.heuristics._id, values.author, values.comment);
+       
+       this.props.postComment(this.props.selectedHeuristic._id, values.author, values.comment);
        window.location.reload(false);
         
     }  
@@ -1307,7 +1307,7 @@ slider.width = 700;
             }) :<Col md={5} className="text-center">
                     <Card className='justify-content-center' style={{ height: "auto", width: "auto", borderRadius: "10px", width: "auto",paddingInline: '20px'}}>
                         <CardBody >
-                        <strong>Currently, no known negative influence property</strong>
+                        <strong>Currently no known negative influence property</strong>
                         </CardBody>
                     </Card>
                 </Col>
@@ -1332,7 +1332,7 @@ slider.width = 700;
             }) :<Col md={5} className="text-center">
                     <Card className='justify-content-center' style={{ height: "auto", width: "auto", borderRadius: "10px", width: "auto",paddingInline: '20px'}}>
                         <CardBody >
-                            <strong>Currently, no known graphic property</strong>
+                            <strong>Currently no graphical explanation of the heuristic available</strong>
                         </CardBody>
                     </Card>
                 </Col>
@@ -1356,7 +1356,7 @@ slider.width = 700;
             }) :<Col md={5} className="text-center">
                     <Card className='justify-content-center' style={{ height: "auto", width: "auto", borderRadius: "10px", width: "auto",paddingInline: '20px'}}>
                         <CardBody >
-                            <strong>Currently, no comment has been posted yet!</strong>
+                            <strong>So far no comments have been posted!</strong>
                         </CardBody>
                     </Card>
                 </Col>
@@ -1396,6 +1396,7 @@ slider.width = 700;
             else
                 return (
                     <>
+                    {console.log("heur: ", selectedHeuristic)}
                         <Header auth={this.props.auth}
                             logoutUser={this.props.logoutUser}/>
                         <div className='container'>
@@ -1405,7 +1406,7 @@ slider.width = 700;
                                     <h3>Design Advice</h3>
                                 </Col>
                                 <Col md= {6} >
-                                    <Card style={{ height: "50px", width: "auto", borderRadius: "10px"}}>
+                                    <Card style={{ height: "auto", width: "auto", borderRadius: "10px"}}>
                                         <CardBody style={{border: 0, paddingInline: "20px"}}>
                                             {selectedHeuristic.title}
                                         </CardBody>
@@ -1499,7 +1500,7 @@ slider.width = 700;
                                 <Col md={5} className="text-center">
                                     <Card className='justify-content-center' style={{ height: "auto", width: "auto", borderRadius: "10px", width: "auto",paddingInline: '20px'}}>
                                         <CardBody >
-                                            <strong>Currently, no description is available</strong>
+                                            <strong>Currently no description of the heuristic is available</strong>
                                         </CardBody>
                                     </Card>
                                 </Col>
@@ -1510,7 +1511,7 @@ slider.width = 700;
                                   {images}
                               </Row>
                               <Row>
-                                  <h4><b>Sources</b></h4> 
+                                  <h4><b>Source</b></h4> 
                                   {sources}
                               </Row>
                               <Row>

@@ -1,11 +1,9 @@
-import React, { Component, useEffect, useState } from 'react';
-import {Link, withRouter } from 'react-router-dom';
+import React, { Component} from 'react';
+import {Link } from 'react-router-dom';
 import Collection from './Collection';
 import { Form, FormGroup, Col, Container, Row, Label, Input,Button, Card, CardTitle, CardBody, CardText, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import Header from './HeaderComponent';
-import { Loading } from './LoadingComponent';
 import { amplitude } from '../utilities/amplitude';
-import { identify } from 'amplitude-js';
 
 
 const initialState= {

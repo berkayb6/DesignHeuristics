@@ -1,5 +1,5 @@
 import React from 'react';
-import {Row, Col} from 'reactstrap';
+import {Row} from 'reactstrap';
 import { baseUrl } from '../shared/baseUrl';
 import { Container } from 'reactstrap';
 import Footer from './FooterComponent';

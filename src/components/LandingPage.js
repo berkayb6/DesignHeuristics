@@ -46,14 +46,14 @@ function Landing (props){
     return(
         <div>
             <Container fluid style={{fontFamily:'sans-serif'}} >
-                <Row style={{width:'auto', display:'inline-block', textAlign:'center'}}>
+                <Row style={{width:'auto', display:'inline-block', marginLeft:'30px',textAlign:'center'}}>
                     <img style={{position:'absolute', left:'80%', width: '15vw', height:'auto'}} src= {`${baseUrl}assets/landingPageLogo.png`}/>
                     <video autoPlay loop muted id='video' style={{ objectFit: 'cover', height:'auto'}}>
                         <source src= {`${baseUrl}videos/clouds.mp4`} type='video/mp4'/>
                     </video>
-                    <p style={{position:'absolute', width: 'auto', top:'30%', height:'auto'}}>
-                        <h1 style={{fontSize:'8.5vw', letterSpacing:'5.5vw'}}>KNOWLEDGE</h1>
-                        <h1 style={{fontSize:'6vw',  letterSpacing:'0.1vw'}}>For Sustainable Product Design</h1>
+                    <p style={{position:'absolute',  width: 'auto', top:'30%', height:'auto'}}>
+                        <h1 style={{fontSize:'7.5vw', letterSpacing:'5.5vw', justifySelf:'center'}}>KNOWLEDGE</h1>
+                        <h1 style={{fontSize:'6vw',  letterSpacing:'0.1vw', marginLeft:'-5vw', justifySelf:'center'}}>For Sustainable Product Design</h1>
                     </p>
                     {/* <Row style={{marginLeft:'.1vw', width:'100%', position:'absolute',marginTop:'-4vw', height:'auto',}}>
                         <Col md={3}>
@@ -90,7 +90,7 @@ function Landing (props){
                 <Row style={{marginTop:'5vw', display:'table'}} className='d-flex align-items-center'>
                     <Col style={{display:'table-cell', textAlign:'center'}}>
                         <p >
-                            <h1 style={{fontSize:'2.5vw', letterSpacing:'.5vw'}}>You said there is <br/> <h1 style={{fontSize:'5vw'}}>an application!</h1></h1>
+                            <h1 style={{fontSize:'2.5vw', letterSpacing:'.5vw'}}>You said there is <br/> <h1 style={{fontSize:'5vw'}}>an application?</h1></h1>
                         </p>
                     </Col>
                 </Row>
@@ -129,9 +129,9 @@ function Landing (props){
                         </p>
                     </Col>
                 </Row>
-                <Row style={{ display:'table'}} className='d-flex align-items-center'>
-                    <p style={{textAlign:'center', display:'table-cell'}}>
-                        <h1 style={{fontSize:'25px'}}>
+                <Row  style={{display:"block", marginLeft:'10px', marginRight:'90px'}}>
+                    <p style={{display:"block"}}>
+                        <h1 style={{fontSize:'25px', lineHeight:'25pt',textAlign:'justify', marginLeft:'10%', marginRight:'10%'}}>
                             Design Heuristics are a form of knowledge representation. They are mostly formulated as simple rules of thumb, that are derived from tacit knowledge. Find out more about design heuristics is in the video.
                         </h1>
                     </p>
@@ -149,11 +149,11 @@ function Landing (props){
                 <Row style={{marginTop:'5vw', display:'table'}} className='d-flex align-items-center'>
                     <Col style={{display:'table-cell', textAlign:'center'}}>
                         <p >
-                            <h1 style={{fontSize:'2.5vw', letterSpacing:'.5vw'}}>What do I need to know about <br/>sustainability?</h1>
+                            <h1 style={{fontSize:'2.5vw', letterSpacing:'.5vw'}}>What do I need to know about <br/><h1 style={{fontSize:'5vw'}}>sustainability?</h1></h1>
                         </p>
                     </Col>
                 </Row>
-                <Row  style={{display:"block"}}>
+                <Row  style={{display:"block", marginLeft:'10px', marginRight:'90px'}}>
                     <p style={{display:"block"}}>
                         <h1 style={{fontSize:'20px', lineHeight:'25pt',textAlign:'justify', marginLeft:'10%', marginRight:'10%'}}>
                             We need to save ressources, we need to protect our environmnent from negative effects of creating, using and disposing products. 
@@ -206,7 +206,7 @@ function Landing (props){
                         </h1>
                     </Col>
                 </Row>
-                <Row  style={{display:"block", marginTop:'2vw'}}>
+                <Row  style={{display:"block", marginTop:'2vw',  marginLeft:'10px', marginRight:'90px'}}>
                     <p style={{display:"block"}}>
                         <h1 style={{fontSize:'20px', lineHeight:'25pt',textAlign:'justify', marginLeft:'10%', marginRight:'10%'}}>
                             As you can see sustainability needs to be looked at hollistically. There are certain impact categories (like emissions, ressource ussage, toxicity) which need to be further classified by the time they are produced/emitted during the life cycle. More than that there are other dimensions of a product which can have a positive impact on the sustainability of a product like the products design for recyclablity, disassemblability, reusability or remanufacturing, which can also be found in DfX (Design for X) guidelines in scientific literature. 
@@ -214,12 +214,10 @@ function Landing (props){
                         </h1>
                     </p>
                 </Row>
-                <Row style={{marginTop:'7vw', display:'table'}} className='d-flex align-items-center'>
-                    <Col style={{display:'table-cell', textAlign:'center'}}>
-                        <p >
-                            <h1 style={{fontSize:'2.5vw', letterSpacing:'.5vw'}}>As a professor or teacher you want to know more about <br/><h1 style={{fontSize:'5vw'}}>didactics?</h1></h1>
-                        </p>
-                    </Col>
+                <Row  style={{marginTop:'7vw', display:"block", marginLeft:'100px', marginRight:'150px'}}>
+                    <p style={{textAlign:'center'}}>
+                        <h1 style={{fontSize:'2.5vw', letterSpacing:'.5vw'}}>As a professor or teacher you want to know more about <br/><h1 style={{fontSize:'5vw'}}>didactics?</h1></h1>
+                    </p>
                 </Row>
                 <Row style={{marginTop:'5vw'}}>
                     <Col md={5} style={{alignItems:'center', marginLeft:'10vw'}}>
@@ -244,12 +242,10 @@ function Landing (props){
                         <img style={{height:'auto', width:'70%'}} src= {`${baseUrl}assets/PTZ.png`}/>
                     </Col>
                 </Row>
-                <Row style={{marginTop:'7vw', display:'table'}} className='d-flex align-items-center'>
-                    <Col style={{display:'table-cell', textAlign:'center'}}>
-                        <p >
-                            <h1 style={{fontSize:'2.5vw', letterSpacing:'.5vw'}}>And the application and website comes from which <br/><h1 style={{fontSize:'5vw'}}>Institute?</h1></h1>
-                        </p>
-                    </Col>
+                <Row  style={{marginTop:'7vw', display:"block", marginLeft:'120px', marginRight:'200px'}}>
+                    <p style={{textAlign:'center'}}>
+                        <h1 style={{fontSize:'2.5vw', letterSpacing:'.5vw'}}>And the application and website comes from which <br/><h1 style={{fontSize:'5vw'}}>Institute?</h1></h1>
+                    </p>
                 </Row>
                 <Row style={{marginTop:'5vw'}}>
                     <Col md={5} style={{alignItems:'center', marginLeft:'10vw'}}>

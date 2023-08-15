@@ -1,10 +1,7 @@
-import React, { Component, useEffect, useState } from 'react';
+import React, { Component} from 'react';
 import Header from './HeaderComponent';
-import HeuristicDetails from './HeuristicDetailsComponent';
-import {Link} from 'react-router-dom';
-import { Form, FormGroup, Col, Container, Row, Label, Input,Button, Card, CardTitle, CardBody, CardText, Modal, ModalHeader, ModalBody } from 'reactstrap';
+import { Form, FormGroup, Col, Label, Input,Button} from 'reactstrap';
 import { MDBInputGroup, MDBInput, MDBIcon, MDBBtn, MDBSwitch } from 'mdb-react-ui-kit';
-import { Loading } from './LoadingComponent';
 import Collection from './Collection';
 
 class Search extends Component{

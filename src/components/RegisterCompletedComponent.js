@@ -1,6 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
-import { Card, CardImg } from 'reactstrap';
+import { CardImg } from 'reactstrap';
 import { baseUrl } from '../shared/baseUrl';
 
 function RegisterCompleted(){

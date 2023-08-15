@@ -1,15 +1,13 @@
 import React, { Component, useState } from 'react';
 import { useForm } from "react-hook-form";
-import { ErrorMessage } from '@hookform/error-message';
 import { useHistory } from "react-router-dom";
 import { useStateMachine } from "little-state-machine";
 import updateAction from "./updateAction";
-import {Link, useLocation, Route, BrowserRouter as Router} from 'react-router-dom';
-import { Control, LocalForm, Errors, actions} from 'react-redux-form';
-import { Col, Label, Row, Input, Button, Card, Form, CardBody, CardImg, CardTitle, CardText, Modal, ModalHeader, ModalBody } from 'reactstrap';
+import { Control} from 'react-redux-form';
+import { Col, Label, Row, Button, Card, CardBody, CardImg} from 'reactstrap';
 import {baseUrl} from '../shared/baseUrl';
 import Header from './HeaderComponent';
-import axios from 'axios';
+
 
 const required = (val) => val && val.length;
 
