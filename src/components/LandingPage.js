@@ -1,91 +1,30 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { Loading } from './LoadingComponent';
+import React, { useRef } from 'react';
 import {withRouter } from 'react-router-dom';
 import Footer from './FooterComponent';
-import { Player } from 'video-react';
 import { baseUrl } from '../shared/baseUrl';
-import { Form, FormGroup, Col, Container, Row, Label, Input,Button, Card, CardTitle, CardBody, CardText, Modal, ModalHeader, ModalBody } from 'reactstrap';
-import Link from 'react-router-dom/Link';
+import { Col, Container, Row, Button} from 'reactstrap';
 
 
 function Landing (props){
     window.HTMLElement.prototype.scrollIntoView = function() {};
-    const arr= ['useApp', 'defineDH', 'explain', 'introduce']
     const refs= useRef(['useApp', 'defineDH', 'explain', 'introduce']);
-    // const defineDHRef= useRef(null);
-    // const explainRef= useRef(null);
-    // const introduceRef= useRef(null);
-    
-    function scrollDown(){
-            refs.current[0].scrollIntoView({ behavior: 'smooth' });
-       
-        // if(item==='defineDH'){
-        //     defineDHRef.current?.scrollIntoView({ behavior: 'smooth' });
-        //     console.log("defn")
-        // }if(item==='explain'){
-        //     explainRef.current?.scrollIntoView({ behavior: 'smooth' });
-        // }if(item==='introduce'){
-        //     introduceRef.current?.scrollIntoView({ behavior: 'smooth' });
-        // }
-        
-    }
-    // function defineDH(){
-    //     defineDHRef.current?.scrollIntoView({ behavior: 'smooth' });
-
-    // }
 
     const getInContact = () => {
         window.location.replace('https://www.tu.berlin/iit');
-      };
+    };
 
-    const image = ()=> {
-        <Col md={5}>
-            <img style={{height:'auto', width:'70%', marginLeft:'10vw'}} src= {`${baseUrl}assets/startPageSS.png`}/>
-        </Col>
-    }
     return(
         <div>
             <Container fluid style={{fontFamily:'sans-serif'}} >
                 <Row style={{width:'auto', display:'inline-block', marginLeft:'30px',textAlign:'center'}}>
                     <img style={{position:'absolute', left:'80%', width: '15vw', height:'auto'}} src= {`${baseUrl}assets/landingPageLogo.png`}/>
-                    <video autoPlay loop muted id='video' style={{ objectFit: 'cover', height:'auto'}}>
+                    <video autoPlay loop muted id='video' style={{ objectFit: 'cover', height:'auto', width:'200vw'}}>
                         <source src= {`${baseUrl}videos/clouds.mp4`} type='video/mp4'/>
                     </video>
                     <p style={{position:'absolute',  width: 'auto', top:'30%', height:'auto'}}>
                         <h1 style={{fontSize:'7.5vw', letterSpacing:'5.5vw', justifySelf:'center'}}>KNOWLEDGE</h1>
                         <h1 style={{fontSize:'6vw',  letterSpacing:'0.1vw', marginLeft:'-5vw', justifySelf:'center'}}>For Sustainable Product Design</h1>
                     </p>
-                    {/* <Row style={{marginLeft:'.1vw', width:'100%', position:'absolute',marginTop:'-4vw', height:'auto',}}>
-                        <Col md={3}>
-                        <Card onClick={()=>scrollDown()} style={{width:'17vw',marginTop:"1vw", borderRadius:"10px", backgroundColor:'#001F4D', borderRadius:'0px 20px 0px 20px'}}>
-                        {console.log("ref: ", refs)}
-                        <div style={{padding:"10px 20px 10px", fontSize:'1vw', color:'white'}}>
-                        <p>Show<br/>The App</p>
-                        </div>
-                        </Card>
-                        </Col>
-                        <Col md={3}>
-                        <Card  style={{width:'17vw',marginTop:"1vw", borderRadius:"10px", backgroundColor:'#001F4D', borderRadius:'0px 20px 0px 20px'}}>
-                        <div  style={{padding:"10px 20px 10px", fontSize:'1vw', color:'white'}}>
-                        <p>Define<br/>Design Heuristics</p>
-                        </div>
-                        </Card>
-                        </Col>
-                        <Col >
-                        <Card onClick={()=>scrollDown('explain')} style={{width:'17vw',marginTop:"1vw", borderRadius:"10px", backgroundColor:'#001F4D', borderRadius:'0px 20px 0px 20px'}}>
-                        <div style={{padding:"10px 20px 10px", fontSize:'1vw', color:'white'}}>
-                        <p>Explain<br/>Sustainability</p>
-                        </div>
-                        </Card>
-                        </Col>
-                        <Col >
-                        <Card onClick={()=>scrollDown('introduce')} style={{width:'17vw',marginTop:"1vw", borderRadius:"10px", backgroundColor:'#001F4D', borderRadius:'0px 20px 0px 20px'}}>
-                        <div style={{padding:"10px 20px 10px", fontSize:'1vw', color:'white'}}>
-                        <p>Introduce<br/>The Department</p>
-                        </div>
-                        </Card>
-                        </Col>
-                    </Row> */}
                 </Row>
                 <Row style={{marginTop:'5vw', display:'table'}} className='d-flex align-items-center'>
                     <Col style={{display:'table-cell', textAlign:'center'}}>

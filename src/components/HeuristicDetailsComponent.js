@@ -88,10 +88,6 @@ function RenderDetailItem({item, type, id}){
     
 }
 
-
-
-
-
 class HeuristicDetails extends Component{   
 
     constructor(props){

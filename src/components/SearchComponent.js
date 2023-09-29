@@ -48,9 +48,6 @@ class Search extends Component{
     }
 
     /** a temporary button "search" is added to obtain the selection for:
-     * -designfor
-     * -industry
-     * -level
      * If the button is clicked, this changes the status of the state "isSearchClicked" to true
      * After that, the Collection which is defined below of this page will be rendered
      */
@@ -70,10 +67,6 @@ class Search extends Component{
                 
             return element.description !== undefined;
         });
-        // var category= this.props.heuristics.filter(function( element ) {
-            
-        //     return element.category[0] !== undefined;
-        // });
         const _ = require("lodash")
         if (this.state.search.length) {
             const searchPattern = new RegExp(this.state.search.map(term => `(?=.*${term})`).join(''), 'i');
@@ -89,13 +82,6 @@ class Search extends Component{
                     return (heuristic.description.toLowerCase().match(searchPattern))
                 }
             ))
-            // searchCategory= (category.filter(
-            //     heuristic => {
-                    
-            //         return (heuristic.category[0].toLowerCase().match(searchPattern))
-            //     }
-            // ))
-
             result= _.unionBy(searchTitel, searchDescription,  '_id') //searchCategory,
         } else {
             result= this.props.heuristics

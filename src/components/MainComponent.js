@@ -24,10 +24,17 @@ import Step3 from './Step3';
 import Step4 from './Step4';
 import Step5 from './step5';
 import YouRock from './YouRock';
-import ExcelTest from './excelTest';
+import DataBase from './dataBaseUpload';
 import LandingPage from './LandingPage';
 import Impress from './Impressum';
 import Datenschutz from './Datenschutz';
+import Tutorial from './TutorialPage';
+import LessonDesign from './LessonDesignPage';
+import QuicklyExplained from './QuicklyExplainedPage';
+import Feedback from './FeedbackComponent';
+import Slides from './SlidesComponent';
+import Infographic from './InfographicComponent';
+import Videos from './VideosComponent';
 
 /** Data will come from the server. Users will be deleted afterwards, when the backend is deployed.*/
 const mapStateToProps = state => {
@@ -118,6 +125,68 @@ class Main extends Component {
                         logoutUser={this.props.logoutUser}/>
                 </div>
             );
+        }
+
+        const TutorialPage = () => {
+            return(
+                <div className='startpage' style = {{minHeight: "100vh"}}>
+                    <Tutorial auth={this.props.auth}
+                        logoutUser={this.props.logoutUser}/>
+                </div>
+            )
+        }
+        const QuicklyExplainedPage = () => {
+            return(
+                <div className='startpage' style = {{minHeight: "100vh"}}>
+                    <QuicklyExplained auth={this.props.auth}
+                        logoutUser={this.props.logoutUser}/>
+                </div>
+            )
+        }
+
+        const LessonDesignPage = () => {
+            return(
+                <div className='startpage' style = {{minHeight: "100vh"}}>
+                    <LessonDesign auth={this.props.auth}
+                        logoutUser={this.props.logoutUser}/>
+                </div>
+            )
+        }
+
+        const FeedbackComponent = () => {
+            return(
+                <div className='startpage' style = {{minHeight: "100vh"}}>
+                    <Feedback auth={this.props.auth}
+                        logoutUser={this.props.logoutUser}/>
+                </div>
+            )
+        }
+
+        const SlidesComponent = () => {
+            return(
+                <div className='startpage' style = {{minHeight: "100vh"}}>
+                    <Slides auth={this.props.auth}
+                        logoutUser={this.props.logoutUser}/>
+                </div>
+            )
+        }
+
+        const InfographicComponent = () => {
+            return(
+                <div className='startpage' style = {{minHeight: "100vh"}}>
+                    <Infographic auth={this.props.auth}
+                        logoutUser={this.props.logoutUser}/>
+                </div>
+            )
+        }
+
+        const VideosComponent = () => {
+            return(
+                <div className='startpage' style = {{minHeight: "100vh"}}>
+                    <Videos auth={this.props.auth}
+                        logoutUser={this.props.logoutUser}/>
+                </div>
+            )
         }
 
         const LoginPage =()=>{
@@ -260,10 +329,10 @@ class Main extends Component {
             )
         }
 
-        const ExcelTestFile = () =>{
+        const DataBaseFile = () =>{
             return(
                 <div className='startpage' style = {{minHeight:"100vh"}}>
-                    <ExcelTest postHeuristic={this.props.postHeuristic}/>
+                    <DataBase postHeuristic={this.props.postHeuristic}/>
                 </div>
             )
         }
@@ -341,12 +410,19 @@ class Main extends Component {
                         <Route path='/register-completed' component={RegisterCompletedPage}/>
                         <Route path='/your-profile' component={ProfilePage}/>
                         <Route path='/selectyourmode' component={SelectYourMode}/>
+                        <Route path='/tutorial' component={TutorialPage}/>
+                        <Route path='/quickly-explained' component={QuicklyExplainedPage}/>
+                        <Route path='/lesson-design' component={LessonDesignPage}/>
+                        <Route path='/feedback' component={FeedbackComponent}/>
+                        <Route path='/slides' component={SlidesComponent}/>
+                        <Route path='/infographic' component={InfographicComponent}/>
+                        <Route path='/videos' component={VideosComponent}/>
                         <Route path='/design-heuristic-collection' component={DesignHeuristicCollection}/>
                         {/* <Route path='/add-your-own-heuristic' component={AddYourOwnHeuristic}/> */}
                         <Route path='/search' component={SearchPage}/>
                         <Route path='/forgot-your-password' component={ForgotYourPassword}/>
                         {routeComponents}
-                        <Route path='/test' component={ExcelTestFile}/>
+                        <Route path='/file-upload' component={DataBaseFile}/>
                         <Route path="/add-your-own-heuristic" component={AddYourOwnHeuristic} />
                         <Route path="/step2" component={AddYourOwnHeuristicStep2} />
                         <Route path="/step3" component={AddYourOwnHeuristicStep3} />

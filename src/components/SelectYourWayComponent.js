@@ -49,14 +49,15 @@ class YourWay extends Component{
                     <div className='row'>
                         
                         <div className='col-12 col-md offset-md-1' >
-                            
-                            <Card className='selectYourWayCard'>
-                                <CardImg src= {`${baseUrl}assets/SelectYourWay_left.jpg`} className='selectYourWayImage' alt= "Tutorials"/>
-                                <CardBody>
-                                    <CardTitle style={{display: "flex", justifyContent:'center', alignItems:'center'}}> <h3><strong>Tutorials</strong></h3> </CardTitle>                
-                                    <CardText style={{display:"block"}}> <p style={{display:"block"}}><h5 >Here you will find tutorials on how to use our app and how design heuristics help you acchieve better designs.</h5></p></CardText>
-                                </CardBody>
-                            </Card>
+                            <Link  className='text-decoration-none card-block' style={{color:"black"}} to="/tutorial">
+                                <Card className='selectYourWayCard'>
+                                    <CardImg src= {`${baseUrl}assets/SelectYourWay_left.jpg`} className='selectYourWayImage' alt= "Tutorials"/>
+                                    <CardBody>
+                                        <CardTitle style={{display: "flex", justifyContent:'center', alignItems:'center'}}> <h3><strong>Tutorials</strong></h3> </CardTitle>                
+                                        <CardText style={{display:"block"}}> <p style={{display:"block"}}><h5 >Here you will find tutorials on how to use our app and how design heuristics help you acchieve better designs.</h5></p></CardText>
+                                    </CardBody>
+                                </Card>
+                            </Link>
                         </div>
 
             {/**Link covers the card. To avoid that card-texts look like a link, e.g. underlined and are blue,

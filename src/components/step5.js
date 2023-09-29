@@ -11,35 +11,49 @@ import axios from 'axios';
 
 
 const Step5 = props => {
+
+    /* Since the heuristic attributes will be sent to the server and database at the end of this process, the entries in each step should be passed over to the next step.
+    useStateMachine serves to save and pass the entries in this step over to the next step. In this step, the entries from previous steps will be saved to new variables to submit them to the server.
+    */
     const { actions, state } = useStateMachine({ updateAction });
+
+    /** Attributes of a heuristic contains following described variables. Those will be merged afterwards to define the title of the new heuristic. Guideline variable has the following four properties and
+     * those properties will be defined by the user in the app
+     */
     const [property, setProperty] = useState([{
         effectCategory: 'Technical Property',
         effectCategorySpecification: 'default',
         step5AdressedLifeCyclePhase: 'default'
     }]);
+
+     /** Since the user could add more than one effect in this step, effects contain the negativeEffects array to save the entries from the user. 
+     * The name of the array helps to avoid confusion with the effects that are added in the fourth step. */
     const [effects, setEffects] = useState({
         negativeEffects: []
     });
 
+    /** If the user wants to add some images for more information. */
     const [file, setFile] = useState({
         selectedFile: null,
         selectedFile2: null,
         selectedFile3: null
     })
 
+    /** Properties that the user can define, if they want */
     const [imageTypes, setImageTypes] = useState([]);
-
     const [industries, setIndustries] = useState([]);
-
     const [extraInfo, setExtraInfo] = useState('');
-
     const [source, setSource] = useState('');
 
+    /** Function for submitting all entries to the server */
     const { handleSubmit, register, errors } = useForm({
         defaultValues: state.heuristicDetails
     });
+
+    /** Function for redirecting the user to you rock page. */
     const { push } = useHistory();
-    console.log("radio: ", imageTypes)
+
+    /** Function that define new variables and their values according to all entries that are made by the user in each step. New variables will be transmitted to the function "postHeuristic" which is defined in ActionCreators.js. */
     const onSubmit = data => {
         if (property[property.length-1].effectCategory==='Life Cycle Property'){
             var newPropertyValues = [...property];
@@ -98,6 +112,7 @@ const Step5 = props => {
         push('/you-rock')
     };
 
+    /** Function that uploads the images to the server side */
     const onFileUpload = () => {
         const url = `${baseUrl}imageUpload`;
 
@@ -129,7 +144,7 @@ const Step5 = props => {
         })
     };
 
-  
+    /** Function that changes the guideline variable and so the properties according to entries that the user has given */
     let handleOnChange = (i,e) => {
         let newPropertyValues = [...property];
         newPropertyValues[i][e.target.name] = e.target.value;
@@ -137,6 +152,7 @@ const Step5 = props => {
         setEffects({...effects, negativeEffects: property})
     }
 
+    /** If the user would want to add more effects, the following function adds more dropdown menu. However the user is not able to add more field, if they did not choose any property in the first field. */
     let addFormFields = () => {
         setProperty([...property, { 
             effectCategory: 'Technical Property',
@@ -144,12 +160,15 @@ const Step5 = props => {
             step5AdressedLifeCyclePhase: 'default' }
         ])
     }
+
+    /** If the user would want to remove the last effect, the following function removes the last dropdown menu. */
     let removeFormFields = (i) => {
         let newPropertyValues = [...property];
         newPropertyValues.splice(i, 1);
         setProperty(newPropertyValues)
     }
 
+    /** To set the properties according to the user's choice, the following functions takes care the changes */
     let handleCheckChange = e =>{
         var value = e.target.id.slice(4)
         if (e.target.checked){
@@ -201,12 +220,14 @@ const Step5 = props => {
     setFile({uploadFile});
     }
 
+    /** HTML part */
     return (
         <div>
             <Header auth={props.auth}
                 logoutUser={props.logoutUser}/>
             <div className='container'>
                 <div className='row row-content'>
+                    {/** Again, the guideline that refers to the title of the heuristic */}
                     <Row  className='form-group' style={{marginBottom:"40px"}}>
                         <Col md={3}>
                             <h5>Your Guideline</h5>
@@ -217,6 +238,8 @@ const Step5 = props => {
                             </p>
                         </Col>
                     </Row>
+
+                    {/** When the form is submitted (clicked on the button "Hand in"), the entries will be saved and passed over to the server side */}
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <Row className='form-group align-items-center' style={{marginBottom:"40px"}}>
                             <Col md={2}>
@@ -250,8 +273,11 @@ const Step5 = props => {
                             </Col>
 
                         </Row>
-                        {property.map((element,index) => (
 
+                        {/** Properties will take place here. Following code contains if/else clause in a form that react supports that is->  (condition)?, if true, then the following is the result
+                         * The code after : means that if the condition is false, then the following code will be run. For example:
+                         */}
+                        {property.map((element,index) => (
                             <FormGroup row key={index}>
                                 <Col md={4}>
                                     <Label htmlFor="effectCategory" ><h4>1. Categorization of the effect</h4></Label>
@@ -270,6 +296,8 @@ const Step5 = props => {
                                 </Col>
                                 <Col md={8}>
                                     <Label htmlFor="effectCategorySpecification" ><h4>2. Effect Category Specification</h4></Label>
+                                    {/** The line 301 is the condition */}
+                                    {/** If the condition is true, then the following code (Line 302-321) will be run. */}
                                     {(element.effectCategory=== "Technical Property") ? 
                                     <Col md={4}>
                                     <Input type="select" name="effectCategorySpecification"
@@ -290,6 +318,7 @@ const Step5 = props => {
                                         <option>Losses</option>
                                         <option>Others</option>
                                     </Input>
+                                    {/** If the condition is false, the code after : will be run. However, there is more than one condition. Hence, there will be different if else clauses in a react form */}
                                 </Col> :
                                 <>
                                     {(element.effectCategory=== 'Life Cycle Phase Property') ?
@@ -590,6 +619,8 @@ const Step5 = props => {
                             </Col>
                         </Row>
                     </form>
+
+                    {/** Info part */}
                     <Col className='informationBackground'>
                         <Row >
                             <Row style={{position: 'relative'}}>
@@ -643,17 +674,17 @@ const Step5 = props => {
                                                         <Row style={{textAlign:'center', marginBottom: '20px'}}>
                                                             <strong>Properties regarding specific life cycle phases</strong>
                                                         </Row>
-                                                        <Row className="col-12 d-flex" style={{justifyContent:'space-around'}}>
-                                                            <Card className='informationCardInside'>Different DfX (Design for X) Goals</Card>
-                                                            <Card className='informationCardInside'>Ease of Design Changes</Card>
-                                                            <Card className='informationCardInside'>Amount of Produced Goods</Card>
+                                                        <Row className="col-12 d-flex" style={{justifyContent:'start'}}>
+                                                            <Card style={{marginRight:'20px', marginLeft:'10px'}} className='informationCardInside'>Different DfX (Design for X) Goals</Card>
+                                                            <Card style={{marginRight:'30px'}} className='informationCardInside'>Ease of Design Changes</Card>
+                                                            <Card style={{marginRight:'22px'}} className='informationCardInside'>Amount of Produced Goods</Card>
                                                             <Card className='informationCardInside'>Economies of Scale</Card>
-                                                            <Card className='informationCardInside'>Economies of Scope</Card>
-                                                            <Card className='informationCardInside'>Product Usage Intensity</Card>
-                                                            <Card className='informationCardInside'>Product Lifetime</Card>
+                                                            <Card style={{marginRight:'20px', marginLeft:'10px'}} className='informationCardInside'>Economies of Scope</Card>
+                                                            <Card style={{marginRight:'30px'}} className='informationCardInside'>Product Usage Intensity</Card>
+                                                            <Card style={{marginRight:'22px'}} className='informationCardInside'>Product Lifetime</Card>
                                                             <Card className='informationCardInside'>Wear</Card>
-                                                            <Card className='informationCardInside'>Customer Value</Card>
-                                                            <Card className='informationCardInside'>Others</Card>
+                                                            <Card style={{marginRight:'20px', marginLeft:'10px'}} className='informationCardInside'>Customer Value</Card>
+                                                            <Card style={{marginRight:'30px'}} className='informationCardInside'>Others</Card>
                                                         </Row>
                                                     </CardBody>
                                                 </Card>
@@ -690,14 +721,14 @@ const Step5 = props => {
                                                         <Row style={{textAlign:'center', marginBottom: '20px'}}>
                                                             <strong>! Speciality here: Please also choose the adressed life cycle phase of the affected property! Possible Phases</strong>
                                                         </Row>
-                                                        <Row className="col-12 d-flex" style={{justifyContent:'space-around'}}>
-                                                            <Card className='informationCardInside'>Design</Card>
-                                                            <Card className='informationCardInside'>Raw Material Acquisition</Card>
-                                                            <Card className='informationCardInside'>Production</Card>
+                                                        <Row className="col-12 d-flex" style={{justifyContent:'start'}}>
+                                                            <Card style={{marginRight:'20px', marginLeft:'10px'}} className='informationCardInside'>Design</Card>
+                                                            <Card style={{marginRight:'30px'}} className='informationCardInside'>Raw Material Acquisition</Card>
+                                                            <Card style={{marginRight:'22px'}} className='informationCardInside'>Production</Card>
                                                             <Card className='informationCardInside'>Assembly</Card>
-                                                            <Card className='informationCardInside'>Distribution</Card>
-                                                            <Card className='informationCardInside'>Usage</Card>
-                                                            <Card className='informationCardInside'>After Use</Card>
+                                                            <Card style={{marginRight:'20px', marginLeft:'10px'}} className='informationCardInside'>Distribution</Card>
+                                                            <Card style={{marginRight:'30px'}} className='informationCardInside'>Usage</Card>
+                                                            <Card style={{marginRight:'30px'}} className='informationCardInside'>After Use</Card>
                                                         </Row>
                                                     </CardBody>
                                                 </Card>

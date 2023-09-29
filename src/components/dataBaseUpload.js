@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import { Button } from 'reactstrap';
 import {read, utils, writeFile} from 'xlsx';
 //f = file
-function ExcelTest(props){
+function DataBase(props){
     const [heuristics, setHeuristics] = useState([]);
     const [data, setData] = useState([]);
     const [pEffects, setPEffects] = useState([]);
@@ -254,4 +254,4 @@ function ExcelTest(props){
         </>
     )
 }
-export default ExcelTest;
+export default DataBase;

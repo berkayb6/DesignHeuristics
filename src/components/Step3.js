@@ -8,22 +8,37 @@ import Header from "./HeaderComponent";
 import { baseUrl } from "../shared/baseUrl";
 
 const Step3 = props => {
+    /* Since the heuristic attributes will be sent to the server and database at the end of this process, the entries in each step should be passed over to the next step.
+    useStateMachine serves to save and pass the entries in this step over to the next step.
+    */
     const { actions, state } = useStateMachine({ updateAction });
+
+    /** Attributes of a heuristic contains following described variables. Those will be merged afterwards to define the title of the new heuristic. Guideline variable has the following four properties and
+     * those properties will be defined by the user in the app
+     */
     const [property, setProperty] = useState({
         orderCategory: 'Product Characteristic',
         orderCategorySpecification: 'default',
         step3SystemLevel: 'default',
         step3AdressedLifeCyclePhase: 'default'
     });
+
+    /** Function for passing the entries over to the next step */
     const { handleSubmit, register, errors } = useForm({
         defaultValues: state.heuristicDetails
     });
 
+    /** Since the following properties must be defined, following reference points are created in order to guide user to that specific point when the following properties are not given.  */
     const step3SystemLevelCheck= React.useRef();
     const orderCategorySpecificationCheck= React.useRef();
     const step3AdressedLifeCyclePhaseCheck= React.useRef();
     
+    /** Function for redirecting the user to the next step. */
     const { push } = useHistory();
+
+    /** Function that checks if following properties are given or not. If not, than the error message will be visible that tells the user that they should give some information about the property to continue.
+     * If all is set, then push command will redirect the user to the next step.
+     */
     const onSubmit = data => {
         if (property.orderCategory==='Product Characteristic'){
             if (property.step3SystemLevel==='default'){
@@ -54,12 +69,18 @@ const Step3 = props => {
         push('/step4')
     };
 
+    /** Function that changes the guideline variable and so the properties according to entries that the user has given */
     const handleOnChange = e => {
         const target = e.target;
         const value = target.type === 'checkbox' ? target.checked : target.value;
         const name = target.name;
         setProperty({...property, [name]: value})
     }
+
+    /** Since the second dropdown menu will look different depending on the choice in the first dropdown menu,
+     *  the following if else clauses define the second dropdown menu according to the choice that is made in the first one. 
+     *  Also some choices that can be made in the second dropdown menu could lead the user to choose a property in a third dropdown menu.
+     *  Because of that, second and third ones will be visible depending on the choices in the first/ second dropdown menu.*/
     let secondDropdown, thirdDropdown;
 
     if(property.orderCategory==='Product Characteristic'){
@@ -272,12 +293,15 @@ const Step3 = props => {
             </Col>
 
     }
+
+    /** HTML part */
     return (
         <div>
             <Header auth={props.auth}
                 logoutUser={props.logoutUser}/>
             <div className='container'>
                 <div className='row row-content'>
+                    {/** Again, the guideline that refers to the title of the heuristic and the choices from the step 2. */}
                     <Row  className='form-group' style={{marginBottom:"40px"}}>
                         <Col md={3}>
                             <h5>Your Guideline</h5>
@@ -309,6 +333,7 @@ const Step3 = props => {
                             </Card>
                         </Col>
                     </Row>
+                    {/** When the form is submitted (clicked on the button "next step"), the entries will be saved and passed over to the next step */}
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <Col md={2}>
                             <h2>Step 3</h2>
@@ -339,6 +364,8 @@ const Step3 = props => {
                                     </Input>
                                 </Col>
                             </Col>
+                            {/** As the second dropdown menu is already defined above, here it will be seen differently depending on the choice in the first one. 
+                             * Also the presence of the third one depends on the choice in the second one*/}
                             <Col md={8}>
                                 <Label htmlFor="orderCategorySpecification" ><h4>2. Order Category Specification</h4></Label>
                                 {secondDropdown}
@@ -346,6 +373,7 @@ const Step3 = props => {
                             </Col>
                         </FormGroup>
                         <Row className='col-md' style={{alignItems:'center', marginTop:'50px'}}>
+                            {/** Button to go to the previous step */}
                             <Col md={4} className='col-md offset-2'>
                                 <Link className='text-decoration-none card-block' style={{color:"black"}} to="/step2">
                                     <Card style={{width:"auto", float: "left", borderRadius:"10px"}}>
@@ -353,6 +381,7 @@ const Step3 = props => {
                                     </Card>
                                 </Link>
                             </Col>
+                            {/** Button to submit and go to the next step */}
                             <Col md={4}>
                                 <Button type='submit' style={{width:"auto", float: "left", borderRadius:"10px"}} className="btn-md" color='light'><h3 style={{padding:"2px 20px 2px"}}><strong>Next Step</strong></h3></Button>
                             </Col>
@@ -363,6 +392,8 @@ const Step3 = props => {
                             </Col>
                         </Row>
                     </form>
+
+                    {/** Info part */}
                     <Col className='informationBackground'>
                         <Row >
                             <Row style={{position: 'relative'}}>
@@ -421,16 +452,16 @@ const Step3 = props => {
                                                         <Row style={{textAlign:'center', marginBottom: '20px'}}>
                                                             <strong>Properties regarding specific life cycle phases</strong>
                                                         </Row>
-                                                        <Row className="col-12 d-flex" style={{justifyContent:'space-around'}}>
-                                                            <Card className='informationCardInside'>Different DfX (Design for X) Goals</Card>
-                                                            <Card className='informationCardInside'>Ease of Design Changes</Card>
-                                                            <Card className='informationCardInside'>Amount of Produced Goods</Card>
+                                                        <Row className="col-12 d-flex" style={{justifyContent:'start'}}>
+                                                            <Card style={{marginRight:'20px', marginLeft:'10px'}} className='informationCardInside'>Different DfX (Design for X) Goals</Card>
+                                                            <Card style={{marginRight:'30px'}} className='informationCardInside'>Ease of Design Changes</Card>
+                                                            <Card style={{marginRight:'22px'}} className='informationCardInside'>Amount of Produced Goods</Card>
                                                             <Card className='informationCardInside'>Economies of Scale</Card>
-                                                            <Card className='informationCardInside'>Economies of Scope</Card>
-                                                            <Card className='informationCardInside'>Product Usage Intensity</Card>
-                                                            <Card className='informationCardInside'>Product Lifetime</Card>
+                                                            <Card style={{marginRight:'20px', marginLeft:'10px'}} className='informationCardInside'>Economies of Scope</Card>
+                                                            <Card style={{marginRight:'30px'}} className='informationCardInside'>Product Usage Intensity</Card>
+                                                            <Card style={{marginRight:'22px'}} className='informationCardInside'>Product Lifetime</Card>
                                                             <Card className='informationCardInside'>Wear</Card>
-                                                            <Card className='informationCardInside'>Customer Value</Card>
+                                                            <Card style={{marginRight:'20px', marginLeft:'10px'}} className='informationCardInside'>Customer Value</Card>
                                                             <Card className='informationCardInside'>Others</Card>
                                                         </Row>
                                                     </CardBody>
@@ -468,14 +499,14 @@ const Step3 = props => {
                                                         <Row style={{textAlign:'center', marginBottom: '20px'}}>
                                                             <strong>! Speciality here: Please also choose the adressed life cycle phase of the affected property! Possible Phases</strong>
                                                         </Row>
-                                                        <Row className="col-12 d-flex" style={{justifyContent:'space-around'}}>
-                                                            <Card className='informationCardInside'>Design</Card>
-                                                            <Card className='informationCardInside'>Raw Material Acquisition</Card>
-                                                            <Card className='informationCardInside'>Production</Card>
+                                                        <Row className="col-12 d-flex" style={{justifyContent:'start'}}>
+                                                            <Card style={{marginRight:'20px', marginLeft:'10px'}} className='informationCardInside'>Design</Card>
+                                                            <Card style={{marginRight:'30px'}} className='informationCardInside'>Raw Material Acquisition</Card>
+                                                            <Card style={{marginRight:'22px'}} className='informationCardInside'>Production</Card>
                                                             <Card className='informationCardInside'>Assembly</Card>
-                                                            <Card className='informationCardInside'>Distribution</Card>
-                                                            <Card className='informationCardInside'>Usage</Card>
-                                                            <Card className='informationCardInside'>After Use</Card>
+                                                            <Card style={{marginRight:'20px', marginLeft:'10px'}} className='informationCardInside'>Distribution</Card>
+                                                            <Card style={{marginRight:'30px'}} className='informationCardInside'>Usage</Card>
+                                                            <Card style={{marginRight:'30px'}} className='informationCardInside'>After Use</Card>
                                                         </Row>
                                                     </CardBody>
                                                 </Card>
@@ -557,14 +588,14 @@ const Step3 = props => {
                                                         <Row style={{textAlign:'center', marginBottom: '20px'}}>
                                                             <strong>Part Level</strong>
                                                         </Row>
-                                                        <Row className="col-12 d-flex" style={{justifyContent:'space-around'}}>
-                                                            <Card className='informationCardInside'>Part Identification and Classification</Card>
-                                                            <Card className='informationCardInside'>Part Position and Orientation</Card>
-                                                            <Card className='informationCardInside'>Surface Characteristics</Card>
+                                                        <Row className="col-12 d-flex" style={{justifyContent:'start'}}>
+                                                            <Card style={{marginRight:'20px', marginLeft:'10px'}} className='informationCardInside'>Part Identification and Classification</Card>
+                                                            <Card style={{marginRight:'30px'}} className='informationCardInside'>Part Position and Orientation</Card>
+                                                            <Card style={{marginRight:'22px'}} className='informationCardInside'>Surface Characteristics</Card>
                                                             <Card className='informationCardInside'>Geometry</Card>
-                                                            <Card className='informationCardInside'>Material Characteristics</Card>
-                                                            <Card className='informationCardInside'>Number</Card>
-                                                            <Card className='informationCardInside'>Others</Card>
+                                                            <Card style={{marginRight:'20px', marginLeft:'10px'}} className='informationCardInside'>Material Characteristics</Card>
+                                                            <Card style={{marginRight:'30px'}} className='informationCardInside'>Number</Card>
+                                                            <Card style={{marginRight:'30px'}} className='informationCardInside'>Others</Card>
                                                         </Row>
                                                     </CardBody>
                                                 </Card>

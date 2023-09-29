@@ -5,7 +5,7 @@ import { Form, FormGroup, Col, Container, Row, Label, Input,Button, Card, CardTi
 import Header from './HeaderComponent';
 import { amplitude } from '../utilities/amplitude';
 
-
+/** Initial state for making the filters to turn to default settings, when the user changes a filter. */
 const initialState= {
     effectSpecification: 'default',
     adressedLifeCyclePhase:"default",
@@ -35,7 +35,7 @@ class DHCollection extends Component{
         this.toggleModal=this.toggleModal.bind(this)
     }
     
-
+    /** The following function takes the chances made by the user and saves them */
     handleInputChange(event) {
         const target = event.target;
         const value = target.type === 'checkbox' ? target.checked : target.value;
@@ -57,12 +57,9 @@ class DHCollection extends Component{
         event.preventDefault();
     }
 
-    /** a temporary button "search" is added to obtain the selection for:
-     * -designfor
-     * -industry
-     * -level
+    /** a button "search" is added to obtain the selection for:
      * If the button is clicked, this changes the status of the state "isSearchClicked" to true
-     * After that, the Collection which is defined below of this page will be rendered
+     * After that, the Collection which is defined as a seperate file will be rendered
      */
 
     searchClicked(){
@@ -83,18 +80,14 @@ class DHCollection extends Component{
     }
     
     render(){
-        console.log("state: ", this.state)
         var identify= new amplitude.Identify(); 
         amplitude.getInstance().identify(identify);
-        var deviceId = amplitude.getInstance().options.deviceId;
         return(
             <>
                 <Header auth={this.props.auth}
                     logoutUser={this.props.logoutUser}/>
-                <div className='container' >
-                
+                <div className='container'>
                     <div className='row row-content align-items-start'>
-                        
                         <div className='col-12 col-md-6 offset-md-1' >
                             <h2><strong style={{marginRight: '20px'}}>Collection</strong><i className='fa fa-info-circle' onClick={this.toggleModal}></i></h2>
                             with all design heuristics available
@@ -471,17 +464,13 @@ class DHCollection extends Component{
                                 </FormGroup>
                                 </Form>
                             </div>
-                               
                         </div>
                     </div>
-
                 </div>
                 {/** The Collection component needs the information which options the user selected.
                  * According to the selections, corresponding heuristics will be shown to the user
                  */}
-
-                 
-
+                {/** Following filter and if else clauses represent all the cases that can occur depending on the filter choices of the user*/}
                 <Collection isSearchClicked={this.state.isSearchClicked}
                     isLoading= {this.props.heuristicsLoading}
                     errMess= {this.props.heuristiscErrMess}

@@ -32,8 +32,8 @@ const YouRock = props => {
                     </div>
                     
 
-                    <div className='col-12 col-md-4'>
-                        <CardImg src={`${baseUrl}assets/robot.png`} width={100} height={800}/>
+                    <div className='col-12 col-md-6'>
+                        <CardImg src={`${baseUrl}assets/youRock.png`} width={200} height={800}/>
                     </div>
                 </div>
                 

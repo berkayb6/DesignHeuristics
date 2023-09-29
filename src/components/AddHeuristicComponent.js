@@ -8,12 +8,18 @@ import { Col, Label, Row, Button, Card, CardBody, CardImg} from 'reactstrap';
 import {baseUrl} from '../shared/baseUrl';
 import Header from './HeaderComponent';
 
-
-const required = (val) => val && val.length;
-
+/** First page of adding a new heuristic */
 
 export default (props) =>{
+
+    /* Since the heuristic attributes will be sent to the server and database at the end of this process, the entries in each step should be passed over to the next step.
+    useStateMachine serves to save and pass the entries in this step over to the next step.
+    */
     const { actions, state } = useStateMachine({ updateAction });
+
+    /** Attributes of a heuristic contains following described variables. Those will be merged afterwards to define the title of the new heuristic. Guideline variable has the following four properties and
+     * those properties will be defined by the user in the app
+     */
     const [guideline, setGuideline] = useState({
         artifact: '',
         artifactRestriction: '',
@@ -21,13 +27,21 @@ export default (props) =>{
         orderAdverb: ''
     });
 
+    /** Since the following properties must be defined, following reference points are created in order to guide user to that specific point when the following properties are not given.  */
     const artifactCheck=React.createRef();
     const orderVerbCheck=React.createRef();
 
+    /** Function for passing the entries over to the next step */
     const { handleSubmit, errors, register } = useForm({
         defaultValues: state.heuristicDetails
     });
+
+    /** Function for redirecting the user to the next step. */
     const { push } = useHistory();
+
+    /** Function that checks if following properties are given or not. If not, than the error message will be visible that tells the user that they should give some information about the property to continue.
+     * If all is set, then push command will redirect the user to the next step.
+     */
     const onSubmit = data => {
         if(guideline.artifact===''){
             artifactCheck.current.style={display:"visible"};
@@ -46,10 +60,14 @@ export default (props) =>{
         actions.updateAction(guideline);
         push("/step2");
     };
+
+    /** Function that changes the guideline variable and so the properties according to entries that the user has given */
     const guidelineChange = e => {
         const {id, value} = e.target; 
         setGuideline({...guideline, [id]: value})
     }
+
+    /** HTML part */
     return (
         <div>
             <Header auth={props.auth}
@@ -57,7 +75,9 @@ export default (props) =>{
             
             <div className='container'>
                 <div className='row row-content'>
-                    <form onSubmit={handleSubmit(onSubmit)}> {/** */}
+                    {/** When the form is submitted (clicked on the button "next step"), the entries will be saved and passed over to the next step */}
+                    <form onSubmit={handleSubmit(onSubmit)}> 
+                        {/** The Row on the 81. line contains the four entries that will define the properties. OnChange helps to save the changes on the entries, as the user starts to write into text fields.*/}
                         <Row onChange={guidelineChange} className='form-group' style={{marginBottom:"60px"}}>
                             <Col md={2}>
                                 <h2>Step 1</h2>
@@ -78,20 +98,7 @@ export default (props) =>{
                                     <Col md={6}>
                                         <Control.text model='.artifact' id="artifact" name="artifact"  
                                             className= "form-control"
-                                            // {...register('artifact', { required: true })}
-                                            // validators= {{
-                                            //     required
-                                            // }}
                                             />
-
-                                        {/* <ErrorMessage errors={errors} name="firstName" as="p" /> */}
-                                        {/* <Errors
-                                            className='text-danger'
-                                            model=".artifact"
-                                            show="touched"
-                                            messages= {{
-                                                required: 'Required '
-                                            }} /> */}
                                     </Col>
                                     <Col md={6}>
                                         <p>
@@ -153,6 +160,7 @@ export default (props) =>{
                                 </Row>
                             </Row>
                         </Row>
+                        {/** After the user gives some information, they can check the title below */}
                         <Row  className='form-group' style={{marginBottom:"40px"}}>
                             <Col md={3}>
                                 <h5>Check your guideline</h5>
@@ -168,6 +176,7 @@ export default (props) =>{
                                 This will be the guideline you share with fellow designers. Is everything correct? Then click on Next Step!
                             </p>
                         </Row>
+                        {/** Submit button */}
                         <Row className='col-md offset-4' style={{marginBottom:"20px"}}>
                             <Col >
                                 <Button type='submit' color='light'>Next Step!</Button>
@@ -179,6 +188,7 @@ export default (props) =>{
                             </Col>
                         </Row>
                     </form>
+                    {/** Info part */}
                     <Col className='informationBackground'>
                         <Row >
                             <Row style={{position: 'relative'}}>

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 
+/** The file is to create pages for each heuristic */
 class Heuristic {
     constructor(map) {
         this.title= map.title;

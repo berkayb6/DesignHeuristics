@@ -8,17 +8,34 @@ import Header from "./HeaderComponent";
 import { baseUrl } from "../shared/baseUrl";
 
 const Step2 = props => {
+
+    /* Since the heuristic attributes will be sent to the server and database at the end of this process, the entries in each step should be passed over to the next step.
+    useStateMachine serves to save and pass the entries in this step over to the next step.
+    */
     const { actions, state } = useStateMachine({ updateAction });
+
+    /** Attributes of a heuristic contains following described variables. Those will be merged afterwards to define the title of the new heuristic. Guideline variable has the following four properties and
+     * those properties will be defined by the user in the app
+     */
     const [property, setProperty] = useState({
         adressedSystemLevel: 'product',
         artefactCategorization: 'default'
     });
+
+    /** Function for passing the entries over to the next step */
     const { handleSubmit, register, errors } = useForm({
       defaultValues: state.heuristicDetails
     });
 
+    /** Since the following property must be defined, following reference point is created in order to guide user to that specific point when the following property is not given.  */
     const artefactCategorizationCheck= React.useRef();
+
+    /** Function for redirecting the user to the next step. */
     const { push } = useHistory();
+    
+    /** Function that checks if following property is given or not. If not, than the error message will be visible that tells the user that they should give some information about the property to continue.
+     * If all is set, then push command will redirect the user to the next step.
+     */
     const onSubmit = data => {
         if (property.artefactCategorization==='default'){
             artefactCategorizationCheck.current.style={display:"visible"};
@@ -28,10 +45,7 @@ const Step2 = props => {
         push('/step3')
     };
 
-    function handleFirstDrowdownChange (){
-        setProperty({...property, artefactCategorization: 'Assembly Identification and Classification'})
-    }
-
+    /** Function that changes the guideline variable and so the properties according to entries that the user has given */
     const handleOnChange = e => {
         const target = e.target;
         const value = target.type === 'checkbox' ? target.checked : target.value;
@@ -40,7 +54,9 @@ const Step2 = props => {
         setProperty({...property, [name]: value})
         
     }
-    const location= useLocation();
+
+    /** Since the second dropdown menu will look different depending on the choice in the first dropdown menu,
+     *  the following if else clauses define the second dropdown menu according to the choice that is made in the first one. */
     let secondDropdown;
 
     if (property.adressedSystemLevel=== 'product'){
@@ -115,12 +131,16 @@ const Step2 = props => {
             <Label className='align-items-center'> <h6 className="requiredStyle" ref={artefactCategorizationCheck} style={{display:"none"}}> You may have missed some information to share! </h6></Label>
         </Col>
     }
+
+
+    /** HTML part */
     return (
         <div>
             <Header auth={props.auth}
                 logoutUser={props.logoutUser}/>
             <div className='container'>
                 <div className='row row-content'>
+                    {/** Again, the guideline that refers to the title of the heuristic */}
                     <Row  className='form-group' style={{marginBottom:"40px"}}>
                         <Col md={3}>
                             <h5>Your guideline</h5>
@@ -131,6 +151,7 @@ const Step2 = props => {
                             </p>
                         </Col>
                     </Row>
+                    {/** When the form is submitted (clicked on the button "next step"), the entries will be saved and passed over to the next step */}
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <Col md={2}>
                             <h2>Step 2</h2>
@@ -160,12 +181,14 @@ const Step2 = props => {
                                     </Input>
                                 </Col>
                             </Col>
+                            {/** As the second dropdown menu is already defined above, here it will be seen differently depending on the choice in the first one. */}
                             {secondDropdown}
 
                             
                         </FormGroup>
                                     
                         <Row className='col-md' style={{alignItems:'center', marginTop:'50px'}}>
+                            {/** Button to go to the previous step */}
                             <Col md={4} className='col-md offset-2'>
                                 <Link className='text-decoration-none card-block' style={{color:"black"}} to="/add-your-own-heuristic">
                                     <Card style={{width:"auto", float: "left", borderRadius:"10px"}}>
@@ -173,6 +196,7 @@ const Step2 = props => {
                                     </Card>
                                 </Link>
                             </Col>
+                            {/** Button to submit and go to the next step */}
                             <Col md={4}>
                                 <Button type='submit' style={{width:"auto", float: "left", borderRadius:"10px"}} className="btn-md" color='light'><h3 style={{padding:"2px 20px 2px"}}><strong>Next Step</strong></h3></Button>
                             </Col>
@@ -183,6 +207,7 @@ const Step2 = props => {
                             </Row>
                         </Row>
                     </form>
+                    {/** Info part */}
                     <Col className='informationBackground'>
                         <Row >
                             <Row style={{position: 'relative'}}>
@@ -257,14 +282,14 @@ const Step2 = props => {
                                                         <Row style={{textAlign:'center', marginBottom: '20px'}}>
                                                             <strong>Part Level</strong>
                                                         </Row>
-                                                        <Row className="col-12 d-flex" style={{justifyContent:'space-around'}}>
-                                                            <Card className='informationCardInside'>Part Identification and Classification</Card>
-                                                            <Card className='informationCardInside'>Part Position and Orientation</Card>
-                                                            <Card className='informationCardInside'>Surface Characteristics</Card>
+                                                        <Row className="col-12 d-flex" style={{justifyContent:'left',}}>
+                                                            <Card style={{marginRight:'20px', marginLeft:'10px'}} className='informationCardInside'>Part Identification and Classification</Card>
+                                                            <Card style={{marginRight:'30px'}} className='informationCardInside'>Part Position and Orientation</Card>
+                                                            <Card style={{marginRight:'22px'}} className='informationCardInside'>Surface Characteristics</Card>
                                                             <Card className='informationCardInside'>Geometry</Card>
-                                                            <Card className='informationCardInside'>Material Characteristics</Card>
-                                                            <Card className='informationCardInside'>Number</Card>
-                                                            <Card className='informationCardInside'>Others</Card>
+                                                            <Card style={{marginRight:'20px', marginLeft:'10px'}} className='informationCardInside'>Material Characteristics</Card>
+                                                            <Card style={{marginRight:'30px'}} className='informationCardInside'>Number</Card>
+                                                            <Card style={{marginRight:'30px'}} className='informationCardInside'>Others</Card>
                                                         </Row>
                                                     </CardBody>
                                                 </Card>

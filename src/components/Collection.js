@@ -9,12 +9,19 @@ function Collection (props){
     /** Collection Component has also an property which is showing the details of a specific heuristic
      * that the user clicked on. To show that as a pop-up (modal), it contains the HeuristicDetailsComponent inside of it.
      */
-
+    
     const [isModalOpen, setIsModalOpen] = useState(false)
-    const [isHeuristicClicked, setisHeuristicClicked] = useState(false)
-    const [selectedHeuristic, setSelectedHeuristic] = useState('')
-    const [sampleData, setSampleData] = useState(props.item)
 
+    /** isHeuristicClicked variable contains the information if the user clicked on any heuristic to go to the detail page of that heuristic*/
+    const [isHeuristicClicked, setisHeuristicClicked] = useState(false)
+
+    /** if the user clicked on a heuristic, the selected heuristic will be saved to give the user more information about itself */
+    const [selectedHeuristic, setSelectedHeuristic] = useState('')
+
+    /** Sample data represents all the heuristics that are filtered out and is saved for the case that the user wanted to sort the heuristics alphabetically.
+     * In this regard, useEffect and handleSort work for that purpose.
+     */
+    const [sampleData, setSampleData] = useState(props.item)
     useEffect(()=>{
         setSampleData(props.item)
     }, [props.item])
@@ -26,8 +33,8 @@ function Collection (props){
         setSampleData(sortedData)
     
     }
-    console.log("props: ", props.item)
 
+    /** If the user clicked on a specific heuristic, the user will be redirected to the page of that heuristic */
     function forwardHeuristicPage(selectedOne){
         amplitude.getInstance().logEvent(`${selectedOne.title}`)
         var heuristicUrl= selectedOne.shortId+ '/' + selectedOne.title.trim().replace(/\s+/g, '-').toLowerCase();
@@ -37,14 +44,16 @@ function Collection (props){
         setIsModalOpen(!isModalOpen)
 
     }
-    //console.log("item: ", props.item)
     function closeModal(){
         setIsModalOpen(!isModalOpen)
     }
+
+    /** The following function is to make the content of the heuristic unique. This means, for example the heuristic has a property multiple times. This property should be seen only once in the collection page */
     function onlyUnique(value, index, array) {
         return array.indexOf(value) === index;
     }
 
+    /** The heuristics that will be showed are defined as follows: */
     const heuristic= sampleData.map((heuristic)=>{
         var uniqueEffectCategory= [];
         var effectCategoryArray= [];
@@ -86,14 +95,11 @@ function Collection (props){
         )
     })
 
-    
-        
-        /** The heuristic defined just below contains all the informations of heuristics that the user wants to see: designfor, level etc.
-         * A short explanation about the heuristic stands as the last column. If the user wants to have more information
-         * about this specific heuristic, s/he should click on the explanation to toggle the pop-up.
-         */
-        
-
+    /** if the search button clicked the following cases will be tested:
+     * - if the heuristics are still loading, then a turning circle will be popped up
+     * - if any error occurs, the error message will be showed
+     * - and if they are loaded correctly, the user will then see the heuristics.
+     */
     if (props.isSearchClicked){
 
         if (props.isLoading) {

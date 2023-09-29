@@ -140,3 +140,9 @@
   width:fit-content;
   height:auto;
 }
+
+.lessonPageCard{
+  height: 522.71px;
+  width: auto;
+  border-radius: 0px 130px 0px 130px;
+}
